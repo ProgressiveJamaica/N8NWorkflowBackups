@@ -1,0 +1,282 @@
+{
+  "createdAt": "2025-08-13T21:56:56.468Z",
+  "updatedAt": "2025-08-13T21:56:56.468Z",
+  "id": "uRa16XjilRQMorZX",
+  "name": "Projects",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        80
+      ],
+      "id": "ee4ec699-4cbb-4290-97bc-381a8f178ea7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const setCookieHeader = $json.headers['set-cookie'];\n\nconst jsession = setCookieHeader.find(c => c.startsWith('JSESSIONID=')).split(';')[0];\nconst serverid = setCookieHeader.find(c => c.startsWith('SERVERID=')).split(';')[0];\n\nreturn [\n  {\n    json: {\n      cookieHeader: `${jsession}; ${serverid}`\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        80
+      ],
+      "id": "100d405b-e976-40fa-9a2b-6a62c4baee38",
+      "name": "SessionID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://pgam.sysaidit.com/api/v1/login",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/JSON",
+        "body": "{   \"user_name\": \"Ratkinson\",   \"password\": \"Wizzy3004%25%5E%26\" }",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "df127eab-f430-4820-ac04-f299a02d346b",
+      "name": "Login"
+    },
+    {
+      "parameters": {
+        "url": "https://pgam.sysaidit.com/api/v1/list?entity=task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Cookie",
+              "value": "={{ $json.cookieHeader }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        352,
+        0
+      ],
+      "id": "d3bae512-71b8-43cd-acd3-e48eebe721b9",
+      "name": "ApiProjects",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 612771832,
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=612771832"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "ProjectID"
+          ],
+          "schema": [
+            {
+              "id": "ProjectID",
+              "displayName": "ProjectID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hash",
+              "displayName": "hash",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        816,
+        0
+      ],
+      "id": "3741bd62-6111-4dc5-b2d2-b341b9a99c4b",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function simpleHash(str) {\n  let hash = 0;\n  if (str.length === 0) return hash.toString();\n  for (let i = 0; i < str.length; i++) {\n    const chr = str.charCodeAt(i);\n    hash = ((hash << 5) - hash) + chr;\n    hash |= 0; // Convert to 32-bit integer\n  }\n  return hash.toString();\n}\n\nreturn $input.all().flatMap(item => {\n  const data = item.json;\n\n  if (data.id === 'project_id' && Array.isArray(data.values)) {\n    return data.values.map(project => {\n      const source = `${project.id}:${project.caption}`;\n      const hash = simpleHash(source);\n\n      return {\n        json: {\n         ProjectID: project.id,\n         Title: project.caption,\n         hash: hash\n        }\n      };\n    });\n  }\n\n  return [];\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "766abc63-1d92-4a7c-a9bc-f3f4619cdfd8",
+      "name": "API Project Hash",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Projects",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        448,
+        208
+      ],
+      "id": "ca44845d-2d76-47ab-97b4-abbaf1dd1123",
+      "name": "Get row(s) in sheet",
+      "executeOnce": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login": {
+      "main": [
+        [
+          {
+            "node": "SessionID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SessionID": {
+      "main": [
+        [
+          {
+            "node": "ApiProjects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ApiProjects": {
+      "main": [
+        [
+          {
+            "node": "API Project Hash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Project Hash": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1d2082be-b636-4448-b119-92e20d668b3f",
+  "triggerCount": 0,
+  "tags": []
+}
