@@ -1,0 +1,127 @@
+{
+  "createdAt": "2025-08-13T21:58:25.490Z",
+  "updatedAt": "2025-08-13T21:58:25.490Z",
+  "id": "aN7gU1SfYvI2ERio",
+  "name": "Assets",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ea927332-d0fb-4100-bb56-5e02272e7e54",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const setCookieHeader = $json.headers['set-cookie'];\n\nconst jsession = setCookieHeader.find(c => c.startsWith('JSESSIONID=')).split(';')[0];\nconst serverid = setCookieHeader.find(c => c.startsWith('SERVERID=')).split(';')[0];\n\nreturn [\n  {\n    json: {\n      cookieHeader: `${jsession}; ${serverid}`\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        0
+      ],
+      "id": "5085e41e-4c1e-42a4-a7eb-ea4d99de3d9d",
+      "name": "Get cookie/sessionID's"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://pgam.sysaidit.com/api/v1/login",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/JSON",
+        "body": "{   \"user_name\": \"Ratkinson\",   \"password\": \"Wizzy3004%25%5E%26\" }",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        0
+      ],
+      "id": "7043a728-debc-48c8-9afd-e24f317b3c3a",
+      "name": "Login credentials",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "https://pgam.sysaidit.com/api/v1/asset",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $json.cookieHeader }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        576,
+        0
+      ],
+      "id": "fc4896bf-0ead-4f27-b4a7-ec57457849ef",
+      "name": "Assets"
+    }
+  ],
+  "connections": {
+    "Login credentials": {
+      "main": [
+        [
+          {
+            "node": "Get cookie/sessionID's",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Login credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get cookie/sessionID's": {
+      "main": [
+        [
+          {
+            "node": "Assets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "de6bc89b-af7e-471a-a09e-228eba9a9167",
+  "triggerCount": 0,
+  "tags": []
+}
