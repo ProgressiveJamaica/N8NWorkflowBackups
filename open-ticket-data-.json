@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:51:30.482Z",
-  "updatedAt": "2025-08-15T13:38:14.211Z",
+  "updatedAt": "2025-08-20T22:03:51.370Z",
   "id": "anJhLUN0JjdpG2ht",
   "name": "Open Ticket Data",
   "active": true,
@@ -823,7 +823,8 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes"
+              "field": "minutes",
+              "minutesInterval": 8
             }
           ]
         }
@@ -1408,7 +1409,7 @@
     },
     {
       "parameters": {
-        "content": "## Login credentials\nWorkflow is scheduled to run every 5 mins.\n\nAn HTTP Login node is used to proof the user is an admin of SysAid using SysAid's api.\n\n\nA set node is used to get the ID from the header of the user, extracted and saved to use later to extract info from SysAid.\n",
+        "content": "## Login credentials\nWorkflow is scheduled to run every 5 mins.\n\nAn HTTP Login node is used to proof the user is an admin of SysAid using SysAid's api.\n\n\nA set node is used to get the ID from the header of the user, extracted and saved to use later to retrieve info from SysAid.\n",
         "height": 352,
         "width": 608
       },
@@ -1731,7 +1732,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "956514a0-4328-45f0-ac05-4f7e36d2bc60",
+  "versionId": "d91bed8d-6141-49ca-b02c-17bbb0e83f8d",
   "triggerCount": 1,
   "tags": []
 }
