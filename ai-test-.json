@@ -1,0 +1,195 @@
+{
+  "createdAt": "2025-08-15T20:47:13.516Z",
+  "updatedAt": "2025-08-18T20:33:51.521Z",
+  "id": "EaKp8ltsCTxDk0tc",
+  "name": "AI Test",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        -48
+      ],
+      "id": "cab1c6c3-6a88-47a0-8613-77171f56c318",
+      "name": "When chat message received",
+      "webhookId": "f3a54899-1109-487a-bdde-be6b11798375"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        -48
+      ],
+      "id": "06d34fd6-1e31-49b8-8ea3-b159180806ce",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        144
+      ],
+      "id": "eaa05721-c2bb-4616-9321-071776c45eaa",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        144
+      ],
+      "id": "c53a67dd-e217-46fa-8a20-d312855c3cd6",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', `API information for tickets: https://68767137814c0dfa653c1daf.mockapi.io/api/v1/ticketdata`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        144
+      ],
+      "id": "9e3585fc-15ba-419c-b098-66979908faa9",
+      "name": "get_tickets"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8",
+          "mode": "list",
+          "cachedResultName": "Ticket Data test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        304,
+        128
+      ],
+      "id": "0980d62e-3a42-4fb8-8de6-56ebf3310e16",
+      "name": "Ticket data",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_tickets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ticket data": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "63749460-94d4-44cb-b419-736646643fe1",
+  "triggerCount": 0,
+  "tags": []
+}
