@@ -1,0 +1,487 @@
+{
+  "createdAt": "2025-08-18T17:58:43.004Z",
+  "updatedAt": "2025-08-20T22:02:17.476Z",
+  "id": "gY35g77PTE3nJsmG",
+  "name": "SQL Workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "3d038160-84cd-4053-84f3-5f3cc2a90d32",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -592,
+        -48
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e09b351f-c6be-4a33-a937-cf2eb5fbbd4c",
+              "name": "Creation Date",
+              "value": "={{ $json.CREATION_DATE }}",
+              "type": "string"
+            },
+            {
+              "id": "bee0b78a-4d76-40eb-aa88-df6e72acffed",
+              "name": "Item Description",
+              "value": "={{ $json.ITEM_DESCRIPTION }}",
+              "type": "string"
+            },
+            {
+              "id": "6db3bde7-27ee-4fd0-96cd-fd1894965f74",
+              "name": "Item Code",
+              "value": "={{ $json.ITEM_CODE }}",
+              "type": "string"
+            },
+            {
+              "id": "336f2499-b9c4-40d5-8cc7-da05822a0f78",
+              "name": "Store Number",
+              "value": "={{ $json.STORE_NUMBER }}",
+              "type": "string"
+            },
+            {
+              "id": "13a925af-7ce5-433e-98bb-d4d07d7174fe",
+              "name": "Vendor ID",
+              "value": "={{ $json.VENDOR_ID }}",
+              "type": "string"
+            },
+            {
+              "id": "11a8998b-712a-4c57-80a7-73ff597f390b",
+              "name": "Case Size",
+              "value": "={{ $json.CASE_SIZE }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        -192
+      ],
+      "id": "cfb85e4d-bb82-4fef-bba5-defc7c6ef64c",
+      "name": "Items"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  F09 AS CREATION_DATE,\n  P.F01 AS ITEM_CODE,\n  F02 AS ITEM_DESCRIPTION,\n  R.F1056 AS STORE_NUMBER,\n  C.F27 AS VENDOR_ID,\n  C.F19 AS CASE_SIZE\nFROM POS_TAB P\nINNER JOIN RPT_ITM_N R ON R.F01 = P.F01\nINNER JOIN COST_TAB C ON C.F01 = P.F01\nWHERE F09 >= DATEADD(DAY, -180, CAST(GETDATE() AS DATE))\nORDER BY F09 DESC;"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -384,
+        -192
+      ],
+      "id": "e7716632-f15a-460e-9478-031a1ce8d946",
+      "name": "Items SQL",
+      "credentials": {
+        "microsoftSql": {
+          "id": "kzaFzy84PjbdnsE4",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e61fa250-9e2e-4ff2-ba1e-ee24d645f108",
+              "name": "Vendor ID",
+              "value": "={{ $json.VENDORID }}",
+              "type": "string"
+            },
+            {
+              "id": "f75ac905-b86a-4620-a9e9-38380bac3f7e",
+              "name": "Vendor Name",
+              "value": "={{ $json.VENDORNAME }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        80
+      ],
+      "id": "efb5ac6d-3f14-428f-869c-be2a324b5010",
+      "name": "Vendor Name and ID"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  F27 VENDORID, \n  F334 VENDORNAME \n  FROM VENDOR_TAB"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -384,
+        80
+      ],
+      "id": "c34ed30a-6c22-4d62-8dd8-b7ae9b8cddb2",
+      "name": "Vendor Name and ID1",
+      "credentials": {
+        "microsoftSql": {
+          "id": "kzaFzy84PjbdnsE4",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        528,
+        -48
+      ],
+      "id": "8187e0f4-b318-44e5-9d2a-a8fd06ebcbfe",
+      "name": "Merge",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "list",
+          "cachedResultName": "Sql query",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Items",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "Creation Date"
+          ],
+          "schema": [
+            {
+              "id": "Creation Date",
+              "displayName": "Creation Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Description",
+              "displayName": "Item Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Code",
+              "displayName": "Item Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Store Number",
+              "displayName": "Store Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Vendor ID",
+              "displayName": "Vendor ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Case Size",
+              "displayName": "Case Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        -192
+      ],
+      "id": "74b4df89-a109-49c4-8bf6-8946d5eb0506",
+      "name": "Items Sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "list",
+          "cachedResultName": "Sql query",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 602113986,
+          "mode": "list",
+          "cachedResultName": "Vendor and ID",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=602113986"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "Vendor ID"
+          ],
+          "schema": [
+            {
+              "id": "Vendor ID",
+              "displayName": "Vendor ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Vendor Name",
+              "displayName": "Vendor Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        80
+      ],
+      "id": "5ce64a58-1961-4bf8-adc9-97fab07a7c82",
+      "name": "Vendor and ID sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toFile",
+        "binaryPropertyName": "data1",
+        "options": {
+          "fileName": "Items.xls"
+        }
+      },
+      "name": "Items file",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        272,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "2855092a-e7b2-4d43-8b87-f59ba59c123b"
+    },
+    {
+      "parameters": {
+        "operation": "toFile",
+        "binaryPropertyName": "data2",
+        "options": {
+          "fileName": "Vendor.xls"
+        }
+      },
+      "name": "Vendors file",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        272,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "e844cf83-4607-4148-bd5a-067350fc68f8"
+    }
+  ],
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Items SQL",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Vendor Name and ID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items": {
+      "main": [
+        [
+          {
+            "node": "Items Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items SQL": {
+      "main": [
+        [
+          {
+            "node": "Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vendor Name and ID1": {
+      "main": [
+        [
+          {
+            "node": "Vendor Name and ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vendor Name and ID": {
+      "main": [
+        [
+          {
+            "node": "Vendor and ID sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        []
+      ]
+    },
+    "Items Sheet": {
+      "main": [
+        [
+          {
+            "node": "Items file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vendor and ID sheet": {
+      "main": [
+        [
+          {
+            "node": "Vendors file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vendors file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "b89fe140-c5af-47c1-8c55-e8b76b53a80a",
+  "triggerCount": 0,
+  "tags": []
+}
