@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:51:30.482Z",
-  "updatedAt": "2025-08-20T22:03:51.370Z",
+  "updatedAt": "2025-08-25T13:28:35.463Z",
   "id": "anJhLUN0JjdpG2ht",
   "name": "Open Ticket Data",
   "active": true,
@@ -823,8 +823,7 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 8
+              "field": "minutes"
             }
           ]
         }
@@ -1732,7 +1731,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "d91bed8d-6141-49ca-b02c-17bbb0e83f8d",
+  "versionId": "8f81581f-e24d-4ad1-be09-850015c88f62",
   "triggerCount": 1,
   "tags": []
 }
