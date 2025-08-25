@@ -1,0 +1,143 @@
+{
+  "createdAt": "2025-08-21T20:21:13.137Z",
+  "updatedAt": "2025-08-25T17:12:16.004Z",
+  "id": "A30kU1rcb6mKeDG6",
+  "name": "Whatsapp",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -16
+      ],
+      "id": "899f1d6b-ad6a-4ee2-97e4-f08c5aa54c06",
+      "name": "WhatsApp Trigger",
+      "webhookId": "66bb9d99-d78c-4665-aecb-2a82faa060f8",
+      "retryOnFail": true,
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "RfIQ1tIBJAiUJjuV",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        -16
+      ],
+      "id": "1e398b8c-09d2-4ca6-b200-d4f4b41b3bc5",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "795070217018578",
+        "recipientPhoneNumber": "18763514207 - ronaldo",
+        "textBody": "test",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -16
+      ],
+      "id": "2db2a6c4-2b88-41dc-a16a-104d1dbfbe7e",
+      "name": "Send message",
+      "webhookId": "34ab7232-837d-4614-a654-b7d1dca2d4a6",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "bP42xqNMnKqIbTr5",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        48,
+        240
+      ],
+      "id": "7aff31bf-74f9-4d3d-a0aa-30eea260053a",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "5f2bbea1-78be-4036-acc7-513d2ef6876e",
+  "triggerCount": 0,
+  "tags": []
+}
