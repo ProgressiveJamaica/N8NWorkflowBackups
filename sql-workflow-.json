@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-18T17:58:43.004Z",
-  "updatedAt": "2025-08-20T22:02:17.476Z",
+  "updatedAt": "2025-08-25T15:51:50.257Z",
   "id": "gY35g77PTE3nJsmG",
   "name": "SQL Workflow",
   "active": false,
@@ -12,8 +12,8 @@
       "name": "When clicking \"Execute Workflow\"",
       "type": "n8n-nodes-base.manualTrigger",
       "position": [
-        -592,
-        -48
+        -1248,
+        32
       ],
       "typeVersion": 1
     },
@@ -47,7 +47,7 @@
             },
             {
               "id": "13a925af-7ce5-433e-98bb-d4d07d7174fe",
-              "name": "Vendor ID",
+              "name": "VendorID",
               "value": "={{ $json.VENDOR_ID }}",
               "type": "string"
             },
@@ -64,8 +64,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -176,
-        -192
+        -864,
+        -144
       ],
       "id": "cfb85e4d-bb82-4fef-bba5-defc7c6ef64c",
       "name": "Items"
@@ -78,8 +78,8 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        -384,
-        -192
+        -1056,
+        -144
       ],
       "id": "e7716632-f15a-460e-9478-031a1ce8d946",
       "name": "Items SQL",
@@ -96,7 +96,7 @@
           "assignments": [
             {
               "id": "e61fa250-9e2e-4ff2-ba1e-ee24d645f108",
-              "name": "Vendor ID",
+              "name": "VendorID",
               "value": "={{ $json.VENDORID }}",
               "type": "string"
             },
@@ -113,8 +113,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -176,
-        80
+        -864,
+        160
       ],
       "id": "efb5ac6d-3f14-428f-869c-be2a324b5010",
       "name": "Vendor Name and ID"
@@ -127,8 +127,8 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        -384,
-        80
+        -1056,
+        160
       ],
       "id": "c34ed30a-6c22-4d62-8dd8-b7ae9b8cddb2",
       "name": "Vendor Name and ID1",
@@ -148,8 +148,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        528,
-        -48
+        -160,
+        0
       ],
       "id": "8187e0f4-b318-44e5-9d2a-a8fd06ebcbfe",
       "name": "Merge",
@@ -221,8 +221,8 @@
               "removed": false
             },
             {
-              "id": "Vendor ID",
-              "displayName": "Vendor ID",
+              "id": "VendorID",
+              "displayName": "VendorID",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -249,8 +249,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        48,
-        -192
+        -656,
+        -144
       ],
       "id": "74b4df89-a109-49c4-8bf6-8946d5eb0506",
       "name": "Items Sheet",
@@ -283,12 +283,12 @@
           "mappingMode": "autoMapInputData",
           "value": {},
           "matchingColumns": [
-            "Vendor ID"
+            "VendorID"
           ],
           "schema": [
             {
-              "id": "Vendor ID",
-              "displayName": "Vendor ID",
+              "id": "VendorID",
+              "displayName": "VendorID",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -315,8 +315,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        48,
-        80
+        -656,
+        160
       ],
       "id": "5ce64a58-1961-4bf8-adc9-97fab07a7c82",
       "name": "Vendor and ID sheet",
@@ -338,8 +338,8 @@
       "name": "Items file",
       "type": "n8n-nodes-base.spreadsheetFile",
       "position": [
-        272,
-        -192
+        -416,
+        -144
       ],
       "typeVersion": 1,
       "id": "2855092a-e7b2-4d43-8b87-f59ba59c123b"
@@ -355,11 +355,407 @@
       "name": "Vendors file",
       "type": "n8n-nodes-base.spreadsheetFile",
       "position": [
-        272,
-        80
+        -416,
+        160
       ],
       "typeVersion": 1,
       "id": "e844cf83-4607-4148-bd5a-067350fc68f8"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/mnt/n8n-share/Items.xls",
+        "dataPropertyName": "data1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        64,
+        0
+      ],
+      "id": "b46eaf76-aec5-4e07-8173-babe1cbff9f3",
+      "name": "Write Items to shared drive"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/mnt/n8n-share/Vendor.xls",
+        "dataPropertyName": "data2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        256,
+        0
+      ],
+      "id": "fcc219e6-dbb1-4c44-848d-3ed0cce0f041",
+      "name": "Write Vendors to shared drive"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect all IDs coming from the query results\nconst queryItemIds = new Set(\n  $items(\"Items\").map(item => String(item.json.VendorID).trim())\n);\n\n// Filter rows from the sheet that are NOT in the query results\nconst missingItems = $items(\"Sheet Items\").filter(item => {\n  const sheetItemId = String(item.json.VendorID).trim();\n  return !queryItemIds.has(sheetItemId);\n});\n\n// Return the list of items to mark for deletion\nreturn missingItems.map(item => ({\n  json: {\n    VendorID: item.json.VendorID,\n    rowIndex: item.json.row_number // needed so you can delete the exact row\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -672
+      ],
+      "id": "40372e8f-8967-4479-8737-417a3aa305be",
+      "name": "Find Closed Query",
+      "retryOnFail": true,
+      "executeOnce": true,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -608,
+        -672
+      ],
+      "id": "7b244442-a7c5-4ee5-aea0-fda91971463f",
+      "name": "Merge1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "512c626c-8aff-4e22-a631-8b1039b8d928",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "f38a735f-8e21-4259-90e5-0275a0ecea4d",
+              "name": "VendorID",
+              "value": "={{ $json.VendorID }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -400,
+        -896
+      ],
+      "id": "08a15440-286d-4c4d-85f6-68a9213e26d0",
+      "name": "Sheet Items"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "list",
+          "cachedResultName": "Sql query",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Items",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+        },
+        "startIndex": "={{ $json.rowIndex }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        64,
+        -688
+      ],
+      "id": "1ef98e39-79cb-44d2-bc96-698b90991465",
+      "name": "Delete rows or columns from sheet",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "rowIndex",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -688
+      ],
+      "id": "bcc608e1-f53c-458c-b105-fa80d578656d",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Items",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        -688
+      ],
+      "id": "96f02512-ec0b-4e94-83ae-62e7747584db",
+      "name": "Get row(s) in sheet1",
+      "executeOnce": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8aebaecf-7dd4-48d9-8f8b-8cb743ee02a8",
+              "name": "Creation Date",
+              "value": "={{ $json[\"Creation Date\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "ee71c690-374f-41d6-8761-7dd320a57561",
+              "name": "Item Description",
+              "value": "={{ $json[\"Item Description\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "41e77a8a-31b4-43de-82bc-f359c5181d15",
+              "name": "Item Code",
+              "value": "={{ $json[\"Item Code\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "a9b52799-a86e-492a-aa7b-3f2633ad4e3f",
+              "name": "Store Number",
+              "value": "={{ $json[\"Store Number\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "f542eb82-5e4b-40a8-b66d-cd190f4f7690",
+              "name": "VendorID",
+              "value": "={{ $json.VendorID }}",
+              "type": "number"
+            },
+            {
+              "id": "d6d1a16a-b74b-43c0-9364-1ba32f873603",
+              "name": "Case Size",
+              "value": "={{ $json[\"Case Size\"] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        -688
+      ],
+      "id": "412e06b2-36b7-42c2-b9b7-797b4881e871",
+      "name": "No row number"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Items",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -592,
+        -896
+      ],
+      "id": "1263be12-f70a-4a29-9225-529caee4e2e4",
+      "name": "Get items in sheet",
+      "executeOnce": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "03014dea-854b-4773-abbf-1c15e1bc57c6",
+              "leftValue": "={{ $json.rowIndex }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        -880
+      ],
+      "id": "50c00f51-af01-4000-a17a-6adb639e3b87",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Items",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        -864
+      ],
+      "id": "4f319bb0-aac2-4a33-9355-f87b1580dd5c",
+      "name": "Get row(s) in sheet",
+      "executeOnce": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8aebaecf-7dd4-48d9-8f8b-8cb743ee02a8",
+              "name": "Creation Date",
+              "value": "={{ $json[\"Creation Date\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "ee71c690-374f-41d6-8761-7dd320a57561",
+              "name": "Item Description",
+              "value": "={{ $json[\"Item Description\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "41e77a8a-31b4-43de-82bc-f359c5181d15",
+              "name": "Item Code",
+              "value": "={{ $json[\"Item Code\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "a9b52799-a86e-492a-aa7b-3f2633ad4e3f",
+              "name": "Store Number",
+              "value": "={{ $json[\"Store Number\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "f542eb82-5e4b-40a8-b66d-cd190f4f7690",
+              "name": "VendorID",
+              "value": "={{ $json.VendorID }}",
+              "type": "number"
+            },
+            {
+              "id": "d6d1a16a-b74b-43c0-9364-1ba32f873603",
+              "name": "Case Size",
+              "value": "={{ $json[\"Case Size\"] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        -864
+      ],
+      "id": "3ffc8c53-4339-4d72-b9e1-89dbee70f36d",
+      "name": "No row number1"
     }
   ],
   "connections": {
@@ -425,7 +821,13 @@
     },
     "Merge": {
       "main": [
-        []
+        [
+          {
+            "node": "Write Items to shared drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Items Sheet": {
@@ -471,6 +873,138 @@
           }
         ]
       ]
+    },
+    "Write Items to shared drive": {
+      "main": [
+        [
+          {
+            "node": "Write Vendors to shared drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Closed Query": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Find Closed Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Items": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "No row number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No row number": {
+      "main": [
+        []
+      ]
+    },
+    "Get items in sheet": {
+      "main": [
+        [
+          {
+            "node": "Sheet Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "No row number1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No row number1": {
+      "main": [
+        []
+      ]
+    },
+    "Write Vendors to shared drive": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -481,7 +1015,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "b89fe140-c5af-47c1-8c55-e8b76b53a80a",
+  "versionId": "60e04005-7d5e-49fb-a8dd-16cf0014a53d",
   "triggerCount": 0,
   "tags": []
 }
