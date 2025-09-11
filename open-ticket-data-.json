@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-08-13T21:51:30.482Z",
-  "updatedAt": "2025-08-25T13:28:35.463Z",
+  "updatedAt": "2025-09-11T21:53:03.225Z",
   "id": "anJhLUN0JjdpG2ht",
   "name": "Open Ticket Data",
-  "active": true,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
@@ -25,7 +25,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -608,
+        -752,
         512
       ],
       "id": "4e560841-dfa4-470f-8d7a-e4fc8d3e03d8",
@@ -49,8 +49,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        240,
-        208
+        176,
+        128
       ],
       "id": "3cf9c342-a289-4ed9-bdc1-2ff6bb6fb90a",
       "name": "ApiTickets",
@@ -96,7 +96,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Applicant",
@@ -105,7 +106,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Responsibility",
@@ -114,7 +116,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Status",
@@ -123,7 +126,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Priority",
@@ -132,7 +136,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Category",
@@ -141,7 +146,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Sub Category",
@@ -150,7 +156,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Third Level Category",
@@ -159,7 +166,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Difficulty Category",
@@ -168,7 +176,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Impact",
@@ -177,7 +186,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Location",
@@ -186,7 +196,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Main CI",
@@ -195,7 +206,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Title",
@@ -204,7 +216,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Max Support Level",
@@ -213,7 +226,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Source",
@@ -222,7 +236,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Resolution",
@@ -231,7 +246,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom List 2",
@@ -240,7 +256,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Parent ID",
@@ -249,7 +266,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Solution",
@@ -258,7 +276,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Request User Manager",
@@ -267,7 +286,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Survey Status",
@@ -276,7 +296,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Weight",
@@ -285,7 +306,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Followup Planned Date",
@@ -294,7 +316,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Int 2",
@@ -303,7 +326,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Date 1",
@@ -312,7 +336,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Int 1",
@@ -321,7 +346,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Reopen Counter",
@@ -330,7 +356,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Date 2",
@@ -339,7 +366,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Archive",
@@ -348,7 +376,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Close time",
@@ -357,7 +386,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Merged service records",
@@ -366,7 +396,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Version",
@@ -375,7 +406,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Is Escalated",
@@ -384,7 +416,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Closure Information",
@@ -393,7 +426,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Assigned Counter",
@@ -402,7 +436,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Alert",
@@ -411,7 +446,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Description",
@@ -420,7 +456,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Main task",
@@ -429,7 +466,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Request username",
@@ -438,7 +476,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Followup User",
@@ -447,7 +486,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Workaround",
@@ -456,7 +496,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Current Support Level",
@@ -465,7 +506,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Modify time",
@@ -474,7 +516,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Success Rating",
@@ -483,7 +526,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Modify User",
@@ -492,7 +536,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Notes",
@@ -501,7 +546,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Followup Text",
@@ -510,7 +556,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Email Account",
@@ -519,7 +566,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Urgency",
@@ -528,7 +576,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Request user",
@@ -537,7 +586,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Sub Type",
@@ -546,7 +596,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Followup Actual Date",
@@ -555,7 +606,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Department",
@@ -564,7 +616,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Asset ID",
@@ -573,7 +626,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "CC",
@@ -582,7 +636,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Time to Repair",
@@ -591,7 +646,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Main Asset",
@@ -600,7 +656,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Time to Respond",
@@ -609,7 +666,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Due Date",
@@ -618,7 +676,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Text 1",
@@ -627,7 +686,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "SR Custom Text 2",
@@ -636,7 +696,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Merged to",
@@ -645,7 +706,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Account",
@@ -654,7 +716,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Escalation Level",
@@ -663,7 +726,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Classification",
@@ -672,7 +736,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Admin group",
@@ -681,7 +746,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Service Record Type",
@@ -690,7 +756,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Store",
@@ -699,7 +766,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "Owner",
@@ -708,19 +776,22 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
-        "options": {}
+        "options": {
+          "cellFormat": "=USER_ENTERED"
+        }
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        -128,
-        672
+        -176,
+        816
       ],
       "id": "4780da87-23b1-450e-8c37-105d84702f4d",
       "name": "Append or update row in sheet",
@@ -750,8 +821,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -160,
-        208
+        -224,
+        128
       ],
       "id": "cb95323d-fd27-46d5-98f0-f2f140b5a755",
       "name": "Get Status List",
@@ -777,8 +848,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        128,
-        672
+        80,
+        816
       ],
       "id": "5a1eaebd-ef02-4c43-bc9f-5ddd9b56a93b",
       "name": "SheetRow",
@@ -823,7 +894,8 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes"
+              "field": "minutes",
+              "minutesInterval": 8
             }
           ]
         }
@@ -831,7 +903,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -816,
+        -960,
         512
       ],
       "id": "e952a30a-c99b-4ea6-a122-8403e5b4cbfd",
@@ -854,7 +926,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -384,
+        -528,
         512
       ],
       "id": "e9f7e11f-9621-4699-8062-fb87523dadbe",
@@ -919,8 +991,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        32,
-        208
+        -32,
+        128
       ],
       "id": "cd0a0e7c-34df-4978-942e-977574502c43",
       "name": "Open Status"
@@ -948,8 +1020,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        400,
-        672
+        352,
+        816
       ],
       "id": "52222131-5e9b-411e-95ab-4dad2c851399",
       "name": "Sheet Tickets"
@@ -1369,7 +1441,7 @@
             {
               "id": "71d66e84-e462-4112-a51d-d1d55d2542dd",
               "name": "Store",
-              "value": "={{ `=SWITCH(INDIRECT(\"L\"&ROW()),\"Liguanea\", 103,\n \"Mandeville\", 104,\n \"Manchester\", 105,\n \"Greater Portmore\", 106,\n \"Portmore Mall\", 107,\n \"Duhaney Park\", 108,\n \"Westgate\", 109,\n \"Harbour View\", 111,\n \"Blue Diamond\", 112,\n \"D&Y Sav\", 118,\n \"Junction\", 119,\n \"Brunswick\", 121,\n \"Savanna-La-Mar\", 122,\n \"Whitter Village\", 123,\n \"Ocho Rios\", 124,\n \"Burke Road\", 125,\n \"May Pen\", 126,\n \"Bogue\", 127,\n \"Braeton\", 128,\n \"Portmore Pines\", 128,\n \"Boulevard\", 129,\n \"Head Office\", 1000,\n \"Linstead\", 901,\n \"JRs May Pen\", 902,\n-1)` }}",
+              "value": "={{ `=SWITCH(INDIRECT(\"L\"&ROW()),\n \"Liguanea\", 103,\n \"SF Liguanea\", 103,\n\n \"Mandeville\", 104,\n \"PF Mandeville\", 104,\n\n \"Manchester\", 105,\n \"SF Manchester\", 105,\n\n \"Greater Portmore\", 106,\n \"SF Greater Portmore\", 106,\n\n \"Portmore Mall\", 107,\n \"SF Portmore Mall\", 107,\n\n \"Duhaney Park\", 108,\n \"SF Duhaney Park\", 108,\n\n \"Westgate\", 109,\n \"SF Westgate\", 109,\n\n \"Harbour View\", 111,\n \"SF Harbour View\", 111,\n\n \"Blue Diamond\", 112,\n \"SF Blue Diamond\", 112,\n\n \"D&Y Sav\", 118,\n \"D&Y Supermarket\", 118,\n\n \"Junction\", 119,\n \"SF Junction\", 119,\n\n \"Brunswick\", 121,\n \"SF Brunswick\", 121,\n\n \"Savanna-La-Mar\", 122,\n \"SF Savanna-La-Mar\", 122,\n\n \"Whitter Village\", 123,\n \"PF Whitter Village\", 123,\n\n \"Ocho Rios\", 124,\n \"PF Ocho Rios\", 124,\n\n \"Burke Road\", 125,\n \"SF Burke Road\", 125,\n\n \"May Pen\", 126,\n \"SSF May Pen\", 126,\n\n \"Bogue\", 127,\n \"PF Bogue\", 127,\n\n \"Braeton\", 128,\n \"PF Braeton\", 128,\n \"Portmore Pines\", 128,\n\n \"Boulevard\", 129,\n \"SF Boulevard\", 129,\n\n \"Linstead\", 901,\n \"JRs BW Linstead\", 901,\n\n \"JRs May Pen\", 902,\n \"JRs BW May Pen\", 902,\n\n \"Head Office\", 1000,\n \"Warehouse TP\", 998\n-1)` }}",
               "type": "string"
             },
             {
@@ -1385,8 +1457,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        416,
-        208
+        352,
+        128
       ],
       "id": "216dd951-7120-41ca-b4e0-60027297ac0d",
       "name": "Api Tickets"
@@ -1414,7 +1486,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -848,
+        -992,
         320
       ],
       "typeVersion": 1,
@@ -1429,8 +1501,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -224,
-        0
+        -288,
+        -80
       ],
       "typeVersion": 1,
       "id": "e1ada421-e914-408e-99be-c394b2fff051",
@@ -1444,8 +1516,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -176,
-        496
+        -224,
+        640
       ],
       "typeVersion": 1,
       "id": "eae94c4e-f86b-40a6-abda-2c79ee34cee5",
@@ -1556,6 +1628,61 @@
       ],
       "id": "d3e8a036-a462-406f-95be-ce2cc2275986",
       "name": "Sort"
+    },
+    {
+      "parameters": {
+        "content": "                           Date formatting and sorting.\n         The date is formatted to ISO (yyyy-MM-dd) instead of a custom format. \n         The date is also sorted from ascending (earliest - latest).",
+        "height": 240,
+        "width": 768
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -256,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "41053dcc-a385-4332-9aaa-ab6afc09052c",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json[\"Request Time\"] }}",
+        "format": "custom",
+        "customFormat": "yyyy-MM-dd HH:mm:ss",
+        "outputFieldName": "Request Time",
+        "options": {
+          "includeInputFields": true
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        432
+      ],
+      "id": "5a8c8b56-c9b7-4ccd-a5be-330506c8fa8d",
+      "name": "Date & Time Format"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "Request Time"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        352,
+        432
+      ],
+      "id": "3b75178e-d765-4a77-81a9-cbced73aef82",
+      "name": "Sort by Time"
     }
   ],
   "connections": {
@@ -1689,7 +1816,7 @@
             "index": 0
           },
           {
-            "node": "Append or update row in sheet",
+            "node": "Date & Time Format",
             "type": "main",
             "index": 0
           }
@@ -1717,6 +1844,28 @@
           }
         ]
       ]
+    },
+    "Date & Time Format": {
+      "main": [
+        [
+          {
+            "node": "Sort by Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort by Time": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1731,7 +1880,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "8f81581f-e24d-4ad1-be09-850015c88f62",
+  "versionId": "ff6de8c5-2c37-417d-9e27-b8862cc43cf3",
   "triggerCount": 1,
   "tags": []
 }
