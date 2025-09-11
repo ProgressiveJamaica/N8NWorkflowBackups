@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:55:58.337Z",
-  "updatedAt": "2025-08-14T15:53:28.405Z",
+  "updatedAt": "2025-08-28T18:30:26.924Z",
   "id": "0ykgir1GJaoP7uSD",
   "name": "Open ticket data test",
   "active": false,
@@ -8,16 +8,655 @@
   "nodes": [
     {
       "parameters": {
-        "jsCode": "const setCookieHeader = $json.headers['set-cookie'];\n\nconst jsession = setCookieHeader.find(c => c.startsWith('JSESSIONID=')).split(';')[0];\nconst serverid = setCookieHeader.find(c => c.startsWith('SERVERID=')).split(';')[0];\n\nreturn [\n  {\n    json: {\n      cookieHeader: `${jsession}; ${serverid}`\n    }\n  }\n];\n"
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a3416bc-2cdf-405b-9fe1-59c4e75cc779",
+              "name": "headers[\"set-cookie\"]",
+              "value": "={{ $json.headers[\"set-cookie\"] }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -640,
+        1696
+      ],
+      "id": "67301e0e-9478-41e5-a3fe-7bc1b07edbad",
+      "name": "SessionID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "121fd8d7-b3c8-4c1f-8174-7191e3296ebe",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "2a3416bc-2cdf-405b-9fe1-59c4e75cc779",
+              "name": "New",
+              "value": "={{ $json.values[0].id }}",
+              "type": "string"
+            },
+            {
+              "id": "a24b9284-a061-49a1-a347-e89a56d911af",
+              "name": "Open",
+              "value": "={{ $json.values[1].id }}",
+              "type": "string"
+            },
+            {
+              "id": "271ad820-68cf-4fb7-a788-73aa59e7d311",
+              "name": "Pending",
+              "value": "={{ $json.values[3].id }}",
+              "type": "string"
+            },
+            {
+              "id": "49c5255d-5fd9-444d-8955-a34da8c91048",
+              "name": "Postponed",
+              "value": "={{ $json.values[4].id }}",
+              "type": "string"
+            },
+            {
+              "id": "155b7801-6975-45fb-847a-2c16fcf25c1b",
+              "name": "User Responded",
+              "value": "={{ $json.values[5].id }}",
+              "type": "string"
+            },
+            {
+              "id": "3e81a548-2b3b-4e57-b612-e6490ba49918",
+              "name": "Pending: Waiting on Hardware",
+              "value": "={{ $json.values[6].id }}",
+              "type": "string"
+            },
+            {
+              "id": "82773f4a-f713-4010-8eef-815939530544",
+              "name": "Pending: Waiting on External Party",
+              "value": "={{ $json.values[7].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
         -224,
-        112
+        1392
       ],
-      "id": "dd29686c-0b1f-4273-b889-820e2a856ddc",
-      "name": "Get cookie/sessionID's"
+      "id": "3442291f-8f61-4f43-8962-9850d7e602d8",
+      "name": "Open Status"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "32589481-9a7c-4e75-a669-e39fb51f5646",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "d04899ee-a706-486b-b54b-2fcbca942c5a",
+              "name": "TicketID",
+              "value": "={{ $json.TicketID }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        1856
+      ],
+      "id": "aec8e1ed-815d-4495-9360-6b307d0f49b5",
+      "name": "Sheet Tickets"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0670735d-0e05-499a-b38c-9be4a6a1bfbe",
+              "name": "TicketID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "647c1ab6-6351-439e-93b1-df8c058da61d",
+              "name": "Request Time",
+              "value": "={{ $json.info[34].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "b166e9a5-100e-44da-9e5f-e3978761f8b2",
+              "name": "Applicant",
+              "value": "={{ $json.info[13].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "51b9dc8d-bb63-468e-9821-6d7559d51c1a",
+              "name": "Responsibility",
+              "value": "={{ $json.info[47].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "485b9ef6-c150-4ec0-83d8-91a35a9baf11",
+              "name": "Status",
+              "value": "={{ $json.info[31].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "6668c95e-cdd5-4ec5-9e33-8d7c65d3d40c",
+              "name": "Priority",
+              "value": "={{ $json.info[23].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0ddc4d38-d18c-4389-94b7-7ee9b9806ba1",
+              "name": "Category",
+              "value": "={{ $json.info[29].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "ded72416-9e1b-4818-983f-f56fae7c460b",
+              "name": "Sub Category",
+              "value": "={{ $json.info[32].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "a56521e7-cf28-454b-bd16-5c606cceb58c",
+              "name": "Third Level Category",
+              "value": "={{ $json.info[0].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "b920c143-f5cf-4dcf-908d-a38d2f31b461",
+              "name": "Difficulty Category",
+              "value": "={{ $json.info[1].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "4abc38ba-4d51-4130-ba71-d218a93402fe",
+              "name": "Impact",
+              "value": "={{ $json.info[18].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "7a075b1e-17a2-4292-b885-82d987e1fe4a",
+              "name": "Location",
+              "value": "={{ $json.info[67].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "508433b4-70bd-460d-98fa-b6c337787727",
+              "name": "Main CI",
+              "value": "={{ $json.info[58].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "68ad7c7a-9316-4fd8-a405-6b9a055e35a3",
+              "name": "Title",
+              "value": "={{ $json.info[36].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0de8640b-5e12-42c2-94d2-78bef00e1e67",
+              "name": "Max Support Level",
+              "value": "={{ $json.info[2].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "53ffeca0-bce2-40ab-b170-890ba3b16589",
+              "name": "Source",
+              "value": "={{ $json.info[4].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0c60de7f-7bfd-47fc-b834-cf5a9e760a03",
+              "name": "Resolution",
+              "value": "={{ $json.info[5].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "33a1740d-4662-4264-b214-d57fb618a9bf",
+              "name": "SR Custom List 2",
+              "value": "={{ $json.info[6].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "36bb18c9-1724-45b4-8f5d-0029aefd6caf",
+              "name": "Parent ID",
+              "value": "={{ $json.info[7].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0228e776-d44a-47db-9adb-8aa260ebabe9",
+              "name": "Solution",
+              "value": "={{ $json.info[8].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "fadc6ff9-2041-4694-85c1-5a66c44e9f66",
+              "name": "Request User Manager",
+              "value": "={{ $json.info[9].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0e04f531-f5d0-4a1b-aac5-a221f06dfecb",
+              "name": "Survey Status",
+              "value": "={{ $json.info[10].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "50ba1bfb-2af3-4ff0-be9e-a1949f66039a",
+              "name": "Weight",
+              "value": "={{ $json.info[11].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "c9c12a3f-8661-4d36-8ee3-f459f231370e",
+              "name": "Followup Planned Date",
+              "value": "={{ $json.info[12].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "181cb52b-9083-4f45-a126-2106fbb32e8b",
+              "name": "SR Custom Int 2",
+              "value": "={{ $json.info[14].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "01142cb5-41fb-4be0-9999-98aaa02a2a6b",
+              "name": "SR Custom Date 1",
+              "value": "={{ $json.info[15].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "da35bb25-e4f1-4f1b-8786-e3519ed99e60",
+              "name": "SR Custom Int 1",
+              "value": "={{ $json.info[16].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "8641f86b-7d84-484a-a591-ad1a6209857a",
+              "name": "Reopen Counter",
+              "value": "={{ $json.info[19].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "e3a97691-26d2-47f4-8c6f-b9e502f779f4",
+              "name": "SR Custom Date 2",
+              "value": "={{ $json.info[20].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "2d0ca64c-db3d-44ed-91a1-4b2a5e7cc711",
+              "name": "Archive",
+              "value": "={{ $json.info[21].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "f1630782-959b-4bbf-9c9c-c3ecad0a27ad",
+              "name": "Close time",
+              "value": "={{ $json.info[22].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "8608f76d-0244-45d7-aee1-d563029d391d",
+              "name": "Merged service records",
+              "value": "={{ $json.info[24].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "54c6bc4a-6803-4f48-b569-16d8d9b68e14",
+              "name": "Version",
+              "value": "={{ $json.info[25].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "a81e7987-abe9-4757-9593-1a022e82ee52",
+              "name": "Is Escalated",
+              "value": "={{ $json.info[26].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "4ab7d8ee-18e9-47a6-a0d1-4caf2e8233d5",
+              "name": "Closure Information",
+              "value": "={{ $json.info[27].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "6db0dcdb-fb60-4e99-90fc-7930bb33f908",
+              "name": "Assigned Counter",
+              "value": "={{ $json.info[28].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "2a331ef9-81aa-452b-80cf-0182a7c13a6c",
+              "name": "Alert",
+              "value": "={{ $json.info[30].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "b8fb23f7-e0e2-405a-a5b2-72e575af95b4",
+              "name": "Description",
+              "value": "={{ $json.info[33].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "be9a8b97-9172-462a-b715-66e519c3d9a1",
+              "name": "Main task",
+              "value": "={{ $json.info[35].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "20bc0279-7ca2-416b-93a8-d970280f32a3",
+              "name": "Request username",
+              "value": "={{ $json.info[37].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "2e58dcc9-5945-4349-840a-e2a91af683e6",
+              "name": "Followup User",
+              "value": "={{ $json.info[38].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "5d907163-9d70-4a2d-9c0f-b55cf9167c0f",
+              "name": "Workaround",
+              "value": "={{ $json.info[39].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "cb7f3f36-d32b-4d87-8112-2a80b77a4d0d",
+              "name": "Current Support Level",
+              "value": "={{ $json.info[40].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "5506a357-e5f6-42a6-a6d6-a94253d23693",
+              "name": "Modify time",
+              "value": "={{ $json.info[41].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "12a76b2b-c8f6-416e-98e5-28b4ee6446aa",
+              "name": "Success Rating",
+              "value": "={{ $json.info[42].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "b178e47e-a3d2-4aa9-bebf-894c63e26c1c",
+              "name": "Modify User",
+              "value": "={{ $json.info[43].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "65ba2121-422a-43d3-bedb-843807b11892",
+              "name": "SR Custom Notes",
+              "value": "={{ $json.info[44].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "1d5b312e-d214-43b8-bf27-6f9e6878cf24",
+              "name": "Followup Text",
+              "value": "={{ $json.info[45].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "09a4e1d0-dbb4-4b82-81ac-62f3795c1ed3",
+              "name": "Email Account",
+              "value": "={{ $json.info[46].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "eaf9c7fe-4f4a-413b-a68a-3a401338ad39",
+              "name": "Urgency",
+              "value": "={{ $json.info[48].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "c19d7245-967b-4226-8d0e-640ba11babe4",
+              "name": "Request user",
+              "value": "={{ $json.info[49].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0d046138-93c4-4368-bd2a-eed52b70f682",
+              "name": "Sub Type",
+              "value": "={{ $json.info[50].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "5b0349bb-260e-4c8d-b342-ca9f4e4947cd",
+              "name": "Followup Actual Date",
+              "value": "={{ $json.info[51].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "949d15a2-4cef-4f8d-a67f-16c3b223694a",
+              "name": "Department",
+              "value": "={{ $json.info[52].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "8836e2df-37ea-488f-baa5-43a344e523f2",
+              "name": "Asset ID",
+              "value": "={{ $json.info[53].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "bf0907db-81e5-41ad-bb84-7c3ebabc9bd0",
+              "name": "CC",
+              "value": "={{ $json.info[54].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "b6bb968c-b7a3-4d62-82c2-ff1d33d46732",
+              "name": "Time to Repair",
+              "value": "={{ $json.info[55].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "7b52276b-6970-4e8e-beba-b847a4c36ab6",
+              "name": "Main Asset",
+              "value": "={{ $json.info[56].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "407a4fb7-6212-4720-8862-5cbe585a1d8e",
+              "name": "Time to Respond",
+              "value": "={{ $json.info[57].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "963ec59b-1efb-40ee-bc16-594d18cb9067",
+              "name": "Due Date",
+              "value": "={{ $json.info[59].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "09ff65c5-0ece-4ada-b60b-0abb2fa79297",
+              "name": "SR Custom Text 1",
+              "value": "={{ $json.info[60].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "6aba81d4-531a-4e03-868a-a2bb729eeda0",
+              "name": "SR Custom Text 2",
+              "value": "={{ $json.info[61].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "e09d0e18-8e13-4781-8ca2-4ae3190bdf64",
+              "name": "Merged to",
+              "value": "={{ $json.info[62].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "0fbe36a9-b110-48a8-9397-66c825107f3d",
+              "name": "Account",
+              "value": "={{ $json.info[63].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "97acdf8d-1330-422a-8c69-cb5b3d918b6c",
+              "name": "Escalation Level",
+              "value": "={{ $json.info[64].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "2385a4d4-a865-4f2b-b098-13945ccd8d66",
+              "name": "Classification",
+              "value": "={{ $json.info[65].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "3a6e7dd5-2c89-4e47-8126-d230f0c3f063",
+              "name": "Admin group",
+              "value": "={{ $json.info[66].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "dbb1ae74-44ce-44dd-9792-c9f22f97e3fc",
+              "name": "Service Record Type",
+              "value": "={{ $json.info[68].valueCaption }}",
+              "type": "string"
+            },
+            {
+              "id": "71d66e84-e462-4112-a51d-d1d55d2542dd",
+              "name": "Store",
+              "value": "={{ `=SWITCH(INDIRECT(\"L\"&ROW()),\n \"Liguanea\", 103,\n \"SF Liguanea\", 103,\n\n \"Mandeville\", 104,\n \"PF Mandeville\", 104,\n\n \"Manchester\", 105,\n \"SF Manchester\", 105,\n\n \"Greater Portmore\", 106,\n \"SF Greater Portmore\", 106,\n\n \"Portmore Mall\", 107,\n \"SF Portmore Mall\", 107,\n\n \"Duhaney Park\", 108,\n \"SF Duhaney Park\", 108,\n\n \"Westgate\", 109,\n \"SF Westgate\", 109,\n\n \"Harbour View\", 111,\n \"SF Harbour View\", 111,\n\n \"Blue Diamond\", 112,\n \"SF Blue Diamond\", 112,\n\n \"D&Y Sav\", 118,\n \"D&Y Supermarket\", 118,\n\n \"Junction\", 119,\n \"SF Junction\", 119,\n\n \"Brunswick\", 121,\n \"SF Brunswick\", 121,\n\n \"Savanna-La-Mar\", 122,\n \"SF Savanna-La-Mar\", 122,\n\n \"Whitter Village\", 123,\n \"PF Whitter Village\", 123,\n\n \"Ocho Rios\", 124,\n \"PF Ocho Rios\", 124,\n\n \"Burke Road\", 125,\n \"SF Burke Road\", 125,\n\n \"May Pen\", 126,\n \"SSF May Pen\", 126,\n\n \"Bogue\", 127,\n \"PF Bogue\", 127,\n\n \"Braeton\", 128,\n \"PF Braeton\", 128,\n \"Portmore Pines\", 128,\n\n \"Boulevard\", 129,\n \"SF Boulevard\", 129,\n\n \"Linstead\", 901,\n \"JRs BW Linstead\", 901,\n\n \"JRs May Pen\", 902,\n \"JRs BW May Pen\", 902,\n\n \"Head Office\", 1000,\n \"Warehouse TP\", 998\n-1)` }}",
+              "type": "string"
+            },
+            {
+              "id": "7c5e010b-d5d3-436f-937c-83486e2ac0ce",
+              "name": "Owner",
+              "value": "={{ `=SWITCH(INDIRECT(\"D\"&ROW()),\n \"Cheddi Goss\", \"cheddi.goss@pgjam.com\",\n \"Orane Phillips\", \"orane.phillips@pgjam.com\",\n \"Deron Dobson\", \"deron.dobson@pgjam.com\",\n \"Aaron Cummings\", \"aaron.cummings@pgjam.com\",\n \"COREY GRANT\", \"corey.grant@pgjam.com\",\n \"Keyaka Neil\", \"keyaka.neil@pgjam.com\",\n \"Gawayne Bromfield\", \"gawayne.bromfield@pgjam.com\",\n \"Tiffany Garrick\", \"Tiffany.Garrick@pgjam.com\",\n \"Christine Whyte\", \"christine.whyte@pgjam.com\",\n \"Owen Clashing\", \"owen.clashing@pgjam.com\",\n \"Alana Thompson\", \"alana.thompson@pgjam.com\",\n-1)` }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        1392
+      ],
+      "id": "1e72302e-0ad8-47b9-aace-076ccd8ce64e",
+      "name": "Api Tickets"
+    },
+    {
+      "parameters": {
+        "content": "## Sort and Delete rows\nA sort node is used delete from descending order rather than ascending. This makes sure the delete row node always deletes tickets from the bottom-up, preventing index shifts from ruining the mapping.\n\nIf any tickets found in the sheet that are not in the API, get removed from the sheet. ",
+        "height": 304,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        944,
+        1536
+      ],
+      "typeVersion": 1,
+      "id": "1da8c248-0cdb-4b4b-be68-9d87c14c841f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Login credentials\nWorkflow is scheduled to run every 5 mins.\n\nAn HTTP Login node is used to proof the user is an admin of SysAid using SysAid's api.\n\n\nA set node is used to get the ID from the header of the user, extracted and saved to use later to retrieve info from SysAid.\n",
+        "height": 352,
+        "width": 608
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1104,
+        1504
+      ],
+      "typeVersion": 1,
+      "id": "05b45b61-9f07-49d7-968b-66cb03343882",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Get Ticket's that are open\n\nHTTP node to grab all the status'. \n\nSet node to grab the relevant status' that are deemed \"Open\".\n\nHTTP node to grab tickets that have the status that are open.\n\nGrab all fields from the Api Ticket HTTP node.",
+        "height": 352,
+        "width": 816
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        1184
+      ],
+      "typeVersion": 1,
+      "id": "d1209da0-dcfd-4bad-b37f-82afefc63675",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Append and Read\n\nTickets are appended in the google sheet followed by a Read sheet node.\n\nThe read sheet node returns row number and is set using a set node. This will help determine which rows from the sheet are not drawn from the api for deletion.",
+        "height": 352,
+        "width": 704
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -432,
+        1680
+      ],
+      "typeVersion": 1,
+      "id": "87151b55-e9e7-47a2-be06-f0865af2b160",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Merge and Compare\n\nA simple merge node that merges the info from the API and the info from the google sheet.\n\nThe code node then does a comparison using info from the merge node. If a ticket that's in the sheet is not found from the Api, it gets marked for deletion.",
+        "height": 368,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        1472
+      ],
+      "typeVersion": 1,
+      "id": "3124a62e-bcc1-4e08-a814-74e6b33d8421",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "rowIndex",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        976,
+        1680
+      ],
+      "id": "644659a7-e491-4ee7-842c-953455097a8f",
+      "name": "Sort"
     },
     {
       "parameters": {
@@ -38,22 +677,22 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -416,
-        112
+        -864,
+        1696
       ],
-      "id": "a258c781-b2ba-4101-973c-974b21fa193d",
-      "name": "Login credentials",
+      "id": "4eaf1ce2-89a1-43b2-87ec-2e8a216727b3",
+      "name": "Login credentials1",
       "retryOnFail": true
     },
     {
       "parameters": {
-        "url": "=https://pgam.sysaidit.com/api/v1/sr?{{$json.statusQuery}}",
+        "url": "https://pgam.sysaidit.com/api/v1/list/status?entity=sr",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Cookie",
-              "value": "={{ $('Get cookie/sessionID\\'s').item.json.cookieHeader }}"
+              "value": "={{ $json.headers[\"set-cookie\"] }}"
             }
           ]
         },
@@ -62,10 +701,34 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        368,
-        112
+        -416,
+        1392
       ],
-      "id": "054e13f6-f552-44c9-b372-edc40906f569",
+      "id": "f12e3b15-bc35-4865-b1b7-3cae2ddc5774",
+      "name": "Get Status List",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "=https://pgam.sysaidit.com/api/v1/sr?{{ $json.id }}={{ $json.New }},{{ $json.Open }},{{ $json.Pending }},{{ $json.Postponed }},{{ $json[\"User Responded\"] }},{{ $json[\"Pending: Waiting on Hardware\"] }},{{ $json[\"Pending: Waiting on External Party\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('SessionID').item.json.headers[\"set-cookie\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -16,
+        1392
+      ],
+      "id": "bf2a73e3-8e8d-4d12-9df5-b1f104a4f640",
       "name": "ApiTickets",
       "retryOnFail": true
     },
@@ -82,16 +745,14 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": 377171780,
+          "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Sheet3",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=377171780"
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=0"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
-          "value": {
-            "TicketID": "={{ $json.TicketID }}"
-          },
+          "value": {},
           "matchingColumns": [
             "TicketID"
           ],
@@ -359,16 +1020,6 @@
             {
               "id": "SR Custom Int 1",
               "displayName": "SR Custom Int 1",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Total Activities time",
-              "displayName": "Total Activities time",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -787,16 +1438,6 @@
               "removed": false
             },
             {
-              "id": "hash",
-              "displayName": "hash",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
               "id": "Store",
               "displayName": "Store",
               "required": false,
@@ -827,68 +1468,19 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        192,
-        320
+        -384,
+        1856
       ],
-      "id": "0c477935-8b7f-47f3-b139-081cccd7d0f4",
+      "id": "4d731733-4f2a-43f8-80cf-aacf8d2555d3",
       "name": "Append or update row in sheet",
       "retryOnFail": true,
+      "executeOnce": false,
       "credentials": {
         "googleApi": {
           "id": "Fr8gBQ8Q5zSOdGfU",
           "name": "Google Service Account account"
         }
       }
-    },
-    {
-      "parameters": {
-        "jsCode": "function simpleHash(obj) {\n  const str = JSON.stringify(obj);\n  let hash = 0, i, chr;\n  for (i = 0; i < str.length; i++) {\n    chr = str.charCodeAt(i);\n    hash = ((hash << 5) - hash) + chr;\n    hash |= 0;\n  }\n  return hash.toString();\n}\n\nfunction getValueCaption(infoArray, possibleKeys) {\n  for (const key of possibleKeys) {\n    const match = infoArray.find(e =>\n      e.key?.toLowerCase() === key.toLowerCase() ||\n      e.keyCaption?.toLowerCase() === key.toLowerCase()\n    );\n    if (match) return match.valueCaption || \"\";\n  }\n  return \"\";\n}\n\nconst preferredOrder = [\n  \"TicketID\",\n  \"Request Time\",\n  \"Applicant\",\n  \"Responsibility\",\n  \"Status\",\n  \"Priority\",\n  \"Category\",\n  \"Sub Category\",\n  \"Third Level Category\",\n  \"Difficulty Category\",\n  \"Impact\",\n  \"Location\",\n  \"Main CI\",\n  \"Title\"\n];\n\n// Keys we don't want duplicated\nconst excludedKeys = [\n  \"submit_user\", \"Submit user\",\n  \"responsibility\", \"Assigned to\", \"Responsibility\",\n  \"insert_time\", \"Request time\", \"Request Time\",\n  \"problem_sub_type\", \"Sub-category\", \"Sub Category\",\n  \"=== Hide/Show Divider ===\"\n];\n\nreturn items.map((item, index) => {\n  const info = item.json.info || [];\n\n  // Extract renamed values\n  const reqTime = getValueCaption(info, [\"Request time\", \"insert_time\", \"Request Time\"]);\n  const applicant = getValueCaption(info, [\"submit_user\", \"Submit user\"]);\n  const responsibility = getValueCaption(info, [\"responsibility\", \"Assigned to\", \"Responsibility\"]);\n  const subCategory = getValueCaption(info, [\"problem_sub_type\", \"Sub-category\", \"Sub Category\"]);\n\n  // Build dataset excluding duplicates and unwanted keys\n  const fieldData = info.reduce((acc, field) => {\n    const keyCaption = field.keyCaption?.trim();\n    if (!keyCaption) return acc;\n\n    // Skip if in excludedKeys\n    if (excludedKeys.includes(field.key) || excludedKeys.includes(keyCaption)) {\n      return acc;\n    }\n\n    acc[keyCaption] = field.valueCaption ?? \"\";\n    return acc;\n  }, {});\n\n  // Add renamed/preferred fields\n  fieldData[\"TicketID\"] = item.json.id?.toString() || \"\";\n  fieldData[\"Request Time\"] = reqTime;\n  fieldData[\"Applicant\"] = applicant;\n  fieldData[\"Responsibility\"] = responsibility;\n  fieldData[\"Sub Category\"] = subCategory;\n\n  // Reorder preferred fields\n  const orderedData = {};\n  preferredOrder.forEach(field => {\n    orderedData[field] = fieldData[field] ?? \"\";\n  });\n\n  // Append remaining fields\n  Object.keys(fieldData).forEach(key => {\n    if (!preferredOrder.includes(key)) {\n      orderedData[key] = fieldData[key];\n    }\n  });\n\n  // Add hash\n  const hash = simpleHash(orderedData);\n  orderedData[\"hash\"] = hash;\n\n  // Add location formula column\n  const rowNumber = index + 2;\n  orderedData[\"Store\"] = `=SWITCH(L${rowNumber},\"Liguanea\", 103,\n \"Mandeville\", 104,\n \"Manchester\", 105,\n \"Greater Portmore\", 106,\n \"Portmore Mall\", 107,\n \"Duhaney Park\", 108,\n \"Westgate\", 109,\n \"Harbour View\", 111,\n \"Blue Diamond\", 112,\n \"D&Y Sav\", 118,\n \"Junction\", 119,\n \"Brunswick\", 121,\n \"Savanna-La-Mar\", 122,\n \"Whitter Village\", 123,\n \"Ocho Rios\", 124,\n \"Burke Road\", 125,\n \"May Pen\", 126,\n \"Bogue\", 127,\n \"Braeton\", 128,\n \"Portmore Pines\", 128,\n \"Boulevard\", 129,\n \"Head Office\", 1000,\n \"Linstead\", 901,\n \"JRs May Pen\", 902,\n-1)`;\n\n  // Add email formula column\n  orderedData[\"Owner\"] = `=SWITCH(D${rowNumber},\n \"Cheddi Goss\", \"cheddi.goss@pgjam.com\",\n \"Orane Phillips\", \"orane.phillips@pgjam.com\",\n \"Deron Dobson\", \"deron.dobson@pgjam.com\",\n \"Aaron Cummings\", \"aaron.cummings@pgjam.com\",\n \"COREY GRANT\", \"corey.grant@pgjam.com\",\n \"Keyaka Neil\", \"keyaka.neil@pgjam.com\",\n \"Gawayne Bromfield\", \"gawayne.bromfield@pgjam.com\",\n \"Tiffany Garrick\", \"Tiffany.Garrick@pgjam.com\",\n \"Christine Whyte\", \"christine.whyte@pgjam.com\",\n \"Owen Clashing\", \"owen.clashing@pgjam.com\",\n \"Alana Thompson\", \"alana.thompson@pgjam.com\",\n-1)`;\n\n  return {\n    json: {\n      ...orderedData,\n      hash\n    }\n  };\n});"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        544,
-        112
-      ],
-      "id": "d7f92a3a-0b61-4e7a-be6b-b518b792276e",
-      "name": "API Ticket Hash"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Mapping of status IDs to class types\nconst classMap = {\n  \"1\": \"open\",    // New\n  \"2\": \"open\",    // Open\n  \"4\": \"closed\",  // Resolved\n  \"5\": \"open\",    // Pending\n  \"6\": \"open\",    // Postponed\n  \"9\": \"open\",    // User Responded\n  \"10\": \"open\",   // Pending: Waiting on Hardware\n  \"11\": \"open\",   // Pending: Waiting on External Party\n  \"98976\": \"closed\", // Auto Archive\n  \"98980\": \"closed\"  // Merged-Archived\n};\n\n// Get the status list from previous node\nconst statusList = items[0].json.values || [];\n\n// Extract only the status IDs classified as \"open\"\nconst openStatusIDs = statusList\n  .filter(status => classMap[status.id] === \"open\")\n  .map(status => status.id);\n\n// Join into query string format\nconst statusQuery = `status=${openStatusIDs.join(\",\")}`;\n\n// Output it for use in the next API node\nreturn [\n  {\n    json: {\n      openStatusIDs,\n      statusQuery\n    }\n  }\n];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        144,
-        0
-      ],
-      "id": "beb5fde3-4647-4203-bd01-66ee4641a0e3",
-      "name": "Status IDs with Open"
-    },
-    {
-      "parameters": {
-        "url": "https://pgam.sysaidit.com/api/v1/list/status?entity=sr",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Cookie",
-              "value": "={{ $json.cookieHeader }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        0,
-        0
-      ],
-      "id": "0781137d-481c-49b6-8c3e-226febecaa69",
-      "name": "Get Status List",
-      "retryOnFail": true
     },
     {
       "parameters": {
@@ -902,20 +1494,20 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": 377171780,
+          "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Sheet3",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=377171780"
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=0"
         },
         "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        368,
-        320
+        -128,
+        1856
       ],
-      "id": "8a0b87f3-fb27-49c0-92df-21d49280012b",
+      "id": "f8119ccb-576f-4798-8678-de4b7b24467d",
       "name": "SheetRow",
       "retryOnFail": true,
       "executeOnce": true,
@@ -927,17 +1519,31 @@
       }
     },
     {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        1680
+      ],
+      "id": "2aff4e42-e32b-49d0-b6ed-b184843ddf5f",
+      "name": "Merge"
+    },
+    {
       "parameters": {
-        "jsCode": "function simpleHash(obj) {\n  const str = JSON.stringify(obj);\n  let hash = 0, i, chr;\n  for (i = 0; i < str.length; i++) {\n    chr = str.charCodeAt(i);\n    hash = ((hash << 5) - hash) + chr;\n    hash |= 0;\n  }\n  return hash.toString();\n}\n\nreturn items.map(item => {\n  const data = item.json;\n  \n  function normalizeTime(t) {\n  return t.replace(/(\\s)(\\d{1}):/, '$10$2:');\n}\n\nconst hashBase = {\n  \"Request Time\": normalizeTime(data[\"Request Time\"] || \"\"),\n  Applicant: data[\"Applicant\"] || \"\",\n  \"Responsibility\": data[\"Responsibility\"] || \"\",\n  Status: data[\"Status\"] || \"\",\n  Priority: data[\"Priority\"] || \"\",\n  Category: data[\"Category\"] || \"\",\n  \"Sub Category\": data[\"Sub Category\"] || \"\",\n  \"Third Level Category\": data[\"Third Level Category\"] || \"\",\n  \"Difficulty Category\": data[\"Difficulty Category\"] || \"\",\n  Impact: data[\"Impact\"] || \"\",\n  Location: data[\"Location\"] || \"\",\n  \"Main CI\": data[\"Main CI\"] || \"\",\n  Title: data[\"Title\"]\n};\n\n  const recomputedHash = simpleHash(hashBase);\n  const storedHash = data.hash?.toString() || \"\";\n\n  return {\n  json: {\n    TicketID: data.TicketID?.toString() || \"\",\n    rowIndex: data.row_number,\n    recomputedHash,\n    hashBase: JSON.stringify(hashBase),  // <== Add this\n    storedHash,\n    _source: \"sheet\"\n  }\n};\n});\n"
+        "jsCode": "const apiTicketIds = new Set(\n  $items(\"Api Tickets\").map(item => String(item.json.TicketID).trim())\n);\n\nconst closedTickets = $items(\"Sheet Tickets\").filter(item => {\n  const sheetTicketId = String(item.json.TicketID).trim();\n  return !apiTicketIds.has(sheetTicketId);\n});\n\nreturn closedTickets.map(item => ({\n  json: {\n    TicketID: item.json.TicketID,\n    rowIndex: item.json.row_number\n  }\n}));\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        544,
-        320
+        704,
+        1680
       ],
-      "id": "bd64f3c6-26d9-4018-9c68-c1ea6d652147",
-      "name": "Hash Sheet Tickets"
+      "id": "f2d59bea-9eaa-4f05-84f5-5287abcd3778",
+      "name": "Find Closed Tickets",
+      "retryOnFail": true,
+      "executeOnce": true,
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -950,22 +1556,13 @@
           },
           "conditions": [
             {
-              "id": "84d5b24b-fe87-4a21-91d6-8bb6ea8f408b",
+              "id": "78eb24b5-326c-47d2-b38b-18e6b4b4742a",
               "leftValue": "={{ $json.rowIndex }}",
-              "rightValue": 0,
+              "rightValue": "",
               "operator": {
                 "type": "number",
-                "operation": "notEmpty",
+                "operation": "exists",
                 "singleValue": true
-              }
-            },
-            {
-              "id": "06a5d9c4-166b-4a14-abf4-05197638e91d",
-              "leftValue": "={{ $json.rowIndex }}",
-              "rightValue": 1,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
               }
             }
           ],
@@ -976,29 +1573,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1168,
-        256
+        1200,
+        1680
       ],
-      "id": "b944a203-1310-4968-8618-6001792cc623",
-      "name": "If",
-      "executeOnce": false,
-      "retryOnFail": true
-    },
-    {
-      "parameters": {
-        "jsCode": "const apiTicketIds = new Set($items(\"API Ticket Hash\").map(item => item.json.TicketID));\n\nconst closedTickets = $items(\"Hash Sheet Tickets\").filter(item => {\n  const sheetTicketId = item.json.TicketID;\n  return !apiTicketIds.has(sheetTicketId);\n});\n\nreturn closedTickets.map(item => ({\n  json: {\n    TicketID: item.json.TicketID,\n    rowIndex: item.json.rowIndex\n  }\n}));\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        976,
-        256
-      ],
-      "id": "f7e34bbb-4780-4710-817b-dd8188e59d53",
-      "name": "Find Closed Tickets",
-      "retryOnFail": true,
-      "executeOnce": false,
-      "alwaysOutputData": false
+      "id": "68f14551-e314-4067-a228-e4c63aee616e",
+      "name": "If"
     },
     {
       "parameters": {
@@ -1013,21 +1592,20 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": 377171780,
+          "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Sheet3",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=377171780"
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=0"
         },
-        "startIndex": "={{ $json.rowIndex }}",
-        "numberToDelete": "={{ $json.rowIndex + 1 }}"
+        "startIndex": "={{ $json.rowIndex }}"
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        1408,
-        240
+        1504,
+        1664
       ],
-      "id": "0e0fefce-4b12-48ed-bc4a-901e70559e8f",
+      "id": "4eac6b09-e664-42cf-b432-c9bddeed2854",
       "name": "Delete rows or columns from sheet",
       "alwaysOutputData": false,
       "executeOnce": false,
@@ -1038,17 +1616,6 @@
           "name": "Google Service Account account"
         }
       }
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        768,
-        256
-      ],
-      "id": "c3397f06-2faf-40dc-a582-46bddd17bf15",
-      "name": "Merge"
     },
     {
       "parameters": {
@@ -1063,53 +1630,55 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -608,
-        112
+        -1072,
+        1696
       ],
-      "id": "39f58448-87a5-429f-b615-c4c364fc1cf5",
+      "id": "43dd9dad-5f9b-4280-94c1-1de35ed87c2c",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "Request Time"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        160,
+        1552
+      ],
+      "id": "4913be5d-cf65-43a9-ba68-4a76cb61f477",
+      "name": "Sort Time"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json[\"Request Time\"] }}",
+        "format": "custom",
+        "customFormat": "yyyy-MM-dd HH:mm:ss",
+        "outputFieldName": "Request Time",
+        "options": {
+          "includeInputFields": true
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        1552
+      ],
+      "id": "7f4142c9-5c90-4aba-ba8e-283df03656a8",
+      "name": "Date & Time"
     }
   ],
   "connections": {
-    "Login credentials": {
-      "main": [
-        [
-          {
-            "node": "Get cookie/sessionID's",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "ApiTickets": {
-      "main": [
-        [
-          {
-            "node": "API Ticket Hash",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "API Ticket Hash": {
-      "main": [
-        [
-          {
-            "node": "Append or update row in sheet",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get cookie/sessionID's": {
+    "SessionID": {
       "main": [
         [
           {
@@ -1120,7 +1689,7 @@
         ]
       ]
     },
-    "Status IDs with Open": {
+    "Open Status": {
       "main": [
         [
           {
@@ -1131,29 +1700,7 @@
         ]
       ]
     },
-    "Get Status List": {
-      "main": [
-        [
-          {
-            "node": "Status IDs with Open",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "SheetRow": {
-      "main": [
-        [
-          {
-            "node": "Hash Sheet Tickets",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Hash Sheet Tickets": {
+    "Sheet Tickets": {
       "main": [
         [
           {
@@ -1164,18 +1711,23 @@
         ]
       ]
     },
-    "If": {
+    "Api Tickets": {
       "main": [
         [
           {
-            "node": "Delete rows or columns from sheet",
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Date & Time",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Find Closed Tickets": {
+    "Sort": {
       "main": [
         [
           {
@@ -1186,11 +1738,33 @@
         ]
       ]
     },
-    "Merge": {
+    "Login credentials1": {
       "main": [
         [
           {
-            "node": "Find Closed Tickets",
+            "node": "SessionID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Status List": {
+      "main": [
+        [
+          {
+            "node": "Open Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ApiTickets": {
+      "main": [
+        [
+          {
+            "node": "Api Tickets",
             "type": "main",
             "index": 0
           }
@@ -1208,11 +1782,77 @@
         ]
       ]
     },
+    "SheetRow": {
+      "main": [
+        [
+          {
+            "node": "Sheet Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Find Closed Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Closed Tickets": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "Login credentials",
+            "node": "Login credentials1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort Time": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Sort Time",
             "type": "main",
             "index": 0
           }
@@ -1223,12 +1863,16 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "e53f1a53-c223-4d42-b840-a607ec8754b5",
-  "triggerCount": 0,
+  "versionId": "d840cbbe-70e1-4144-88ce-5913830c02c1",
+  "triggerCount": 1,
   "tags": []
 }
