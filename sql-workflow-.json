@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-18T17:58:43.004Z",
-  "updatedAt": "2025-08-25T15:51:50.257Z",
+  "updatedAt": "2025-09-01T19:23:43.895Z",
   "id": "gY35g77PTE3nJsmG",
   "name": "SQL Workflow",
   "active": false,
@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "position": [
         -1248,
-        32
+        16
       ],
       "typeVersion": 1
     },
@@ -371,7 +371,7 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        64,
+        48,
         0
       ],
       "id": "b46eaf76-aec5-4e07-8173-babe1cbff9f3",
@@ -1015,7 +1015,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "60e04005-7d5e-49fb-a8dd-16cf0014a53d",
+  "versionId": "23e88321-cb68-4326-881a-10f7ec3ad66a",
   "triggerCount": 0,
   "tags": []
 }
