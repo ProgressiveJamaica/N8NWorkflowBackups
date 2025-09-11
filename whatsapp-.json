@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-21T20:21:13.137Z",
-  "updatedAt": "2025-08-25T17:12:16.004Z",
+  "updatedAt": "2025-09-02T19:45:43.584Z",
   "id": "A30kU1rcb6mKeDG6",
   "name": "Whatsapp",
   "active": false,
@@ -11,12 +11,14 @@
         "updates": [
           "messages"
         ],
-        "options": {}
+        "options": {
+          "messageStatusUpdates": []
+        }
       },
       "type": "n8n-nodes-base.whatsAppTrigger",
       "typeVersion": 1,
       "position": [
-        -96,
+        -144,
         -16
       ],
       "id": "899f1d6b-ad6a-4ee2-97e4-f08c5aa54c06",
@@ -37,7 +39,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        112,
+        96,
         -16
       ],
       "id": "1e398b8c-09d2-4ca6-b200-d4f4b41b3bc5",
@@ -49,13 +51,13 @@
         "operation": "send",
         "phoneNumberId": "795070217018578",
         "recipientPhoneNumber": "18763514207 - ronaldo",
-        "textBody": "test",
+        "textBody": "Test message",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        464,
+        432,
         -16
       ],
       "id": "2db2a6c4-2b88-41dc-a16a-104d1dbfbe7e",
@@ -137,7 +139,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "5f2bbea1-78be-4036-acc7-513d2ef6876e",
+  "versionId": "dc1ef004-ea03-4f62-8168-55a34aab049d",
   "triggerCount": 0,
   "tags": []
 }
