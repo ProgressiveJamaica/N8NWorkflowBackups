@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-08-13T21:53:08.988Z",
+  "updatedAt": "2025-09-11T21:43:02.461Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -24,8 +24,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 2,
       "position": [
-        -32,
-        0
+        -880,
+        -208
       ]
     },
     {
@@ -49,134 +49,104 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -224,
-        0
+        -1040,
+        -208
       ],
       "id": "e078ad3a-eba0-4c80-888e-c5dc9e0338cf",
       "name": "Zabbix Login"
-    },
-    {
-      "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"hostgroup.get\",\n  \"params\": {\n    \"output\": \"extend\",\n    \"filter\": {\n      \"name\": \"Workstations\"\n    }\n  },\n  \"id\": 2\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        176,
-        0
-      ],
-      "id": "61dc403f-7908-4495-962b-4f989c3dfd50",
-      "name": "Get Group ID"
-    },
-    {
-      "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"host.get\",\n  \"params\": {\n    \"output\": [\"hostid\", \"host\", \"name\"],\n    \"groupids\": \"24\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Duhaney Park\",\n        \"operator\": 0\n      }\n    ],\n    \"selectInterfaces\": [\"ip\"]\n  },\n  \"id\": 3\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        368,
-        0
-      ],
-      "id": "833bee4a-e36a-453f-96f9-c35c6bbc4466",
-      "name": "Get WKN Hosts"
     },
     {
       "parameters": {},
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -272,
-        224
+        -1216,
+        -208
       ],
-      "id": "e2a29ec1-8467-439b-9694-b11642492971",
+      "id": "2b1667f6-2b5c-4dd8-acdb-f357448fd370",
       "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
-        "fileSelector": "/files/braeton-hosts.csv",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Braeton\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
         "options": {}
       },
-      "type": "n8n-nodes-base.readWriteFile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        -384
+      ],
+      "id": "39c806bf-9887-4e25-b678-a734d848aab6",
+      "name": "Get Braeton problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -80,
-        224
+        288,
+        -384
       ],
-      "id": "c36f16bc-349f-445a-b5f0-9bdec3a4dc03",
-      "name": "Read/Write Files from Disk",
+      "id": "6bf7965a-9a21-466d-ac0c-55d4df34f84c",
+      "name": "Split Out1",
       "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "name": "Spreadsheet File",
-      "type": "n8n-nodes-base.spreadsheetFile",
-      "typeVersion": 1,
-      "position": [
-        144,
-        224
-      ],
-      "id": "cb55c7f2-8314-4998-8235-720576012064"
-    },
-    {
-      "parameters": {
-        "filePath": "/files/braeton-hosts.csv"
-      },
-      "name": "Read Binary File",
-      "type": "n8n-nodes-base.readBinaryFile",
-      "position": [
-        -832,
-        32
-      ],
-      "typeVersion": 1,
-      "id": "28a36aa7-c0b1-4214-b20f-674e3f346365"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "482bfb48-4b7e-401e-91b8-4728976c8f2c",
-              "name": "Name",
-              "value": "={{ $json.Name }}",
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
               "type": "string"
             },
             {
-              "id": "89d62a6a-3fd6-4af2-99f9-0c60302ddc80",
-              "name": "IP",
-              "value": "={{ $json.IP }}",
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
               "type": "string"
             }
           ]
@@ -186,11 +156,588 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        352,
-        224
+        496,
+        -384
       ],
-      "id": "1c6a98c8-751c-4cbf-a74e-e3ef2bc0e160",
+      "id": "2ac7c890-f5fa-4069-89b5-3a867954359c",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Braeton problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        -384
+      ],
+      "id": "d4dc4d55-8b76-4d2c-82ad-bd3598993224",
+      "name": "Braeton Triggers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -384
+      ],
+      "id": "53fe3c1c-2404-449c-91bb-618d666e5c98",
+      "name": "Braeton Problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -208
+      ],
+      "id": "f058c2f0-b3f0-484e-b078-5a8626f7fa1b",
+      "name": "Split Out2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        -208
+      ],
+      "id": "2b50f7f7-bbeb-418b-b7bb-3251ca61a8d4",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Harbour View\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        -208
+      ],
+      "id": "877c1d9f-b196-41c2-8812-aeb79dc372f4",
+      "name": "Get Harbour View problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Harbour View problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        -208
+      ],
+      "id": "4901bae6-c444-4a73-a39d-ea7370a6033d",
+      "name": "Harbour View Triggers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -208
+      ],
+      "id": "653f5226-d51a-4ecf-b3f4-bc6757821bd8",
+      "name": "Harbour View problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Boulevard\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        -560
+      ],
+      "id": "d8b7c1bd-e9de-4f7d-b363-f8de25aa8202",
+      "name": "Get Boulevard problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -560
+      ],
+      "id": "dd7a9f45-86aa-4724-8e87-ced25489d8d8",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        -560
+      ],
+      "id": "b23a82db-ce3c-47cd-9888-1811c078078c",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Boulevard problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        -560
+      ],
+      "id": "145ff6ee-4c97-4ec0-9396-e44007b353fa",
+      "name": "Boulevard Triggers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -560
+      ],
+      "id": "c177b61f-587d-4dd2-bea6-aa8439a22cda",
+      "name": "Boulevard Problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -16
+      ],
+      "id": "0c2ac560-0f35-4f31-96a4-1d343f7f7000",
+      "name": "Split Out3",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        -16
+      ],
+      "id": "a21773a1-4b81-4fa6-93d8-9a6af3090d5a",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Liguanea\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        -16
+      ],
+      "id": "2f471897-f1df-41de-839e-23379712f957",
+      "name": "Get Ligunea Problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Ligunea Problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        -16
+      ],
+      "id": "e0613452-297c-4a4a-8c66-40fe548a0a77",
+      "name": "Liguanea Triggers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -16
+      ],
+      "id": "5521acf8-ee6e-458e-ab9a-d8762466c620",
+      "name": "Liguanea problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        192
+      ],
+      "id": "acb8b5c3-7870-40a6-8290-1f64408e1529",
+      "name": "Global problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        192
+      ],
+      "id": "8682c4ba-a7ea-4c11-9983-f7146e1d0e0f",
+      "name": "Split Out4",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        192
+      ],
+      "id": "42196efb-2bb1-49af-8bed-c42ef4a8df9f",
+      "name": "Edit Fields4"
     }
   ],
   "connections": {
@@ -209,18 +756,22 @@
       "main": [
         [
           {
-            "node": "Get Group ID",
+            "node": "Get Braeton problems",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Group ID": {
-      "main": [
-        [
+          },
           {
-            "node": "Get WKN Hosts",
+            "node": "Get Harbour View problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Boulevard problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Ligunea Problems",
             "type": "main",
             "index": 0
           }
@@ -231,29 +782,205 @@
       "main": [
         [
           {
-            "node": "Read/Write Files from Disk",
+            "node": "Zabbix Login",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Read/Write Files from Disk": {
+    "Split Out1": {
       "main": [
         [
           {
-            "node": "Spreadsheet File",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Spreadsheet File": {
+    "Get Braeton problems": {
+      "main": [
+        [
+          {
+            "node": "Braeton Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Braeton Triggers": {
+      "main": [
+        [
+          {
+            "node": "Braeton Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Braeton Problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Harbour View problems": {
+      "main": [
+        [
+          {
+            "node": "Harbour View Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Harbour View Triggers": {
+      "main": [
+        [
+          {
+            "node": "Harbour View problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Harbour View problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Boulevard problems": {
+      "main": [
+        [
+          {
+            "node": "Boulevard Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
       "main": [
         [
           {
             "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Boulevard Triggers": {
+      "main": [
+        [
+          {
+            "node": "Boulevard Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Boulevard Problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ligunea Problems": {
+      "main": [
+        [
+          {
+            "node": "Liguanea Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Liguanea Triggers": {
+      "main": [
+        [
+          {
+            "node": "Liguanea problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Liguanea problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Global problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out4",
             "type": "main",
             "index": 0
           }
@@ -265,9 +992,11 @@
     "executionOrder": "v1"
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "2be617f7-ef39-4d88-9287-614c58bc4e96",
+  "versionId": "c5bd2990-da2b-4e9b-b0d0-53ec14faae29",
   "triggerCount": 0,
   "tags": []
 }
