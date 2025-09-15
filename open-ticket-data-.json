@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-08-13T21:51:30.482Z",
-  "updatedAt": "2025-09-11T21:53:03.225Z",
+  "updatedAt": "2025-09-11T21:54:26.988Z",
   "id": "anJhLUN0JjdpG2ht",
   "name": "Open Ticket Data",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
