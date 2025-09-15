@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-09-11T21:43:02.461Z",
+  "updatedAt": "2025-09-15T21:01:01.473Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -88,8 +88,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -336,
-        -384
+        -320,
+        -560
       ],
       "id": "39c806bf-9887-4e25-b678-a734d848aab6",
       "name": "Get Braeton problems",
@@ -108,8 +108,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        288,
-        -384
+        304,
+        -560
       ],
       "id": "6bf7965a-9a21-466d-ac0c-55d4df34f84c",
       "name": "Split Out1",
@@ -139,7 +139,7 @@
             },
             {
               "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Priority",
+              "name": "Severity",
               "value": "={{ $json.priority }}",
               "type": "string"
             },
@@ -156,8 +156,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        496,
-        -384
+        512,
+        -560
       ],
       "id": "2ac7c890-f5fa-4069-89b5-3a867954359c",
       "name": "Edit Fields1"
@@ -169,8 +169,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -128,
-        -384
+        -112,
+        -560
       ],
       "id": "d4dc4d55-8b76-4d2c-82ad-bd3598993224",
       "name": "Braeton Triggers"
@@ -198,8 +198,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        80,
-        -384
+        96,
+        -560
       ],
       "id": "53fe3c1c-2404-449c-91bb-618d666e5c98",
       "name": "Braeton Problems",
@@ -218,8 +218,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        288,
-        -208
+        304,
+        -384
       ],
       "id": "f058c2f0-b3f0-484e-b078-5a8626f7fa1b",
       "name": "Split Out2",
@@ -249,7 +249,7 @@
             },
             {
               "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Priority",
+              "name": "Severity",
               "value": "={{ $json.priority }}",
               "type": "string"
             },
@@ -266,8 +266,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        496,
-        -208
+        512,
+        -384
       ],
       "id": "2b50f7f7-bbeb-418b-b7bb-3251ca61a8d4",
       "name": "Edit Fields2"
@@ -294,8 +294,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -336,
-        -208
+        -320,
+        -384
       ],
       "id": "877c1d9f-b196-41c2-8812-aeb79dc372f4",
       "name": "Get Harbour View problems",
@@ -313,8 +313,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -128,
-        -208
+        -112,
+        -384
       ],
       "id": "4901bae6-c444-4a73-a39d-ea7370a6033d",
       "name": "Harbour View Triggers"
@@ -342,8 +342,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        80,
-        -208
+        96,
+        -384
       ],
       "id": "653f5226-d51a-4ecf-b3f4-bc6757821bd8",
       "name": "Harbour View problems",
@@ -376,8 +376,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -336,
-        -560
+        -320,
+        -736
       ],
       "id": "d8b7c1bd-e9de-4f7d-b363-f8de25aa8202",
       "name": "Get Boulevard problems",
@@ -396,8 +396,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        288,
-        -560
+        304,
+        -736
       ],
       "id": "dd7a9f45-86aa-4724-8e87-ced25489d8d8",
       "name": "Split Out",
@@ -427,7 +427,7 @@
             },
             {
               "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Priority",
+              "name": "Severity",
               "value": "={{ $json.priority }}",
               "type": "string"
             },
@@ -444,8 +444,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        496,
-        -560
+        512,
+        -736
       ],
       "id": "b23a82db-ce3c-47cd-9888-1811c078078c",
       "name": "Edit Fields"
@@ -457,8 +457,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -128,
-        -560
+        -112,
+        -736
       ],
       "id": "145ff6ee-4c97-4ec0-9396-e44007b353fa",
       "name": "Boulevard Triggers"
@@ -486,8 +486,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        80,
-        -560
+        96,
+        -736
       ],
       "id": "c177b61f-587d-4dd2-bea6-aa8439a22cda",
       "name": "Boulevard Problems",
@@ -506,8 +506,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        288,
-        -16
+        304,
+        -208
       ],
       "id": "0c2ac560-0f35-4f31-96a4-1d343f7f7000",
       "name": "Split Out3",
@@ -537,7 +537,7 @@
             },
             {
               "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Priority",
+              "name": "Severity",
               "value": "={{ $json.priority }}",
               "type": "string"
             },
@@ -554,8 +554,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        496,
-        -16
+        512,
+        -208
       ],
       "id": "a21773a1-4b81-4fa6-93d8-9a6af3090d5a",
       "name": "Edit Fields3"
@@ -582,8 +582,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -336,
-        -16
+        -320,
+        -208
       ],
       "id": "2f471897-f1df-41de-839e-23379712f957",
       "name": "Get Ligunea Problems",
@@ -601,8 +601,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -128,
-        -16
+        -112,
+        -208
       ],
       "id": "e0613452-297c-4a4a-8c66-40fe548a0a77",
       "name": "Liguanea Triggers"
@@ -630,8 +630,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        80,
-        -16
+        96,
+        -208
       ],
       "id": "5521acf8-ee6e-458e-ab9a-d8762466c620",
       "name": "Liguanea problems",
@@ -641,6 +641,68 @@
           "name": "Zabbix account"
         }
       }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -32
+      ],
+      "id": "5e4fddee-87e1-41e2-aab9-165b66ce61cc",
+      "name": "Split Out5",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"May Pen\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "3f20bff0-91e6-4498-b6b8-d64b71e162e5",
+      "name": "Get May Pen Problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get May Pen Problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -32
+      ],
+      "id": "6d10d30b-e876-47fa-9685-e9e2587776b5",
+      "name": "May Pen triggers"
     },
     {
       "parameters": {
@@ -659,21 +721,341 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -336,
-        192
+        96,
+        -32
       ],
-      "id": "acb8b5c3-7870-40a6-8290-1f64408e1529",
-      "name": "Global problems",
+      "id": "2a1c54b0-345d-4a20-ae2e-18587a83a7bc",
+      "name": "May Pen problems",
       "credentials": {
         "zabbixApi": {
           "id": "yJ0hjegcWJuG6BZR",
           "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Severity",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        512,
+        -32
+      ],
+      "id": "60591c01-32f6-47a1-990b-b21f7f342e75",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Boulevard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Host Name",
+              "displayName": "Host Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        -736
+      ],
+      "id": "a3e319e6-f704-43bd-a12d-1af6b2838df8",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 54639254,
+          "mode": "list",
+          "cachedResultName": "Braeton",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        -560
+      ],
+      "id": "f52fc265-203d-4aa6-9066-76bd512871c7",
+      "name": "Append or update row in sheet1",
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2043642226,
+          "mode": "list",
+          "cachedResultName": "HB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=2043642226"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        -384
+      ],
+      "id": "568279a8-8513-4378-bb2e-cd26c3a8e333",
+      "name": "Append or update row in sheet2",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2062678510,
+          "mode": "list",
+          "cachedResultName": "Ligunea",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=2062678510"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        -208
+      ],
+      "id": "58ec1b75-1622-4f7a-9cf9-de8cdbe06618",
+      "name": "Append or update row in sheet3",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1706416370,
+          "mode": "list",
+          "cachedResultName": "May Pen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=1706416370"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        -32
+      ],
+      "id": "e304f27e-bcc9-4e11-9a1d-e0dad177df37",
+      "name": "Append or update row in sheet4",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
         }
       }
     },
@@ -685,10 +1067,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -112,
-        192
+        304,
+        160
       ],
-      "id": "8682c4ba-a7ea-4c11-9983-f7146e1d0e0f",
+      "id": "af508de4-25e9-4349-a494-0e8d1c547a42",
       "name": "Split Out4",
       "alwaysOutputData": true
     },
@@ -716,7 +1098,7 @@
             },
             {
               "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Priority",
+              "name": "Severity",
               "value": "={{ $json.priority }}",
               "type": "string"
             },
@@ -733,11 +1115,429 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        96,
-        192
+        512,
+        160
       ],
-      "id": "42196efb-2bb1-49af-8bed-c42ef4a8df9f",
-      "name": "Edit Fields4"
+      "id": "d98973ac-beb2-4222-9d92-22015e6270a5",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 761804348,
+          "mode": "list",
+          "cachedResultName": "Chester",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=761804348"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host Name",
+              "displayName": "Host Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        160
+      ],
+      "id": "58af9e1e-bbf0-48b6-bd0d-ee7de4a5e366",
+      "name": "Append or update row in sheet5",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Manchester\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        160
+      ],
+      "id": "328e498c-8949-488f-a3e2-5272f42382a0",
+      "name": "Get Manchester problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Manchester problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        160
+      ],
+      "id": "61ffd072-2617-426f-9ddc-d11f79319fb2",
+      "name": "Chester Triggers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        96,
+        160
+      ],
+      "id": "1cd8640a-df06-476e-85bf-84e5a4e27db1",
+      "name": "Chester problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        304,
+        352
+      ],
+      "id": "c6c357dd-eafb-4480-8129-381987ceb337",
+      "name": "Split Out6",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Severity",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        512,
+        352
+      ],
+      "id": "284840e6-ed6b-4c41-a5b3-a8808f34fefb",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 761804348,
+          "mode": "list",
+          "cachedResultName": "Chester",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=761804348"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host Name",
+              "displayName": "Host Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        352
+      ],
+      "id": "56c488a7-d851-4ba7-9d0b-bb9e44a7f5ea",
+      "name": "Append or update row in sheet6",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Ocho Rios\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        352
+      ],
+      "id": "6b453935-2ec6-4945-a730-219007a9da0d",
+      "name": "Get Ocho Rios problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        96,
+        352
+      ],
+      "id": "89497266-4951-409d-8153-ff823a775a90",
+      "name": "Get Ochi problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Ocho Rios problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        352
+      ],
+      "id": "0121605d-f3d2-4b99-9879-82c82c7541ea",
+      "name": "Ochi Triggers"
     }
   ],
   "connections": {
@@ -761,17 +1561,32 @@
             "index": 0
           },
           {
-            "node": "Get Harbour View problems",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Get Boulevard problems",
             "type": "main",
             "index": 0
           },
           {
             "node": "Get Ligunea Problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get May Pen Problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Harbour View problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Manchester problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Ocho Rios problems",
             "type": "main",
             "index": 0
           }
@@ -965,7 +1780,7 @@
         ]
       ]
     },
-    "Split Out4": {
+    "Split Out5": {
       "main": [
         [
           {
@@ -976,11 +1791,203 @@
         ]
       ]
     },
-    "Global problems": {
+    "Get May Pen Problems": {
+      "main": [
+        [
+          {
+            "node": "May Pen triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "May Pen triggers": {
+      "main": [
+        [
+          {
+            "node": "May Pen problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "May Pen problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Manchester problems": {
+      "main": [
+        [
+          {
+            "node": "Chester Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chester Triggers": {
+      "main": [
+        [
+          {
+            "node": "Chester problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chester problems": {
       "main": [
         [
           {
             "node": "Split Out4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ocho Rios problems": {
+      "main": [
+        [
+          {
+            "node": "Ochi Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ochi problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ochi Triggers": {
+      "main": [
+        [
+          {
+            "node": "Get Ochi problems",
             "type": "main",
             "index": 0
           }
@@ -996,7 +2003,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "c5bd2990-da2b-4e9b-b0d0-53ec14faae29",
+  "versionId": "6b346568-957b-48e9-9cec-fa22a01126ab",
   "triggerCount": 0,
   "tags": []
 }
