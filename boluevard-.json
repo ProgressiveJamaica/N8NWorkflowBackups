@@ -1,0 +1,664 @@
+{
+  "createdAt": "2025-09-19T16:19:54.683Z",
+  "updatedAt": "2025-09-19T16:30:35.501Z",
+  "id": "mj9KQvhwtaQAhlnt",
+  "name": "Boluevard",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Boulevard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "HostID"
+          ],
+          "schema": [
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Host Name",
+              "displayName": "Host Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        592,
+        -736
+      ],
+      "id": "a3e319e6-f704-43bd-a12d-1af6b2838df8",
+      "name": "Append or update row in sheet",
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Boulevard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        848,
+        -736
+      ],
+      "id": "429e1170-d78a-4033-8a83-ac2b4b1fe7ea",
+      "name": "Get row(s) in sheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "32589481-9a7c-4e75-a669-e39fb51f5646",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "d04899ee-a706-486b-b54b-2fcbca942c5a",
+              "name": "HostID",
+              "value": "={{ $json.HostID }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        -736
+      ],
+      "id": "ab131436-af87-46f5-8582-5e7a4919e873",
+      "name": "Sheet Boulevard"
+    },
+    {
+      "parameters": {
+        "jsCode": "const apiHostIds = new Set(\n  $items(\"Boulevard\").map(item => String(item.json.HostID).trim())\n);\n\nconst closedProblems = $items(\"Sheet Boulevard\").filter(item => {\n  const sheetHostId = String(item.json.HostID).trim();\n  return !apiHostIds.has(sheetHostId);\n});\n\nreturn closedProblems.map(item => ({\n  json: {\n    HostID: item.json.HostID,\n    rowIndex: item.json.row_number\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        -816
+      ],
+      "id": "f33242a0-050e-4d53-8d7e-ac35a0da06b5",
+      "name": "Find Closed Tickets",
+      "retryOnFail": true,
+      "executeOnce": true,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1296,
+        -816
+      ],
+      "id": "f6e7b4d2-f811-478d-be85-62416c13461c",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Boulevard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=0"
+        },
+        "startIndex": "={{ $json.rowIndex }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1872,
+        -816
+      ],
+      "id": "9c7707e2-8def-410f-a401-945b19aced88",
+      "name": "Delete rows or columns from sheet",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "rowIndex",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        -816
+      ],
+      "id": "19b3690e-2316-49fb-ae49-cdbbbd4ab79f",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "mode": "mergeByKey",
+        "propertyName1": "objectid",
+        "propertyName2": "triggerid"
+      },
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        0,
+        -832
+      ],
+      "typeVersion": 1,
+      "id": "aadef3cf-b8c3-4c3d-bf0f-459e8683daae",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json.clock }}",
+        "format": "custom",
+        "customFormat": "yyyy-MM-dd HH:mm:ss",
+        "outputFieldName": "Time",
+        "options": {
+          "includeInputFields": true
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        176,
+        -832
+      ],
+      "id": "51d12aa0-7460-4ab2-8f3b-5bbb4c03ac87",
+      "name": "Date & Time",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Severity",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            },
+            {
+              "id": "6a93bb9e-7e82-4da3-8e8f-64177ee39317",
+              "name": "Time",
+              "value": "={{ $json.Time }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        -832
+      ],
+      "id": "b23a82db-ce3c-47cd-9888-1811c078078c",
+      "name": "Boulevard"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -848
+      ],
+      "id": "25b557d7-2032-4645-afd2-73f4df5ef9f4",
+      "name": "Split Out7",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Boulevard\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        -976
+      ],
+      "id": "d8b7c1bd-e9de-4f7d-b363-f8de25aa8202",
+      "name": "Get Boulevard problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Boulevard problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        -1136
+      ],
+      "id": "145ff6ee-4c97-4ec0-9396-e44007b353fa",
+      "name": "Boulevard Triggers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        -1136
+      ],
+      "id": "c177b61f-587d-4dd2-bea6-aa8439a22cda",
+      "name": "Boulevard Problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        32,
+        -1136
+      ],
+      "id": "0207068d-3550-4e53-942b-8f81f3226657",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "b16df787-af99-447d-a8a1-3178723429e2",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -688,
+        -976
+      ]
+    }
+  ],
+  "connections": {
+    "Get Boulevard problems": {
+      "main": [
+        [
+          {
+            "node": "Boulevard Triggers",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Boulevard Triggers": {
+      "main": [
+        [
+          {
+            "node": "Boulevard Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Boulevard Problems": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Split Out7": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Boulevard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Sheet Boulevard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Closed Tickets": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Find Closed Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Boulevard": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Boulevard": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get Boulevard problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "82070c1d-cf93-463b-8cc1-22d5c6b9039f",
+  "triggerCount": 0,
+  "tags": []
+}
