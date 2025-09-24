@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:54:08.540Z",
-  "updatedAt": "2025-08-21T13:28:44.272Z",
+  "updatedAt": "2025-09-24T16:40:53.997Z",
   "id": "t0glupR583FnPoY6",
   "name": "Backup Workflows",
   "active": false,
@@ -110,6 +110,7 @@
       ],
       "webhookId": "27218087-8df7-474d-a39f-70cfa9c34ec8",
       "typeVersion": 1,
+      "retryOnFail": true,
       "credentials": {
         "githubApi": {
           "id": "v5PatSVdH1myUGBB",
@@ -404,7 +405,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "dcaaeaed-377a-4db6-80ba-13ba0e873186",
+  "versionId": "cc4e0097-7573-4fba-9ebb-4eb337b8e61c",
   "triggerCount": 0,
   "tags": []
 }
