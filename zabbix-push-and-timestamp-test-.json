@@ -1,0 +1,293 @@
+{
+  "createdAt": "2025-09-23T19:42:41.653Z",
+  "updatedAt": "2025-09-24T16:37:44.354Z",
+  "id": "5YkWYGJPcAASgp1z",
+  "name": "Zabbix push and timestamp test",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323161243,
+          "mode": "list",
+          "cachedResultName": "Sheet8",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=323161243"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1264,
+        -672
+      ],
+      "id": "a7d94e19-84ee-4e85-9fe2-4cc8324edfcb",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"history.push\",\n  \"params\": [\n    {\n      \"itemid\": \"141588\",\n      \"value\": \"{{ $json[\"Last status\"] }}\"\n    }\n  ],\n  \"id\": 4\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1072,
+        -672
+      ],
+      "id": "4e9d09dc-11a5-48bd-857b-d457d4c334d7",
+      "name": "HTTP",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "da61e712-3080-4cde-87f1-e681ff444664",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -1424,
+        -672
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323161243,
+          "mode": "list",
+          "cachedResultName": "Sheet8",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=323161243"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Phone line": "={{ $json[\"Phone line\"] }}",
+            "n8n timestamp": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [
+            "Phone line"
+          ],
+          "schema": [
+            {
+              "id": "Store",
+              "displayName": "Store",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone line",
+              "displayName": "Phone line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last status",
+              "displayName": "Last status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last status timestamp",
+              "displayName": "Last status timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "n8n timestamp",
+              "displayName": "n8n timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -880,
+        -672
+      ],
+      "id": "e48ddb09-ab8e-4bcf-8f8c-32521d74dee2",
+      "name": "Update row in sheet",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323161243,
+          "mode": "list",
+          "cachedResultName": "Sheet8",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=323161243"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -944,
+        -880
+      ],
+      "id": "31f2180b-f20b-4ad0-8ba5-8a209d08a2b9",
+      "name": "Get row(s) in sheet1",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "05bb1a91-affe-4616-945d-794f1f113f73",
+  "triggerCount": 0,
+  "tags": []
+}
