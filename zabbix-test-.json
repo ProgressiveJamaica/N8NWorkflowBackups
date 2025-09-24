@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-09-15T21:01:01.473Z",
+  "updatedAt": "2025-09-23T21:48:42.406Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -24,7 +24,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 2,
       "position": [
-        -880,
+        -944,
         -208
       ]
     },
@@ -49,7 +49,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1040,
+        -1392,
         -208
       ],
       "id": "e078ad3a-eba0-4c80-888e-c5dc9e0338cf",
@@ -60,7 +60,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -1216,
+        -1728,
         -208
       ],
       "id": "2b1667f6-2b5c-4dd8-acdb-f357448fd370",
@@ -356,150 +356,6 @@
     },
     {
       "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Boulevard\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -320,
-        -736
-      ],
-      "id": "d8b7c1bd-e9de-4f7d-b363-f8de25aa8202",
-      "name": "Get Boulevard problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        304,
-        -736
-      ],
-      "id": "dd7a9f45-86aa-4724-8e87-ced25489d8d8",
-      "name": "Split Out",
-      "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
-              "type": "string"
-            },
-            {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        512,
-        -736
-      ],
-      "id": "b23a82db-ce3c-47cd-9888-1811c078078c",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Boulevard problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -112,
-        -736
-      ],
-      "id": "145ff6ee-4c97-4ec0-9396-e44007b353fa",
-      "name": "Boulevard Triggers"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        96,
-        -736
-      ],
-      "id": "c177b61f-587d-4dd2-bea6-aa8439a22cda",
-      "name": "Boulevard Problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "fieldToSplitOut": "result",
         "options": {}
       },
@@ -785,98 +641,6 @@
       ],
       "id": "60591c01-32f6-47a1-990b-b21f7f342e75",
       "name": "Edit Fields4"
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Boulevard",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "HostID"
-          ],
-          "schema": [
-            {
-              "id": "HostID",
-              "displayName": "HostID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Host",
-              "displayName": "Host",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Host Name",
-              "displayName": "Host Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Severity",
-              "displayName": "Severity",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Description",
-              "displayName": "Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        752,
-        -736
-      ],
-      "id": "a3e319e6-f704-43bd-a12d-1af6b2838df8",
-      "name": "Append or update row in sheet",
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1538,6 +1302,61 @@
       ],
       "id": "0121605d-f3d2-4b99-9879-82c82c7541ea",
       "name": "Ochi Triggers"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "mj9KQvhwtaQAhlnt",
+          "mode": "list",
+          "cachedResultName": "Boluevard"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        -720
+      ],
+      "name": "Call Boluevard",
+      "id": "6f9323f3-1691-40c7-a85d-f0f2408c3dac",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "5YkWYGJPcAASgp1z",
+          "mode": "list",
+          "cachedResultName": "Zabbix push and timestamp test"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -944,
+        -672
+      ],
+      "name": "Call Zabbix push and timestamp test",
+      "id": "67ba3c9f-5f20-4a4f-9023-41231e6c6e3e"
     }
   ],
   "connections": {
@@ -1557,11 +1376,6 @@
         [
           {
             "node": "Get Braeton problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get Boulevard problems",
             "type": "main",
             "index": 0
           },
@@ -1587,6 +1401,16 @@
           },
           {
             "node": "Get Ocho Rios problems",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call Boluevard",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call Zabbix push and timestamp test",
             "type": "main",
             "index": 0
           }
@@ -1692,50 +1516,6 @@
         ]
       ]
     },
-    "Get Boulevard problems": {
-      "main": [
-        [
-          {
-            "node": "Boulevard Triggers",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Out": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Boulevard Triggers": {
-      "main": [
-        [
-          {
-            "node": "Boulevard Problems",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Boulevard Problems": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Split Out3": {
       "main": [
         [
@@ -1824,17 +1604,6 @@
         ]
       ]
     },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Append or update row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Edit Fields1": {
       "main": [
         [
@@ -1877,11 +1646,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Append or update row in sheet": {
-      "main": [
-        []
       ]
     },
     "Split Out4": {
@@ -2003,7 +1767,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "6b346568-957b-48e9-9cec-fa22a01126ab",
+  "versionId": "18993064-741c-4a45-9600-776082569582",
   "triggerCount": 0,
   "tags": []
 }
