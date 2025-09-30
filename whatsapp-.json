@@ -1,10 +1,10 @@
 {
   "createdAt": "2025-08-21T20:21:13.137Z",
-  "updatedAt": "2025-09-02T19:45:43.584Z",
+  "updatedAt": "2025-09-30T20:02:49.195Z",
   "id": "A30kU1rcb6mKeDG6",
   "name": "Whatsapp",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {
@@ -139,7 +139,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "dc1ef004-ea03-4f62-8168-55a34aab049d",
+  "versionId": "84e2b8b6-9b7b-456e-b675-d23a96062aed",
   "triggerCount": 0,
   "tags": []
 }
