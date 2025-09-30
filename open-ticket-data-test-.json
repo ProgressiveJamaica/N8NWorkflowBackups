@@ -1,10 +1,10 @@
 {
   "createdAt": "2025-08-13T21:55:58.337Z",
-  "updatedAt": "2025-08-28T18:30:26.924Z",
+  "updatedAt": "2025-09-30T20:02:56.942Z",
   "id": "0ykgir1GJaoP7uSD",
   "name": "Open ticket data test",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {
@@ -1872,7 +1872,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "d840cbbe-70e1-4144-88ce-5913830c02c1",
+  "versionId": "fe716af2-0a65-4541-b5b1-b852da2733f7",
   "triggerCount": 1,
   "tags": []
 }
