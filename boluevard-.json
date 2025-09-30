@@ -1,10 +1,10 @@
 {
   "createdAt": "2025-09-19T16:19:54.683Z",
-  "updatedAt": "2025-09-19T16:30:35.501Z",
+  "updatedAt": "2025-09-30T20:02:09.156Z",
   "id": "mj9KQvhwtaQAhlnt",
   "name": "Boluevard",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {
@@ -658,7 +658,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "82070c1d-cf93-463b-8cc1-22d5c6b9039f",
+  "versionId": "fb1c0556-0863-453d-98af-a64c7843ddcb",
   "triggerCount": 0,
   "tags": []
 }
