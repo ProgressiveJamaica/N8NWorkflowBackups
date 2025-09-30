@@ -1,10 +1,10 @@
 {
   "createdAt": "2025-08-25T17:49:39.602Z",
-  "updatedAt": "2025-08-26T16:36:40.265Z",
+  "updatedAt": "2025-09-30T20:02:15.956Z",
   "id": "ORKmMoRkiIBhzcXB",
   "name": "SAGE",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {},
@@ -61,7 +61,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "3d7e1cc3-58ff-48ba-8aeb-5f76a4dd4cdb",
+  "versionId": "35b64646-e053-43b6-8b6d-b3f1d063bec0",
   "triggerCount": 0,
   "tags": []
 }
