@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-09-23T21:48:42.406Z",
+  "updatedAt": "2025-09-30T20:01:38.436Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -1337,7 +1337,7 @@
           "__rl": true,
           "value": "5YkWYGJPcAASgp1z",
           "mode": "list",
-          "cachedResultName": "Zabbix push and timestamp test"
+          "cachedResultName": "Zabbix Phone Line Status"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -1352,8 +1352,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -944,
-        -672
+        -320,
+        -896
       ],
       "name": "Call Zabbix push and timestamp test",
       "id": "67ba3c9f-5f20-4a4f-9023-41231e6c6e3e"
@@ -1767,7 +1767,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "18993064-741c-4a45-9600-776082569582",
+  "versionId": "fed6db6a-7925-4572-84af-eb634c07eaae",
   "triggerCount": 0,
   "tags": []
 }
