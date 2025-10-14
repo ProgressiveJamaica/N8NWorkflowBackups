@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-09-30T20:01:38.436Z",
+  "updatedAt": "2025-10-14T21:05:20.853Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -24,8 +24,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 2,
       "position": [
-        -944,
-        -208
+        -912,
+        -800
       ]
     },
     {
@@ -49,8 +49,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1392,
-        -208
+        -1104,
+        -800
       ],
       "id": "e078ad3a-eba0-4c80-888e-c5dc9e0338cf",
       "name": "Zabbix Login"
@@ -60,8 +60,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -1728,
-        -208
+        -1296,
+        -800
       ],
       "id": "2b1667f6-2b5c-4dd8-acdb-f357448fd370",
       "name": "When clicking ‘Execute workflow’"
@@ -82,14 +82,14 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Braeton\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\", \"r_eventid\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Braeton\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -320,
-        -560
+        -384,
+        -800
       ],
       "id": "39c806bf-9887-4e25-b678-a734d848aab6",
       "name": "Get Braeton problems",
@@ -102,52 +102,151 @@
     },
     {
       "parameters": {
-        "fieldToSplitOut": "result",
+        "workflowId": {
+          "__rl": true,
+          "value": "5YkWYGJPcAASgp1z",
+          "mode": "list",
+          "cachedResultName": "Zabbix Phone Line Status"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
         "options": {}
       },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
       "position": [
-        304,
-        -560
+        -672,
+        -1056
       ],
-      "id": "6bf7965a-9a21-466d-ac0c-55d4df34f84c",
-      "name": "Split Out1",
-      "alwaysOutputData": true
+      "name": "Call Zabbix push and timestamp test",
+      "id": "67ba3c9f-5f20-4a4f-9023-41231e6c6e3e"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 54639254,
+          "mode": "list",
+          "cachedResultName": "Braeton",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        -384
+      ],
+      "id": "b02e83cb-ff82-4f70-9973-e616136cbff1",
+      "name": "Get Rows (Braeton Sheet)",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all rows from the Google Sheet\nconst sheetRows = $items(\"Get Rows (Braeton Sheet)1\") || [];\n\n// Build a quick lookup of eventid -> sheet row object\nconst sheetMap = {};\nfor (const r of sheetRows) {\n  const evt = (r.json[\"EventID\"] || r.json[\"Zabbix Event ID\"] || \"\").toString();\n  if (evt) sheetMap[evt] = r.json;\n}\n\n// For each incoming problem (from Braeton Problems set node)\nreturn items.map(item => {\n  const p = item.json;\n  const eventid = (p.EventID || p.eventid || \"\").toString();\n\n  // Check if this event is already in the sheet\n  const sheetEntry = sheetMap[eventid];\n\n  // Determine if it needs a ticket\n  let needsTicket = true;\n  let existingTicketId = null;\n\n  if (sheetEntry) {\n    const ticketId = (sheetEntry[\"TicketID\"] || sheetEntry[\"SysAid Ticket ID\"] || \"\").trim();\n    if (ticketId) {\n      // Already has a ticket ID\n      needsTicket = false;\n      existingTicketId = ticketId;\n    }\n  }\n\n  return {\n    json: {\n      ...p,\n      needsTicket,\n      existingTicketId,\n      sheetRow: sheetEntry || null\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        -176
+      ],
+      "id": "3475ed92-95b6-4263-b7bd-13126cfda529",
+      "name": "CheckExistingTicket",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b72de1fa-2d07-41c2-9a5f-441511ed1ca0",
+              "leftValue": "={{ $json.needsTicket }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1408,
+        -176
+      ],
+      "id": "dcf7bfb5-33b1-4405-815b-bc09af9140ee",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://pgam.sysaidit.com/api/v1/login",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/JSON",
+        "body": "{   \"user_name\": \"Ratkinson\",   \"password\": \"Evert0n@tkins1234\" }",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1728,
+        -192
+      ],
+      "id": "cfa38dde-bc6c-476e-82b6-062c25d178fc",
+      "name": "Login credentials",
+      "retryOnFail": true,
+      "executeOnce": true
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
-              "type": "string"
-            },
-            {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
-              "type": "string"
+              "id": "2a3416bc-2cdf-405b-9fe1-59c4e75cc779",
+              "name": "sessionID",
+              "value": "={{ $json.headers[\"set-cookie\"] }}",
+              "type": "array"
             }
           ]
         },
@@ -156,24 +255,41 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        512,
-        -560
+        1920,
+        -192
       ],
-      "id": "2ac7c890-f5fa-4069-89b5-3a867954359c",
-      "name": "Edit Fields1"
+      "id": "b22c2587-7533-4158-859c-bb196eb1e56a",
+      "name": "SessionID"
     },
     {
       "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Braeton problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+        "fieldToSplitOut": "result",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "clock, status, eventid",
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
       "position": [
-        -112,
-        -560
+        304,
+        -688
       ],
-      "id": "d4dc4d55-8b76-4d2c-82ad-bd3598993224",
-      "name": "Braeton Triggers"
+      "id": "4f8d1141-5bd6-4c96-88e1-d997044a5ba6",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex"
+      },
+      "name": "Merge2",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        144,
+        -688
+      ],
+      "typeVersion": 1,
+      "id": "d6bf0bbf-831c-446f-9d85-f558403d3a42"
     },
     {
       "parameters": {
@@ -192,71 +308,405 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerid }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        96,
+        -32,
+        -816
+      ],
+      "id": "0d4a06ac-cbf3-4095-a29d-62d36139101d",
+      "name": "Braeton Trigger Problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const problems = $json.result || [];\n\nreturn problems.map(p => ({\n  json: {\n    eventid: p.eventid,\n    triggerid: p.objectid,\n    name: p.name,\n    severity: p.severity,\n    clock: new Date(p.clock * 1000).toISOString().replace(\"T\", \" \").replace(\"Z\", \"\"),\n    status: p.r_eventid && p.r_eventid !== \"0\" ? \"RESOLVED\" : \"PROBLEM\"\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -208,
+        -672
+      ],
+      "id": "1b90e530-c47b-4762-90f1-162a28bdb7f6",
+      "name": "Braeton Triggers & Event ID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://pgam.sysaidit.com/api/v1/sr",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $json.sessionID }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"info\": [\n    { \n      \"key\": \"title\", \n      \"value\": \"MSSQL: Service is unavailable\" \n    },\n    { \n      \"key\": \"status\", \n      \"value\": \"1\" \n    },\n    { \n      \"key\": \"urgency\", \n      \"value\": \"5\" \n    },\n    { \n      \"key\": \"impact\", \n      \"value\": \"4\" \n    },\n    { \n      \"key\": \"priority\", \n      \"value\": \"4\" \n    },\n    { \n      \"key\": \"request_user\", \n      \"value\": \"\" \n    },\n    {\n      \"key\": \"description\",\n      \"value\": \"Hello, please see the following:<br><a href=\\\"http://192.168.0.22/zabbix.php?show=1&amp;name=&amp;acknowledgement_status=0&amp;inventory%5B0%5D%5Bfield%5D=type&amp;inventory%5B0%5D%5Bvalue%5D=&amp;evaltype=0&amp;tags%5B0%5D%5Btag%5D=&amp;tags%5B0%5D%5Boperator%5D=0&amp;tags%5B0%5D%5Bvalue%5D=&amp;show_tags=3&amp;tag_name_format=0&amp;tag_priority=&amp;show_opdata=0&amp;show_timeline=1&amp;filter_name=&amp;filter_show_counter=0&amp;filter_custom_time=0&amp;sort=clock&amp;sortorder=DESC&amp;age_state=0&amp;show_symptoms=0&amp;show_suppressed=0&amp;acknowledged_by_me=0&amp;compact_view=0&amp;details=0&amp;highlight_row=0&amp;action=problem.view&amp;triggerids%5B%5D=78522\\\" target=\\\"_blank\\\">View Zabbix Problem</a>\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2128,
+        -192
+      ],
+      "id": "5e62d9ce-ca66-42c6-b8d0-4ab35b07bb12",
+      "name": "Create Sysaid Ticket",
+      "retryOnFail": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"event.acknowledge\",\n  \"params\": {\n    \"eventids\": [\"10833842\"],\n    \"action\": \"6\",\n    \"message\": \"SysAid ticket created: <a href=\\\"https://pgam.sysaidit.com/spaces/ticket?id={{ $json.id }}\\\" target=\\\"_blank\\\">View Ticket SR#{{ $json.id }}</a>\"\n  },\n  \"id\": 6\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2656,
+        -192
+      ],
+      "id": "b678c909-bdc0-4708-b801-94a860412e2e",
+      "name": "Zabbix Update",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "847cd878-4b87-491e-bf5e-7c83ab9693cc",
+              "name": "Time ",
+              "value": "={{ $json.clock }}",
+              "type": "string"
+            },
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.result.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.result.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.result.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Severity",
+              "value": "={{ $json.result.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.result.description }}",
+              "type": "string"
+            },
+            {
+              "id": "ac9db0a7-d6a4-49fc-93f6-a79c26149e6e",
+              "name": "Status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "9de7af85-ca7a-40f4-9dd3-12df43933a67",
+              "name": "EventID",
+              "value": "={{ $json.eventid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        -688
+      ],
+      "id": "a6e5bcb3-841c-460e-bca5-3a65e99cedcf",
+      "name": "Braeton problems"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 54639254,
+          "mode": "list",
+          "cachedResultName": "Braeton",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "EventID": "={{ $('ID and EventID').item.json.EventID }}",
+            "TicketID": "={{ $('Create Sysaid Ticket').item.json.id }}"
+          },
+          "matchingColumns": [
+            "EventID"
+          ],
+          "schema": [
+            {
+              "id": "Time ",
+              "displayName": "Time ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Host Name",
+              "displayName": "Host Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "EventID",
+              "displayName": "EventID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TicketID",
+              "displayName": "TicketID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2848,
+        -192
+      ],
+      "id": "65f18187-d821-4161-87fd-229910fa4e0b",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 54639254,
+          "mode": "list",
+          "cachedResultName": "Braeton",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+        },
+        "startIndex": "={{ $json.rowIndex }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1840,
+        -576
+      ],
+      "id": "79267c53-d861-445d-8eae-beac39aab1fd",
+      "name": "Delete rows or columns from sheet",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "rowIndex",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        -576
+      ],
+      "id": "de5c6d14-4e36-4b84-a895-d7f54b39205b",
+      "name": "Sort"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        944,
         -560
       ],
-      "id": "53fe3c1c-2404-449c-91bb-618d666e5c98",
-      "name": "Braeton Problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        304,
-        -384
-      ],
-      "id": "f058c2f0-b3f0-484e-b078-5a8626f7fa1b",
-      "name": "Split Out2",
-      "alwaysOutputData": true
+      "id": "0eacc526-d1be-41bd-b282-a91f3c5ac26f",
+      "name": "Merge3"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "id": "32589481-9a7c-4e75-a669-e39fb51f5646",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "d04899ee-a706-486b-b54b-2fcbca942c5a",
               "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
-              "type": "string"
+              "value": "={{ $json.HostID }}",
+              "type": "number"
             },
             {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "id": "fba769b7-41d5-41ba-9ca8-b720e782cd67",
               "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
+              "value": "={{ $json[\"Host Name\"] }}",
               "type": "string"
             }
           ]
@@ -266,141 +716,113 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        512,
+        464,
         -384
       ],
-      "id": "2b50f7f7-bbeb-418b-b7bb-3251ca61a8d4",
-      "name": "Edit Fields2"
+      "id": "5fb49e6c-1f43-4606-9e6d-272e71bf1021",
+      "name": "Sheet Braeton"
     },
     {
       "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "mode": "list",
+          "cachedResultName": "Zabbix Agents",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
         },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Harbour View\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
+        "sheetName": {
+          "__rl": true,
+          "value": 54639254,
+          "mode": "list",
+          "cachedResultName": "Braeton",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+        },
         "options": {}
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        -320,
-        -384
+        928,
+        -176
       ],
-      "id": "877c1d9f-b196-41c2-8812-aeb79dc372f4",
-      "name": "Get Harbour View problems",
+      "id": "4401b35c-0fc1-4a28-82aa-f47dcbfc76dd",
+      "name": "Get Rows (Braeton Sheet)1",
+      "executeOnce": true,
+      "alwaysOutputData": false,
       "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Harbour View problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+        "jsCode": "const apiHostIds = new Set(\n  $items(\"Braeton problems\").map(item => String(item.json.HostID).trim())\n);\n\nconst closedProblems = $items(\"Sheet Braeton\").filter(item => {\n  const sheetHostId = String(item.json.HostID).trim();\n  return !apiHostIds.has(sheetHostId);\n});\n\nreturn closedProblems.map(item => ({\n  json: {\n    HostID: item.json.HostID,\n    rowIndex: item.json.row_number\n  }\n}));\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -112,
-        -384
+        1152,
+        -560
       ],
-      "id": "4901bae6-c444-4a73-a39d-ea7370a6033d",
-      "name": "Harbour View Triggers"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        96,
-        -384
-      ],
-      "id": "653f5226-d51a-4ecf-b3f4-bc6757821bd8",
-      "name": "Harbour View problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        304,
-        -208
-      ],
-      "id": "0c2ac560-0f35-4f31-96a4-1d343f7f7000",
-      "name": "Split Out3",
+      "id": "b622e7a6-c25a-44ea-8172-f6ba30bdaf35",
+      "name": "Find Resolved Problems",
+      "retryOnFail": true,
+      "executeOnce": true,
       "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4eb237bf-cdae-4c36-92e1-6d7237b0bbf8",
+              "leftValue": "={{ $json.HostID }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1392,
+        -560
+      ],
+      "id": "352fb309-adba-4d5d-aef6-3aab655503c2",
+      "name": "If1"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
+              "id": "ccca319a-500a-4c05-8e62-91b1cfd1adf2",
+              "name": "id",
+              "value": "={{ $json.id }}",
               "type": "string"
             },
             {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
+              "id": "5a49f95c-1208-4730-ac5f-db69d627cb7e",
+              "name": "EventID",
+              "value": "10833842",
               "type": "string"
             }
           ]
@@ -410,237 +832,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        512,
-        -208
+        2464,
+        -192
       ],
-      "id": "a21773a1-4b81-4fa6-93d8-9a6af3090d5a",
-      "name": "Edit Fields3"
-    },
-    {
-      "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Liguanea\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -320,
-        -208
-      ],
-      "id": "2f471897-f1df-41de-839e-23379712f957",
-      "name": "Get Ligunea Problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Ligunea Problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -112,
-        -208
-      ],
-      "id": "e0613452-297c-4a4a-8c66-40fe548a0a77",
-      "name": "Liguanea Triggers"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        96,
-        -208
-      ],
-      "id": "5521acf8-ee6e-458e-ab9a-d8762466c620",
-      "name": "Liguanea problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        304,
-        -32
-      ],
-      "id": "5e4fddee-87e1-41e2-aab9-165b66ce61cc",
-      "name": "Split Out5",
-      "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"May Pen\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -320,
-        -32
-      ],
-      "id": "3f20bff0-91e6-4498-b6b8-d64b71e162e5",
-      "name": "Get May Pen Problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get May Pen Problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -112,
-        -32
-      ],
-      "id": "6d10d30b-e876-47fa-9685-e9e2587776b5",
-      "name": "May Pen triggers"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        96,
-        -32
-      ],
-      "id": "2a1c54b0-345d-4a20-ae2e-18587a83a7bc",
-      "name": "May Pen problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
-              "type": "string"
-            },
-            {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        512,
-        -32
-      ],
-      "id": "60591c01-32f6-47a1-990b-b21f7f342e75",
-      "name": "Edit Fields4"
+      "id": "fa587c08-3b7d-44fe-8ce8-68791f71bdbc",
+      "name": "ID and EventID"
     },
     {
       "parameters": {
@@ -664,9 +860,100 @@
           "mappingMode": "autoMapInputData",
           "value": {},
           "matchingColumns": [
-            "HostID"
+            "EventID"
           ],
-          "schema": [],
+          "schema": [
+            {
+              "id": "Time ",
+              "displayName": "Time ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Host Name",
+              "displayName": "Host Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EventID",
+              "displayName": "EventID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TicketID",
+              "displayName": "TicketID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
@@ -675,57 +962,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        752,
-        -560
-      ],
-      "id": "f52fc265-203d-4aa6-9066-76bd512871c7",
-      "name": "Append or update row in sheet1",
-      "retryOnFail": true,
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 2043642226,
-          "mode": "list",
-          "cachedResultName": "HB",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=2043642226"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "HostID"
-          ],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        752,
+        -368,
         -384
       ],
-      "id": "568279a8-8513-4378-bb2e-cd26c3a8e333",
-      "name": "Append or update row in sheet2",
+      "id": "3ed08c6d-0d6c-48cf-b220-27860ccd9f6b",
+      "name": "Braeton Agent Sheets",
       "credentials": {
         "googleApi": {
           "id": "Fr8gBQ8Q5zSOdGfU",
@@ -735,628 +976,123 @@
     },
     {
       "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 2062678510,
-          "mode": "list",
-          "cachedResultName": "Ligunea",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=2062678510"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "HostID"
-          ],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
+        "content": "## Zabbix Login\n\nUsing zabbix credentials to login and get the token from the admin.",
+        "height": 256,
+        "width": 560
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        752,
-        -208
-      ],
-      "id": "58ec1b75-1622-4f7a-9cf9-de8cdbe06618",
-      "name": "Append or update row in sheet3",
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1706416370,
-          "mode": "list",
-          "cachedResultName": "May Pen",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=1706416370"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "HostID"
-          ],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        752,
-        -32
-      ],
-      "id": "e304f27e-bcc9-4e11-9a1d-e0dad177df37",
-      "name": "Append or update row in sheet4",
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
+      "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        304,
-        160
+        -1344,
+        -912
       ],
-      "id": "af508de4-25e9-4349-a494-0e8d1c547a42",
-      "name": "Split Out4",
-      "alwaysOutputData": true
+      "id": "ac1d98c4-79c8-4b1b-91f6-0ec859ea97a7",
+      "name": "Sticky Note"
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
-              "type": "string"
-            },
-            {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
+        "content": "## Zabbix Phone Line\n\nWorkflow has more information.",
+        "height": 272,
+        "width": 272
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        512,
-        160
-      ],
-      "id": "d98973ac-beb2-4222-9d92-22015e6270a5",
-      "name": "Edit Fields5"
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 761804348,
-          "mode": "list",
-          "cachedResultName": "Chester",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=761804348"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "HostID"
-          ],
-          "schema": [
-            {
-              "id": "HostID",
-              "displayName": "HostID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Host",
-              "displayName": "Host",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Host Name",
-              "displayName": "Host Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Severity",
-              "displayName": "Severity",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Description",
-              "displayName": "Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        752,
-        160
-      ],
-      "id": "58af9e1e-bbf0-48b6-bd0d-ee7de4a5e366",
-      "name": "Append or update row in sheet5",
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Manchester\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -320,
-        160
-      ],
-      "id": "328e498c-8949-488f-a3e2-5272f42382a0",
-      "name": "Get Manchester problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Manchester problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -112,
-        160
-      ],
-      "id": "61ffd072-2617-426f-9ddc-d11f79319fb2",
-      "name": "Chester Triggers"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        96,
-        160
-      ],
-      "id": "1cd8640a-df06-476e-85bf-84e5a4e27db1",
-      "name": "Chester problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
+      "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        304,
-        352
+        -752,
+        -1152
       ],
-      "id": "c6c357dd-eafb-4480-8129-381987ceb337",
-      "name": "Split Out6",
-      "alwaysOutputData": true
+      "id": "ae3cdbaf-fb12-4276-bddb-a7606f67dce5",
+      "name": "Sticky Note1"
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.hosts[0].hostid }}",
-              "type": "string"
-            },
-            {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
-              "value": "={{ $json.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.description }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
+        "content": "## Braeton Problems\n\nBraeton problems extracted which gives the eventid and objectid for each problem.\n\nA Code node is used to convert objectid to triggerid, extract the eventid and convert the clock from epoch time to a custom time format (yy-MM-dd HH-mm-ss).\n\nBraeton trigger node uses the trigger.get to get the host information because the problem.get doesn't return that info. Merge node joins both the trigger and code nodes. This is used to match the host info with the eventid and clock.\n\nThen the information is taken from the result array using the split out node and a set node is used to transform the information to put in the google sheet.\n",
+        "height": 560,
+        "width": 1072
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
       "position": [
-        512,
-        352
+        -448,
+        -1056
       ],
-      "id": "284840e6-ed6b-4c41-a5b3-a8808f34fefb",
-      "name": "Edit Fields6"
+      "id": "6c1266f7-fba9-4e33-a679-553eb4e8d3d3",
+      "name": "Sticky Note2"
     },
     {
       "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 761804348,
-          "mode": "list",
-          "cachedResultName": "Chester",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=761804348"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [
-            "HostID"
-          ],
-          "schema": [
-            {
-              "id": "HostID",
-              "displayName": "HostID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Host",
-              "displayName": "Host",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Host Name",
-              "displayName": "Host Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Severity",
-              "displayName": "Severity",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Description",
-              "displayName": "Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
+        "content": "## Merge, Compare and Delete\n\nMerge node combines both the Braeton problems from the API and the problems in the sheet. \n\nCode node does a comparison to see which problems that are in the sheet is not returned from the API. If not, it gets marked for deletion as it's considered  resolved.\n\nSort node is used to delete rows in descending order.",
+        "height": 384,
+        "width": 1152
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
       "position": [
-        752,
-        352
+        864,
+        -736
       ],
-      "id": "56c488a7-d851-4ba7-9d0b-bb9e44a7f5ea",
-      "name": "Append or update row in sheet6",
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
+      "id": "2364c571-3270-4cf5-9c56-ff4d0a76510f",
+      "name": "Sticky Note3"
     },
     {
       "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Ocho Rios\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
-        "options": {}
+        "content": "## Append and Read \nInfo is then put into the respective store sheet. Then we get the rows from the sheet which returns a row number and set using a set node. This is needed for deletion later.",
+        "height": 256,
+        "width": 1008
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
       "position": [
-        -320,
-        352
+        -416,
+        -480
       ],
-      "id": "6b453935-2ec6-4945-a730-219007a9da0d",
-      "name": "Get Ocho Rios problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
+      "id": "69eae912-0376-4526-a320-7865db5c0081",
+      "name": "Sticky Note4"
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerids }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
-        "options": {}
+        "content": "## Check Problems\n\nWe then read the problems in the sheet to see if each problem has a ticket. If not, it get's sent to Sysaid's API to create the ticket for that problem.",
+        "height": 288,
+        "width": 656
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
       "position": [
-        96,
-        352
+        880,
+        -304
       ],
-      "id": "89497266-4951-409d-8153-ff823a775a90",
-      "name": "Get Ochi problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
+      "id": "5f8a78e2-ed11-4ad1-96b2-866ca34a7c19",
+      "name": "Sticky Note5"
     },
     {
       "parameters": {
-        "jsCode": "// Grab all items from the \"Get Boulevard Problems\" node\nconst items = $items(\"Get Ocho Rios problems\", 0, 0);\n\n// Flatten out all \"result\" arrays and pull the trigger IDs\nconst triggerids = items\n  .flatMap(i => i.json.result || [])\n  .map(p => p.objectid)\n  .filter(id => id); // remove null/undefined\n\nreturn [{ json: { triggerids } }];\n"
+        "content": "## Login to Sysaid\n\nLogin to sysaid using user credentials as proof.\n\nUse the POST to create a sysaid ticket for that problem.",
+        "height": 288,
+        "width": 624
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
       "position": [
-        -112,
-        352
+        1664,
+        -320
       ],
-      "id": "0121605d-f3d2-4b99-9879-82c82c7541ea",
-      "name": "Ochi Triggers"
+      "id": "de2db9d4-0243-424a-8378-5747cf8229ef",
+      "name": "Sticky Note6"
     },
     {
       "parameters": {
-        "workflowId": {
-          "__rl": true,
-          "value": "mj9KQvhwtaQAhlnt",
-          "mode": "list",
-          "cachedResultName": "Boluevard"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
-        "options": {}
+        "content": "## Send Zabbix an update of the problem\n\nA set node is used to get the ticket ID created from Sysaid and the event ID of the problem.\n\nWe used a POST node to update/acknowledge the problem in zabbix using the event.acknowledge param. \n\nWe then update the problem in the sheet using the event ID to match and add the ticket number that problem.",
+        "height": 368,
+        "width": 672
       },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
       "position": [
-        -320,
-        -720
+        2384,
+        -400
       ],
-      "name": "Call Boluevard",
-      "id": "6f9323f3-1691-40c7-a85d-f0f2408c3dac",
-      "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "workflowId": {
-          "__rl": true,
-          "value": "5YkWYGJPcAASgp1z",
-          "mode": "list",
-          "cachedResultName": "Zabbix Phone Line Status"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.2,
-      "position": [
-        -320,
-        -896
-      ],
-      "name": "Call Zabbix push and timestamp test",
-      "id": "67ba3c9f-5f20-4a4f-9023-41231e6c6e3e"
+      "id": "afa1f038-d635-43f7-9edf-ef3ee03a31e1",
+      "name": "Sticky Note7"
     }
   ],
   "connections": {
@@ -1375,42 +1111,12 @@
       "main": [
         [
           {
-            "node": "Get Braeton problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get Ligunea Problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get May Pen Problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get Harbour View problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get Manchester problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get Ocho Rios problems",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Call Boluevard",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Call Zabbix push and timestamp test",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Braeton problems",
             "type": "main",
             "index": 0
           }
@@ -1428,330 +1134,259 @@
         ]
       ]
     },
-    "Split Out1": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Get Braeton problems": {
       "main": [
         [
           {
-            "node": "Braeton Triggers",
+            "node": "Braeton Triggers & Event ID",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Braeton Triggers": {
+    "Get Rows (Braeton Sheet)": {
       "main": [
         [
           {
-            "node": "Braeton Problems",
+            "node": "Sheet Braeton",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Braeton Problems": {
+    "CheckExistingTicket": {
       "main": [
         [
           {
-            "node": "Split Out1",
+            "node": "If",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Split Out2": {
+    "If": {
       "main": [
         [
           {
-            "node": "Edit Fields2",
+            "node": "Login credentials",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Harbour View problems": {
+    "Login credentials": {
       "main": [
         [
           {
-            "node": "Harbour View Triggers",
+            "node": "SessionID",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Harbour View Triggers": {
+    "SessionID": {
       "main": [
         [
           {
-            "node": "Harbour View problems",
+            "node": "Create Sysaid Ticket",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Harbour View problems": {
+    "Merge2": {
       "main": [
         [
           {
-            "node": "Split Out2",
+            "node": "Split Out",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Split Out3": {
+    "Split Out": {
       "main": [
         [
           {
-            "node": "Edit Fields3",
+            "node": "Braeton problems",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Ligunea Problems": {
+    "Braeton Trigger Problems": {
       "main": [
         [
           {
-            "node": "Liguanea Triggers",
+            "node": "Merge2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Liguanea Triggers": {
+    "Braeton Triggers & Event ID": {
       "main": [
         [
           {
-            "node": "Liguanea problems",
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Braeton Trigger Problems",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Liguanea problems": {
+    "Create Sysaid Ticket": {
       "main": [
         [
           {
-            "node": "Split Out3",
+            "node": "ID and EventID",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Split Out5": {
+    "Braeton problems": {
       "main": [
         [
           {
-            "node": "Edit Fields4",
+            "node": "Braeton Agent Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get May Pen Problems": {
+    "Zabbix Update": {
       "main": [
         [
           {
-            "node": "May Pen triggers",
+            "node": "Update row in sheet",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "May Pen triggers": {
+    "Sort": {
       "main": [
         [
           {
-            "node": "May Pen problems",
+            "node": "Delete rows or columns from sheet",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "May Pen problems": {
+    "Merge3": {
       "main": [
         [
           {
-            "node": "Split Out5",
+            "node": "Find Resolved Problems",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields1": {
+    "Sheet Braeton": {
       "main": [
         [
           {
-            "node": "Append or update row in sheet1",
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        [
+          {
+            "node": "Get Rows (Braeton Sheet)1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields2": {
+    "Get Rows (Braeton Sheet)1": {
       "main": [
         [
           {
-            "node": "Append or update row in sheet2",
+            "node": "CheckExistingTicket",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields3": {
+    "Find Resolved Problems": {
       "main": [
         [
           {
-            "node": "Append or update row in sheet3",
+            "node": "If1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields4": {
+    "If1": {
       "main": [
         [
           {
-            "node": "Append or update row in sheet4",
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Rows (Braeton Sheet)1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Split Out4": {
+    "ID and EventID": {
       "main": [
         [
           {
-            "node": "Edit Fields5",
+            "node": "Zabbix Update",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields5": {
+    "Braeton Agent Sheets": {
       "main": [
         [
           {
-            "node": "Append or update row in sheet5",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Manchester problems": {
-      "main": [
-        [
-          {
-            "node": "Chester Triggers",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Chester Triggers": {
-      "main": [
-        [
-          {
-            "node": "Chester problems",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Chester problems": {
-      "main": [
-        [
-          {
-            "node": "Split Out4",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Out6": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields6",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields6": {
-      "main": [
-        [
-          {
-            "node": "Append or update row in sheet6",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Ocho Rios problems": {
-      "main": [
-        [
-          {
-            "node": "Ochi Triggers",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Ochi problems": {
-      "main": [
-        [
-          {
-            "node": "Split Out6",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Ochi Triggers": {
-      "main": [
-        [
-          {
-            "node": "Get Ochi problems",
+            "node": "Get Rows (Braeton Sheet)",
             "type": "main",
             "index": 0
           }
@@ -1767,7 +1402,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "fed6db6a-7925-4572-84af-eb634c07eaae",
+  "versionId": "394bb0f6-49a0-48ad-84de-f00a2f525ca5",
   "triggerCount": 0,
   "tags": []
 }
