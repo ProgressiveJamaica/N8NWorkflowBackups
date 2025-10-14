@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-15T20:47:13.516Z",
-  "updatedAt": "2025-08-26T22:00:58.172Z",
+  "updatedAt": "2025-10-14T16:06:19.800Z",
   "id": "EaKp8ltsCTxDk0tc",
   "name": "AI Test",
   "active": false,
@@ -65,63 +65,6 @@
       ],
       "id": "c53a67dd-e217-46fa-8a20-d312855c3cd6",
       "name": "Simple Memory"
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8",
-          "mode": "list",
-          "cachedResultName": "Ticket Data test",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Ticket Data",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uvN_eVpP3XeWCAssZOay5N76KDawuU2Q_O3sDP3DML8/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheetsTool",
-      "typeVersion": 4.7,
-      "position": [
-        288,
-        128
-      ],
-      "id": "0980d62e-3a42-4fb8-8de6-56ebf3310e16",
-      "name": "Ticket data",
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "url": "https://68767137814c0dfa653c1daf.mockapi.io/api/v1/ticketdata",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequestTool",
-      "typeVersion": 4.2,
-      "position": [
-        160,
-        176
-      ],
-      "id": "3102ff58-f016-4725-9b17-56b901b3bdd8",
-      "name": "get_tickets"
     }
   ],
   "connections": {
@@ -157,28 +100,6 @@
           }
         ]
       ]
-    },
-    "Ticket data": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "get_tickets": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "settings": {
@@ -189,7 +110,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "eb35a8ed-a1bc-4726-ada7-be4cb5764fe2",
+  "versionId": "955ea14b-f565-4d7b-bb42-26937d25fb5b",
   "triggerCount": 0,
   "tags": []
 }
