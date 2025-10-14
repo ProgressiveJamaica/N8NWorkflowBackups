@@ -1,51 +1,11 @@
 {
   "createdAt": "2025-09-23T19:42:41.653Z",
-  "updatedAt": "2025-09-30T19:55:07.817Z",
+  "updatedAt": "2025-10-14T21:09:18.893Z",
   "id": "5YkWYGJPcAASgp1z",
   "name": "Zabbix Phone Line Status",
   "active": false,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22:10051",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n \"request\": \"sender data\",\n \"data\": [\n     {\n       \"host\": \"192.168.50.62\",\n       \"key\": \"trap\",\n       \"value\": \"test value\"\n     }\n   ]\n}",
-        "options": {
-          "response": {
-            "response": {}
-          }
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -1744,
-        -1712
-      ],
-      "id": "4e9d09dc-11a5-48bd-857b-d457d4c334d7",
-      "name": "HTTP",
-      "retryOnFail": false,
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
     {
       "parameters": {
         "inputSource": "passthrough"
@@ -55,8 +15,8 @@
       "name": "Start",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
-        -1888,
-        -832
+        -1744,
+        -976
       ]
     },
     {
@@ -80,7 +40,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "n8n Timestamp": "={{ $('Get row(s) in sheet').item.json[\"Last Timestamp\"] }}",
+            "n8n Timestamp": "={{ new Date().toISOString().slice(0, 19).replace(\"T\", \" \") }}",
             "Zabbix itemid": "={{ $json.result.data[0].itemid }}"
           },
           "matchingColumns": [
@@ -216,8 +176,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -624,
-        -848
+        -544,
+        -992
       ],
       "id": "e48ddb09-ab8e-4bcf-8f8c-32521d74dee2",
       "name": "Update row in sheet",
@@ -228,83 +188,6 @@
           "name": "Google Service Account account"
         }
       }
-    },
-    {
-      "parameters": {
-        "mode": "mergeByKey",
-        "propertyName1": "={{ $json.result.data[0].itemid }}",
-        "propertyName2": "={{ $json[\"Zabbix itemid\"] }}"
-      },
-      "name": "Merge1",
-      "type": "n8n-nodes-base.merge",
-      "position": [
-        -1328,
-        -1712
-      ],
-      "typeVersion": 1,
-      "id": "883d59b7-e8cc-4bd1-aa75-2fe1b6ff41f4",
-      "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "jsCode": "const myString1 = 'ZBXD'; \nconst myString3 = '{\"request\":\"sender data\",\"data\":[{\"host\":\"192.168.16.12\",\"key\":\"pstn.line.status[+18766180050]\",\"value\":\"9\"}],\"clock\":1758817125,\"ns\":745245200}';\n\nconst datalen = myString3.length.toString(16) + '000000';\nconst reserved = '00000000';\n\n    const myBuffer1 = Buffer.from(myString1, 'utf8');\n    const myBuffer3 = Buffer.from(myString3, 'utf8');\n    return { json: { bufferData: myBuffer1.toString('hex') + '01' + datalen + reserved + myBuffer3.toString('hex') } }; // Return as hex for easy handling in n8n\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -1968,
-        -1712
-      ],
-      "id": "7d82820c-364e-4d97-a665-6942fe42314d",
-      "name": "Code"
-    },
-    {
-      "parameters": {
-        "command": "zabbix_sender -z 192.168.51.38 -s \"FAMILY-PC\" -k \"pstn.line.status\" -o 9\n"
-      },
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        -1552,
-        -1712
-      ],
-      "id": "b68a82a8-22a9-495c-9696-5c3666765987",
-      "name": "Execute Command"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "f9ba67d2-b558-4297-87ef-6194258705c1",
-              "leftValue": "={{ $json[\"Zabbix itemid\"] }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.2,
-      "position": [
-        -1488,
-        -832
-      ],
-      "id": "4a42fedf-f0e1-4c1d-8732-c9335518a523",
-      "name": "Filter"
     },
     {
       "parameters": {
@@ -326,8 +209,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1680,
-        -832
+        -1488,
+        -976
       ],
       "id": "a7d94e19-84ee-4e85-9fe2-4cc8324edfcb",
       "name": "Get row(s) in sheet",
@@ -340,13 +223,13 @@
     },
     {
       "parameters": {
-        "jsCode": "return items.map(item => {\n  const data = item.json;\n  const last = new Date(data[\"Last Timestamp\"]);\n  let prev = data[\"n8n Timestamp\"];\n\n  if (!prev) {\n    prev = \"1970-01-01 00:00:00\";\n  }\n\n  return {\n    json: {\n      ...data,\n      lastISO: last.toISOString(),\n      prevISO: new Date(prev).toISOString()\n    }\n  };\n});"
+        "jsCode": "return items.map(item => {\n  const data = item.json;\n\n  const lastRaw = data[\"Last Timestamp\"];\n  const prevRaw = data[\"n8n Timestamp\"];\n\n  const lastDate = new Date(lastRaw);\n  const prevDate = new Date(prevRaw || \"1970-01-01 00:00:00\");\n\n  // If invalid, use default or null-safe fallback\n  const lastISO = isNaN(lastDate) ? \"1970-01-01T00:00:00.000Z\" : lastDate.toISOString();\n  const prevISO = isNaN(prevDate) ? \"1970-01-01T00:00:00.000Z\" : prevDate.toISOString();\n\n  return {\n    json: {\n      ...data,\n      lastISO,\n      prevISO\n    }\n  };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         -1264,
-        -832
+        -976
       ],
       "id": "6305740c-b44b-400a-b01b-1daf2f54edcc",
       "name": "Code1"
@@ -378,8 +261,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1072,
-        -832
+        -1040,
+        -976
       ],
       "id": "b50964ff-ca10-4372-8bb5-5fba8742798e",
       "name": "If"
@@ -411,8 +294,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -832,
-        -848
+        -800,
+        -992
       ],
       "id": "9a5e3de6-a20f-489f-b9d4-cc57093aa591",
       "name": "Item push",
@@ -440,7 +323,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"history.get\",\n  \"params\": {\n    \"history\": 3, \n    \"itemids\": [\"{{ $json.result.data[0].itemid }}\"],\n    \"sortfield\": \"clock\",\n    \"sortorder\": \"DESC\",\n    \"limit\": 1\n  },\n  \"id\": 2\n}\n",
+        "jsonBody": "={{$json}}",
         "options": {
           "response": {
             "response": {}
@@ -450,51 +333,438 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -672,
-        -672
+        -736,
+        -704
       ],
-      "id": "b5303489-e306-4edb-9b33-3005d0a0eb98",
-      "name": "Item push1",
+      "id": "850c2764-d0a5-43df-b9de-a112a719ee4e",
+      "name": "Item create",
+      "executeOnce": true,
       "credentials": {
         "zabbixApi": {
           "id": "yJ0hjegcWJuG6BZR",
           "name": "Zabbix account"
         }
       }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"host.get\",\n  \"params\": {\n    \"output\": [\"hostid\", \"host\", \"name\"],\n    \"filter\": {\n      \"name\": [\"{{ $('Get row(s) in sheet1').item.json[\"Zabbix host visible name\"] }}\"]\n    }\n  },\n  \"id\": 4\n}",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1344,
+        -672
+      ],
+      "id": "ba2305f6-9943-4986-94c0-b3d4af2f2ebf",
+      "name": "Host get",
+      "executeOnce": false,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E",
+          "mode": "list",
+          "cachedResultName": "PGJ Store Inspections",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1469833957,
+          "mode": "list",
+          "cachedResultName": "Phone Line Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit#gid=1469833957"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Zabbix itemid": "={{ $json[\"Zabbix itemid\"] }}",
+            "row_number": "={{ $json.row_number }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Store",
+              "displayName": "Store",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix host",
+              "displayName": "Zabbix host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix host visible name",
+              "displayName": "Zabbix host visible name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix key",
+              "displayName": "Zabbix key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix itemid",
+              "displayName": "Zabbix itemid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provider",
+              "displayName": "Provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Line",
+              "displayName": "Phone Line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Status",
+              "displayName": "Last Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Timestamp",
+              "displayName": "Last Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "n8n Timestamp",
+              "displayName": "n8n Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Active",
+              "displayName": "Active",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -416,
+        -704
+      ],
+      "id": "46255987-c95c-440f-9615-e52b4ce07330",
+      "name": "Update row in sheet1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E",
+          "mode": "list",
+          "cachedResultName": "PGJ Store Inspections",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1469833957,
+          "mode": "list",
+          "cachedResultName": "Phone Line Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit#gid=1469833957"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Zabbix host visible name",
+              "lookupValue": "PSTN - Braeton"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1488,
+        -720
+      ],
+      "id": "42b357ee-7b4e-4a90-95a9-e0d94636d968",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const sheetRows = $items(\"Get row(s) in sheet1\"); // all sheet rows\nconst createdItemIds = $json[\"result\"][\"itemids\"]; // from item.create response\n\n// Map itemids to sheet rows based on order\nconst output = sheetRows.map((row, index) => {\n  return {\n    json: {\n      ...row.json,\n      \"Zabbix itemid\": createdItemIds[index] // update with corresponding itemid\n    }\n  };\n});\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        -704
+      ],
+      "id": "76a6a42e-0abe-4d3d-a9b7-55e1f12b0554",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      jsonrpc: \"2.0\",\n      method: \"item.create\",\n      params: items.map(item => ({\n        name: `PSTN line Status :+${item.json[\"Phone Line\"]}`,\n        key_: item.json[\"Zabbix key\"],\n        hostid: $input.first().json.hostid, // or dynamic from host.get\n        type: 2,\n        value_type: 3,\n        delay: \"0s\"\n      })),\n      id: 1\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -896,
+        -704
+      ],
+      "id": "1677aac2-63c1-4667-a7ff-c285b5721473",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        -672
+      ],
+      "id": "ad802f15-680a-40cb-8711-3d84267c338a",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex"
+      },
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        -1056,
+        -704
+      ],
+      "typeVersion": 1,
+      "id": "d0a46d99-e781-47e4-910f-fdccc52862a4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"item.update\",\n  \"params\": {\n    \"itemid\": \"{{ $json[\"Zabbix itemid\"] }}\",\n    \"name\": \"{{ $json[\"newItemName\"] }}\"\n  },\n  \"id\": 1\n}\n",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        -1232
+      ],
+      "id": "eb4f0c05-7b41-42d6-a11c-bcff32b76fca",
+      "name": "Item update",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const data = item.json;\n  // Construct new name in Zabbix format\n  data.newItemName = `PSTN line status :+${data[\"Phone Line\"]}`;\n  return { json: data };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1072,
+        -1232
+      ],
+      "id": "6b0b934b-3531-4bab-a9a3-5a48ac0dabcc",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1469833957,
+          "mode": "list",
+          "cachedResultName": "Phone Line Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit#gid=1469833957"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Zabbix host visible name",
+              "lookupValue": "PSTN - West Gate"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1280,
+        -1232
+      ],
+      "id": "9c708fd8-1b71-44bc-9e1a-6e19f92dd529",
+      "name": "Get row(s) in sheet3",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "height": 240,
+        "width": 1152
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        -1072
+      ],
+      "id": "ce32197e-8994-48c3-b0f9-424b8dbd5b3b",
+      "name": "Sticky Note"
     }
   ],
   "connections": {
-    "HTTP": {
-      "main": [
-        []
-      ]
-    },
     "Start": {
       "main": [
         [
           {
             "node": "Get row(s) in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge1": {
-      "main": [
-        []
-      ]
-    },
-    "Code": {
-      "main": [
-        []
-      ]
-    },
-    "Filter": {
-      "main": [
-        [
-          {
-            "node": "Code1",
             "type": "main",
             "index": 0
           }
@@ -510,7 +780,7 @@
       "main": [
         [
           {
-            "node": "Filter",
+            "node": "Code1",
             "type": "main",
             "index": 0
           }
@@ -547,9 +817,113 @@
             "node": "Update row in sheet",
             "type": "main",
             "index": 0
+          }
+        ]
+      ]
+    },
+    "Item create": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Host get": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Host get",
+            "type": "main",
+            "index": 0
           },
           {
-            "node": "Item push1",
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Item create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Item update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Code4",
             "type": "main",
             "index": 0
           }
@@ -565,7 +939,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "e4539778-c54f-455c-82af-9956a51fff39",
+  "versionId": "17663279-0355-4130-84aa-eea00603035e",
   "triggerCount": 0,
   "tags": []
 }
