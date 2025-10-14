@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:51:30.482Z",
-  "updatedAt": "2025-09-30T20:04:04.195Z",
+  "updatedAt": "2025-10-14T21:11:56.267Z",
   "id": "anJhLUN0JjdpG2ht",
   "name": "Open Ticket Data",
   "active": false,
@@ -13,7 +13,7 @@
         "sendBody": true,
         "contentType": "raw",
         "rawContentType": "application/JSON",
-        "body": "{   \"user_name\": \"Ratkinson\",   \"password\": \"Sashee1234%25%5E%26\" }",
+        "body": "{   \"user_name\": \"Ratkinson\",   \"password\": \"Evert0n@tkins1234\" }",
         "options": {
           "response": {
             "response": {
@@ -895,7 +895,7 @@
           "interval": [
             {
               "field": "minutes",
-              "minutesInterval": 8
+              "minutesInterval": 10
             }
           ]
         }
@@ -1480,7 +1480,7 @@
     },
     {
       "parameters": {
-        "content": "## Login credentials\nWorkflow is scheduled to run every 5 mins.\n\nAn HTTP Login node is used to proof the user is an admin of SysAid using SysAid's api.\n\n\nA set node is used to get the ID from the header of the user, extracted and saved to use later to retrieve info from SysAid.\n",
+        "content": "## Login credentials\nWorkflow is scheduled to run every 10 mins.\n\nAn HTTP Login node is used to proof the user is an admin of SysAid using SysAid's api.\n\n\nA set node is used to get the ID from the header of the user, extracted and saved to use later to retrieve info from SysAid.\n",
         "height": 352,
         "width": 608
       },
@@ -1880,7 +1880,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "ff6de8c5-2c37-417d-9e27-b8862cc43cf3",
+  "versionId": "e4f098bd-4bb0-46d4-989d-c3626f57181b",
   "triggerCount": 1,
   "tags": []
 }
