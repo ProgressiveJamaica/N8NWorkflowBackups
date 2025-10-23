@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-10-14T21:05:20.853Z",
+  "updatedAt": "2025-10-21T14:16:20.120Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -149,8 +149,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        48,
-        -384
+        -304,
+        -160
       ],
       "id": "b02e83cb-ff82-4f70-9973-e616136cbff1",
       "name": "Get Rows (Braeton Sheet)",
@@ -165,7 +165,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Get all rows from the Google Sheet\nconst sheetRows = $items(\"Get Rows (Braeton Sheet)1\") || [];\n\n// Build a quick lookup of eventid -> sheet row object\nconst sheetMap = {};\nfor (const r of sheetRows) {\n  const evt = (r.json[\"EventID\"] || r.json[\"Zabbix Event ID\"] || \"\").toString();\n  if (evt) sheetMap[evt] = r.json;\n}\n\n// For each incoming problem (from Braeton Problems set node)\nreturn items.map(item => {\n  const p = item.json;\n  const eventid = (p.EventID || p.eventid || \"\").toString();\n\n  // Check if this event is already in the sheet\n  const sheetEntry = sheetMap[eventid];\n\n  // Determine if it needs a ticket\n  let needsTicket = true;\n  let existingTicketId = null;\n\n  if (sheetEntry) {\n    const ticketId = (sheetEntry[\"TicketID\"] || sheetEntry[\"SysAid Ticket ID\"] || \"\").trim();\n    if (ticketId) {\n      // Already has a ticket ID\n      needsTicket = false;\n      existingTicketId = ticketId;\n    }\n  }\n\n  return {\n    json: {\n      ...p,\n      needsTicket,\n      existingTicketId,\n      sheetRow: sheetEntry || null\n    }\n  };\n});\n"
+        "jsCode": "// Get all rows from the Google Sheet\nconst sheetRows = $items(\"Get row(s)1\") || [];\n\n// Build a quick lookup of eventid -> sheet row object\nconst sheetMap = {};\nfor (const r of sheetRows) {\n  const evt = (r.json[\"EventID\"] || r.json[\"Zabbix Event ID\"] || \"\").toString();\n  if (evt) sheetMap[evt] = r.json;\n}\n\n// For each incoming problem (from Braeton Problems set node)\nreturn items.map(item => {\n  const p = item.json;\n  const eventid = (p.EventID || p.eventid || \"\").toString();\n\n  // Check if this event is already in the sheet\n  const sheetEntry = sheetMap[eventid];\n\n  // Determine if it needs a ticket\n  let needsTicket = true;\n  let existingTicketId = null;\n\n  if (sheetEntry) {\n    const ticketId = (sheetEntry[\"TicketID\"] || sheetEntry[\"SysAid Ticket ID\"] || \"\").trim();\n    if (ticketId) {\n      // Already has a ticket ID\n      needsTicket = false;\n      existingTicketId = ticketId;\n    }\n  }\n\n  return {\n    json: {\n      ...p,\n      needsTicket,\n      existingTicketId,\n      sheetRow: sheetEntry || null\n    }\n  };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -230,7 +230,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1728,
+        1712,
         -192
       ],
       "id": "cfa38dde-bc6c-476e-82b6-062c25d178fc",
@@ -255,7 +255,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1920,
+        1936,
         -192
       ],
       "id": "b22c2587-7533-4158-859c-bb196eb1e56a",
@@ -354,13 +354,13 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"info\": [\n    { \n      \"key\": \"title\", \n      \"value\": \"MSSQL: Service is unavailable\" \n    },\n    { \n      \"key\": \"status\", \n      \"value\": \"1\" \n    },\n    { \n      \"key\": \"urgency\", \n      \"value\": \"5\" \n    },\n    { \n      \"key\": \"impact\", \n      \"value\": \"4\" \n    },\n    { \n      \"key\": \"priority\", \n      \"value\": \"4\" \n    },\n    { \n      \"key\": \"request_user\", \n      \"value\": \"\" \n    },\n    {\n      \"key\": \"description\",\n      \"value\": \"Hello, please see the following:<br><a href=\\\"http://192.168.0.22/zabbix.php?show=1&amp;name=&amp;acknowledgement_status=0&amp;inventory%5B0%5D%5Bfield%5D=type&amp;inventory%5B0%5D%5Bvalue%5D=&amp;evaltype=0&amp;tags%5B0%5D%5Btag%5D=&amp;tags%5B0%5D%5Boperator%5D=0&amp;tags%5B0%5D%5Bvalue%5D=&amp;show_tags=3&amp;tag_name_format=0&amp;tag_priority=&amp;show_opdata=0&amp;show_timeline=1&amp;filter_name=&amp;filter_show_counter=0&amp;filter_custom_time=0&amp;sort=clock&amp;sortorder=DESC&amp;age_state=0&amp;show_symptoms=0&amp;show_suppressed=0&amp;acknowledged_by_me=0&amp;compact_view=0&amp;details=0&amp;highlight_row=0&amp;action=problem.view&amp;triggerids%5B%5D=78522\\\" target=\\\"_blank\\\">View Zabbix Problem</a>\"\n    }\n  ]\n}",
+        "jsonBody": "{\n  \"info\": [\n    {\n      \"key\": \"title\",\n      \"value\": \"Windows: High memory utilization\"\n    },\n    {\n      \"key\": \"description\",\n      \"value\": \"Detected issue on host <b>WS - 128wkn12</b>.<br>Severity: 3<br><a href='http://192.168.0.22/zabbix.php?show=1&name=&acknowledgement_status=0&inventory%5B0%5D%5Bfield%5D=type&inventory%5B0%5D%5Bvalue%5D=&evaltype=0&tags%5B0%5D%5Btag%5D=&tags%5B0%5D%5Boperator%5D=0&tags%5B0%5D%5Bvalue%5D=&show_tags=3&tag_name_format=0&tag_priority=&show_opdata=0&show_timeline=1&filter_name=&filter_show_counter=0&filter_custom_time=0&sort=clock&sortorder=DESC&age_state=0&show_symptoms=0&show_suppressed=0&acknowledged_by_me=0&compact_view=0&details=0&highlight_row=0&action=problem.view&triggerids%5B%5D=78522'>View Zabbix Problem</a>\"\n    },\n    {\n      \"key\": \"status\",\n      \"value\": \"1\"\n    },\n    {\n      \"key\": \"urgency\",\n      \"value\": \"3\"\n    },\n    {\n      \"key\": \"impact\",\n      \"value\": \"2\"\n    },\n    {\n      \"key\": \"priority\",\n      \"value\": \"3\"\n    },\n    {\n      \"key\": \"source\",\n      \"value\": \"7\"\n    },\n    {\n      \"key\": \"request_user\",\n      \"value\": \"\"\n    },\n    {\n      \"key\": \"sub_type\",\n      \"value\": \"6\"\n    }\n  ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2128,
+        2144,
         -192
       ],
       "id": "5e62d9ce-ca66-42c6-b8d0-4ab35b07bb12",
@@ -409,7 +409,7 @@
           "assignments": [
             {
               "id": "847cd878-4b87-491e-bf5e-7c83ab9693cc",
-              "name": "Time ",
+              "name": "Time",
               "value": "={{ $json.clock }}",
               "type": "string"
             },
@@ -427,7 +427,7 @@
             },
             {
               "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "Host Name",
+              "name": "HostName",
               "value": "={{ $json.result.hosts[0].name }}",
               "type": "string"
             },
@@ -605,8 +605,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2848,
-        -192
+        3152,
+        -208
       ],
       "id": "65f18187-d821-4161-87fd-229910fa4e0b",
       "name": "Update row in sheet",
@@ -640,7 +640,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        1840,
+        2160,
         -576
       ],
       "id": "79267c53-d861-445d-8eae-beac39aab1fd",
@@ -692,9 +692,9 @@
         "assignments": {
           "assignments": [
             {
-              "id": "32589481-9a7c-4e75-a669-e39fb51f5646",
-              "name": "row_number",
-              "value": "={{ $json.row_number }}",
+              "id": "fd059166-86e4-411b-9b10-9297be02d5b3",
+              "name": "id",
+              "value": "={{ $json.id }}",
               "type": "number"
             },
             {
@@ -704,9 +704,9 @@
               "type": "number"
             },
             {
-              "id": "fba769b7-41d5-41ba-9ca8-b720e782cd67",
-              "name": "Host Name",
-              "value": "={{ $json[\"Host Name\"] }}",
+              "id": "cdf72c5a-90e5-4b92-aab5-669fd037aa67",
+              "name": "HostName",
+              "value": "={{ $json.HostName }}",
               "type": "string"
             }
           ]
@@ -744,8 +744,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        928,
-        -176
+        624,
+        -144
       ],
       "id": "4401b35c-0fc1-4a28-82aa-f47dcbfc76dd",
       "name": "Get Rows (Braeton Sheet)1",
@@ -832,7 +832,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2464,
+        2432,
         -192
       ],
       "id": "fa587c08-3b7d-44fe-8ce8-68791f71bdbc",
@@ -864,8 +864,8 @@
           ],
           "schema": [
             {
-              "id": "Time ",
-              "displayName": "Time ",
+              "id": "Time",
+              "displayName": "Time",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -962,8 +962,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -368,
-        -384
+        -720,
+        -416
       ],
       "id": "3ed08c6d-0d6c-48cf-b220-27860ccd9f6b",
       "name": "Braeton Agent Sheets",
@@ -1037,7 +1037,7 @@
     {
       "parameters": {
         "content": "## Append and Read \nInfo is then put into the respective store sheet. Then we get the rows from the sheet which returns a row number and set using a set node. This is needed for deletion later.",
-        "height": 256,
+        "height": 240,
         "width": 1008
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -1093,6 +1093,353 @@
       ],
       "id": "afa1f038-d635-43f7-9edf-ef3ee03a31e1",
       "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "8y4OLwlOJZZbTrt2",
+          "mode": "list",
+          "cachedResultName": "Braeton Problems",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/8y4OLwlOJZZbTrt2"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "EventID",
+              "keyValue": "={{ $json.EventID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HostName",
+              "displayName": "HostName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "EventID",
+              "displayName": "EventID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "TicketID",
+              "displayName": "TicketID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -384
+      ],
+      "id": "06911f64-d5a5-4a0b-8827-bf45c0f93baf",
+      "name": "Upsert row(s)",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZKHgO1Ak04DLRby0",
+          "mode": "list",
+          "cachedResultName": "Braeton Problems",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/ZKHgO1Ak04DLRby0"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -384
+      ],
+      "id": "82e7dba7-9f72-4484-9436-56224af02817",
+      "name": "Get row(s)",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "value": "zkhwrBbFIowchu5E",
+          "mode": "list",
+          "cachedResultName": "Braeton Problems",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/zkhwrBbFIowchu5E"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        -576
+      ],
+      "id": "01190a8b-e312-4618-b2c0-39214bc35ca3",
+      "name": "Delete row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZKHgO1Ak04DLRby0",
+          "mode": "list",
+          "cachedResultName": "Braeton Problems",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/ZKHgO1Ak04DLRby0"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        928,
+        -176
+      ],
+      "id": "ca306c0e-d9b7-47c9-bf7d-fd47450624aa",
+      "name": "Get row(s)1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "zkhwrBbFIowchu5E",
+          "mode": "list",
+          "cachedResultName": "Braeton Problems",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/zkhwrBbFIowchu5E"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "EventID"
+            },
+            {
+              "keyName": "TicketID"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "HostID": 0,
+            "Severity": 0,
+            "EventID": 0,
+            "TicketID": 0
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HostID",
+              "displayName": "HostID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Host",
+              "displayName": "Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HostName",
+              "displayName": "HostName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "EventID",
+              "displayName": "EventID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "TicketID",
+              "displayName": "TicketID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        -192
+      ],
+      "id": "c03be18f-7d30-4ca3-9dfb-813cddcee6cf",
+      "name": "Update row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming items (the problems)\nconst problems = $input.all();\n\n// We'll build a map where key = Host, value = list of problems\nconst hostMap = {};\n\nfor (const item of problems) {\n  const data = item.json;\n  const host = data.Host || \"Unknown\";\n\n  if (!hostMap[host]) {\n    hostMap[host] = {\n      Time: [],\n      Host: data.Host,\n      HostName: data.HostName,\n      HostID: data.HostID,\n      Severity: data.Severity,\n      Description: [], // store multiple problem descriptions\n      EventID: [],\n    };\n  }\n\n  // Add this problem’s details\n  hostMap[host].Description.push(data.Description);\n  hostMap[host].EventID.push(data.EventID);\n  hostMap[host].Time.push(data.Time);\n}\n\n// Now convert the grouped map into array output\nreturn Object.values(hostMap).map(h => ({\n  json: {\n    ...h,\n    Description: h.Description.join(String.fromCharCode(10)),\n    EventID: h.EventID.join(\"\\n\"),\n    Time: h.Time.join(\"\\n\")\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        -384
+      ],
+      "id": "247b9370-ea42-412e-b1f1-f4f2cdcf341b",
+      "name": "Group Problems by Host"
     }
   ],
   "connections": {
@@ -1147,13 +1494,7 @@
     },
     "Get Rows (Braeton Sheet)": {
       "main": [
-        [
-          {
-            "node": "Sheet Braeton",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "CheckExistingTicket": {
@@ -1264,12 +1605,12 @@
       "main": [
         [
           {
-            "node": "Braeton Agent Sheets",
+            "node": "Merge3",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Merge3",
+            "node": "Group Problems by Host",
             "type": "main",
             "index": 0
           }
@@ -1280,7 +1621,7 @@
       "main": [
         [
           {
-            "node": "Update row in sheet",
+            "node": "Update row(s)",
             "type": "main",
             "index": 0
           }
@@ -1291,7 +1632,7 @@
       "main": [
         [
           {
-            "node": "Delete rows or columns from sheet",
+            "node": "Delete row(s)",
             "type": "main",
             "index": 0
           }
@@ -1322,24 +1663,12 @@
     },
     "Delete rows or columns from sheet": {
       "main": [
-        [
-          {
-            "node": "Get Rows (Braeton Sheet)1",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Get Rows (Braeton Sheet)1": {
       "main": [
-        [
-          {
-            "node": "CheckExistingTicket",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Find Resolved Problems": {
@@ -1364,7 +1693,7 @@
         ],
         [
           {
-            "node": "Get Rows (Braeton Sheet)1",
+            "node": "Get row(s)1",
             "type": "main",
             "index": 0
           }
@@ -1384,9 +1713,58 @@
     },
     "Braeton Agent Sheets": {
       "main": [
+        []
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
         [
           {
-            "node": "Get Rows (Braeton Sheet)",
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Sheet Braeton",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete row(s)": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "CheckExistingTicket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Group Problems by Host": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
             "type": "main",
             "index": 0
           }
@@ -1402,7 +1780,16 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "394bb0f6-49a0-48ad-84de-f00a2f525ca5",
+  "versionId": "86a8eda7-36b3-467d-9e6e-be597463cdb7",
   "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-08-13T21:53:08.988Z",
+      "updatedAt": "2025-08-13T21:53:08.988Z",
+      "role": "workflow:owner",
+      "workflowId": "rdvNCzYT6AVYVUH5",
+      "projectId": "jYvi0vPc2f8MZoYz"
+    }
+  ],
   "tags": []
 }
