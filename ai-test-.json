@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-15T20:47:13.516Z",
-  "updatedAt": "2025-10-14T16:06:19.800Z",
+  "updatedAt": "2025-10-16T18:10:16.564Z",
   "id": "EaKp8ltsCTxDk0tc",
   "name": "AI Test",
   "active": false,
@@ -65,6 +65,27 @@
       ],
       "id": "c53a67dd-e217-46fa-8a20-d312855c3cd6",
       "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "zkhwrBbFIowchu5E",
+          "mode": "list",
+          "cachedResultName": "Braeton Problems",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/zkhwrBbFIowchu5E"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}"
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        304,
+        160
+      ],
+      "id": "ca3fdb47-822f-42f3-a3c6-446ff0fe6a55",
+      "name": "Braeton"
     }
   ],
   "connections": {
@@ -100,6 +121,17 @@
           }
         ]
       ]
+    },
+    "Braeton": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -110,7 +142,16 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "955ea14b-f565-4d7b-bb42-26937d25fb5b",
+  "versionId": "cf2bd920-3a83-43cb-81dc-38da46b7c879",
   "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-08-15T20:47:13.516Z",
+      "updatedAt": "2025-08-15T20:47:13.516Z",
+      "role": "workflow:owner",
+      "workflowId": "EaKp8ltsCTxDk0tc",
+      "projectId": "jYvi0vPc2f8MZoYz"
+    }
+  ],
   "tags": []
 }
