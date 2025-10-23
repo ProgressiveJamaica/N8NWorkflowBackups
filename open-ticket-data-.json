@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:51:30.482Z",
-  "updatedAt": "2025-10-14T21:11:56.267Z",
+  "updatedAt": "2025-10-23T21:45:32.366Z",
   "id": "anJhLUN0JjdpG2ht",
   "name": "Open Ticket Data",
   "active": false,
@@ -1882,5 +1882,14 @@
   "pinData": {},
   "versionId": "e4f098bd-4bb0-46d4-989d-c3626f57181b",
   "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-13T21:51:30.482Z",
+      "updatedAt": "2025-08-13T21:51:30.482Z",
+      "role": "workflow:owner",
+      "workflowId": "anJhLUN0JjdpG2ht",
+      "projectId": "jYvi0vPc2f8MZoYz"
+    }
+  ],
   "tags": []
 }
