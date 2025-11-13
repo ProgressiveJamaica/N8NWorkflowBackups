@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-21T20:21:13.137Z",
-  "updatedAt": "2025-10-23T19:57:49.829Z",
+  "updatedAt": "2025-11-11T16:38:56.961Z",
   "id": "A30kU1rcb6mKeDG6",
   "name": "Whatsapp",
   "active": false,
@@ -74,7 +74,7 @@
         "operation": "send",
         "phoneNumberId": "795070217018578",
         "recipientPhoneNumber": "18763514207 - ronaldo",
-        "textBody": "3nd testing!",
+        "textBody": "Is this thing on?",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.whatsApp",
@@ -136,7 +136,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "89b7dacd-6dce-475a-98cb-176cf25fb744",
+  "versionId": "c6b076ec-3f05-4ec2-a6de-dd35cabd2512",
   "triggerCount": 0,
   "shared": [
     {
