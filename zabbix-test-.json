@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-10-21T14:16:20.120Z",
+  "updatedAt": "2025-11-13T20:52:53.153Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -24,8 +24,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 2,
       "position": [
-        -912,
-        -800
+        -896,
+        -768
       ]
     },
     {
@@ -49,56 +49,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1104,
-        -800
+        -1088,
+        -768
       ],
       "id": "e078ad3a-eba0-4c80-888e-c5dc9e0338cf",
       "name": "Zabbix Login"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -1296,
-        -800
-      ],
-      "id": "2b1667f6-2b5c-4dd8-acdb-f357448fd370",
-      "name": "When clicking ‘Execute workflow’"
-    },
-    {
-      "parameters": {
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\", \"r_eventid\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"tags\": [\n      {\n        \"tag\": \"STORE\",\n        \"value\": \"Braeton\",\n        \"operator\": 0\n      }\n    ]\n  },\n  \"id\": 4\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -384,
-        -800
-      ],
-      "id": "39c806bf-9887-4e25-b678-a734d848aab6",
-      "name": "Get Braeton problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
     },
     {
       "parameters": {
@@ -106,6 +61,7 @@
           "__rl": true,
           "value": "5YkWYGJPcAASgp1z",
           "mode": "list",
+          "cachedResultUrl": "/workflow/5YkWYGJPcAASgp1z",
           "cachedResultName": "Zabbix Phone Line Status"
         },
         "workflowInputs": {
@@ -129,49 +85,13 @@
     },
     {
       "parameters": {
-        "authentication": "serviceAccount",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 54639254,
-          "mode": "list",
-          "cachedResultName": "Braeton",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        -304,
-        -160
-      ],
-      "id": "b02e83cb-ff82-4f70-9973-e616136cbff1",
-      "name": "Get Rows (Braeton Sheet)",
-      "executeOnce": true,
-      "alwaysOutputData": true,
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Get all rows from the Google Sheet\nconst sheetRows = $items(\"Get row(s)1\") || [];\n\n// Build a quick lookup of eventid -> sheet row object\nconst sheetMap = {};\nfor (const r of sheetRows) {\n  const evt = (r.json[\"EventID\"] || r.json[\"Zabbix Event ID\"] || \"\").toString();\n  if (evt) sheetMap[evt] = r.json;\n}\n\n// For each incoming problem (from Braeton Problems set node)\nreturn items.map(item => {\n  const p = item.json;\n  const eventid = (p.EventID || p.eventid || \"\").toString();\n\n  // Check if this event is already in the sheet\n  const sheetEntry = sheetMap[eventid];\n\n  // Determine if it needs a ticket\n  let needsTicket = true;\n  let existingTicketId = null;\n\n  if (sheetEntry) {\n    const ticketId = (sheetEntry[\"TicketID\"] || sheetEntry[\"SysAid Ticket ID\"] || \"\").trim();\n    if (ticketId) {\n      // Already has a ticket ID\n      needsTicket = false;\n      existingTicketId = ticketId;\n    }\n  }\n\n  return {\n    json: {\n      ...p,\n      needsTicket,\n      existingTicketId,\n      sheetRow: sheetEntry || null\n    }\n  };\n});\n"
+        "jsCode": "// Get all rows from the Google Sheet\nconst sheetRows = $items(\"Get Rows (Zabbix Problem Sheet)\") || [];\n\n// Build a quick lookup of eventid -> sheet row object\nconst sheetMap = {};\nfor (const r of sheetRows) {\n  const evt = (r.json[\"EventID\"] || r.json[\"Zabbix Event ID\"] || \"\").toString();\n  if (evt) sheetMap[evt] = r.json;\n}\n\n// For each incoming problem (from Braeton Problems set node)\nreturn items.map(item => {\n  const p = item.json;\n  const eventid = (p.EventID || p.eventid || \"\").toString();\n\n  // Check if this event is already in the sheet\n  const sheetEntry = sheetMap[eventid];\n\n  // Determine if it needs a ticket\n  let needsTicket = true;\n  let existingTicketId = null;\n\n  if (sheetEntry) {\n    const ticketId = (sheetEntry[\"TicketID\"] || sheetEntry[\"SysAid Ticket ID\"] || \"\").trim();\n    if (ticketId) {\n      // Already has a ticket ID\n      needsTicket = false;\n      existingTicketId = ticketId;\n    }\n  }\n\n  return {\n    json: {\n      ...p,\n      needsTicket,\n      existingTicketId,\n      sheetRow: sheetEntry || null\n    }\n  };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1168,
-        -176
+        960,
+        -48
       ],
       "id": "3475ed92-95b6-4263-b7bd-13126cfda529",
       "name": "CheckExistingTicket",
@@ -189,7 +109,7 @@
           "conditions": [
             {
               "id": "b72de1fa-2d07-41c2-9a5f-441511ed1ca0",
-              "leftValue": "={{ $json.needsTicket }}",
+              "leftValue": "null",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -205,8 +125,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1408,
-        -176
+        1168,
+        -48
       ],
       "id": "dcf7bfb5-33b1-4405-815b-bc09af9140ee",
       "name": "If"
@@ -230,8 +150,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1712,
-        -192
+        1536,
+        -64
       ],
       "id": "cfa38dde-bc6c-476e-82b6-062c25d178fc",
       "name": "Login credentials",
@@ -255,89 +175,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1936,
-        -192
+        1744,
+        -64
       ],
       "id": "b22c2587-7533-4158-859c-bb196eb1e56a",
       "name": "SessionID"
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "result",
-        "include": "selectedOtherFields",
-        "fieldsToInclude": "clock, status, eventid",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        304,
-        -688
-      ],
-      "id": "4f8d1141-5bd6-4c96-88e1-d997044a5ba6",
-      "name": "Split Out",
-      "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "mode": "mergeByIndex"
-      },
-      "name": "Merge2",
-      "type": "n8n-nodes-base.merge",
-      "position": [
-        144,
-        -688
-      ],
-      "typeVersion": 1,
-      "id": "d6bf0bbf-831c-446f-9d85-f558403d3a42"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerid }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -32,
-        -816
-      ],
-      "id": "0d4a06ac-cbf3-4095-a29d-62d36139101d",
-      "name": "Braeton Trigger Problems",
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const problems = $json.result || [];\n\nreturn problems.map(p => ({\n  json: {\n    eventid: p.eventid,\n    triggerid: p.objectid,\n    name: p.name,\n    severity: p.severity,\n    clock: new Date(p.clock * 1000).toISOString().replace(\"T\", \" \").replace(\"Z\", \"\"),\n    status: p.r_eventid && p.r_eventid !== \"0\" ? \"RESOLVED\" : \"PROBLEM\"\n  }\n}));\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -208,
-        -672
-      ],
-      "id": "1b90e530-c47b-4762-90f1-162a28bdb7f6",
-      "name": "Braeton Triggers & Event ID"
     },
     {
       "parameters": {
@@ -360,8 +202,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2144,
-        -192
+        1952,
+        -64
       ],
       "id": "5e62d9ce-ca66-42c6-b8d0-4ab35b07bb12",
       "name": "Create Sysaid Ticket",
@@ -391,8 +233,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2656,
-        -192
+        2496,
+        -64
       ],
       "id": "b678c909-bdc0-4708-b801-94a860412e2e",
       "name": "Zabbix Update",
@@ -405,106 +247,38 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "847cd878-4b87-491e-bf5e-7c83ab9693cc",
-              "name": "Time",
-              "value": "={{ $json.clock }}",
-              "type": "string"
-            },
-            {
-              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
-              "name": "HostID",
-              "value": "={{ $json.result.hosts[0].hostid }}",
-              "type": "string"
-            },
-            {
-              "id": "2d380f93-2503-4489-b131-a961fe374e17",
-              "name": "Host",
-              "value": "={{ $json.result.hosts[0].host }}",
-              "type": "string"
-            },
-            {
-              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
-              "name": "HostName",
-              "value": "={{ $json.result.hosts[0].name }}",
-              "type": "string"
-            },
-            {
-              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
-              "name": "Severity",
-              "value": "={{ $json.result.priority }}",
-              "type": "string"
-            },
-            {
-              "id": "c491e678-a274-440c-8856-7b96165c2488",
-              "name": "Description",
-              "value": "={{ $json.result.description }}",
-              "type": "string"
-            },
-            {
-              "id": "ac9db0a7-d6a4-49fc-93f6-a79c26149e6e",
-              "name": "Status",
-              "value": "={{ $json.status }}",
-              "type": "string"
-            },
-            {
-              "id": "9de7af85-ca7a-40f4-9dd3-12df43933a67",
-              "name": "EventID",
-              "value": "={{ $json.eventid }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        464,
-        -688
-      ],
-      "id": "a6e5bcb3-841c-460e-bca5-3a65e99cedcf",
-      "name": "Braeton problems"
-    },
-    {
-      "parameters": {
         "authentication": "serviceAccount",
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
           "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
-          "value": 54639254,
+          "value": 1939728952,
           "mode": "list",
-          "cachedResultName": "Braeton",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
         },
         "columns": {
           "mappingMode": "defineBelow",
-          "value": {
-            "EventID": "={{ $('ID and EventID').item.json.EventID }}",
-            "TicketID": "={{ $('Create Sysaid Ticket').item.json.id }}"
-          },
+          "value": {},
           "matchingColumns": [
             "EventID"
           ],
           "schema": [
             {
-              "id": "Time ",
-              "displayName": "Time ",
+              "id": "Time",
+              "displayName": "Time",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
-              "removed": true
+              "removed": false
             },
             {
               "id": "HostID",
@@ -567,25 +341,6 @@
               "removed": true
             },
             {
-              "id": "EventID",
-              "displayName": "EventID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "TicketID",
-              "displayName": "TicketID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
               "id": "row_number",
               "displayName": "row_number",
               "required": false,
@@ -605,8 +360,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3152,
-        -208
+        2720,
+        -64
       ],
       "id": "65f18187-d821-4161-87fd-229910fa4e0b",
       "name": "Update row in sheet",
@@ -623,25 +378,25 @@
         "operation": "delete",
         "documentId": {
           "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
           "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
-          "value": 54639254,
+          "value": 1939728952,
           "mode": "list",
-          "cachedResultName": "Braeton",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
         },
         "startIndex": "={{ $json.rowIndex }}"
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        2160,
-        -576
+        1680,
+        -432
       ],
       "id": "79267c53-d861-445d-8eae-beac39aab1fd",
       "name": "Delete rows or columns from sheet",
@@ -670,109 +425,27 @@
       "type": "n8n-nodes-base.sort",
       "typeVersion": 1,
       "position": [
-        1632,
-        -576
+        1456,
+        -432
       ],
       "id": "de5c6d14-4e36-4b84-a895-d7f54b39205b",
       "name": "Sort"
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        944,
-        -560
-      ],
-      "id": "0eacc526-d1be-41bd-b282-a91f3c5ac26f",
-      "name": "Merge3"
-    },
-    {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "fd059166-86e4-411b-9b10-9297be02d5b3",
-              "name": "id",
-              "value": "={{ $json.id }}",
-              "type": "number"
-            },
-            {
-              "id": "d04899ee-a706-486b-b54b-2fcbca942c5a",
-              "name": "HostID",
-              "value": "={{ $json.HostID }}",
-              "type": "number"
-            },
-            {
-              "id": "cdf72c5a-90e5-4b92-aab5-669fd037aa67",
-              "name": "HostName",
-              "value": "={{ $json.HostName }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        464,
-        -384
-      ],
-      "id": "5fb49e6c-1f43-4606-9e6d-272e71bf1021",
-      "name": "Sheet Braeton"
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "documentId": {
-          "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
-          "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 54639254,
-          "mode": "list",
-          "cachedResultName": "Braeton",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        624,
-        -144
-      ],
-      "id": "4401b35c-0fc1-4a28-82aa-f47dcbfc76dd",
-      "name": "Get Rows (Braeton Sheet)1",
-      "executeOnce": true,
-      "alwaysOutputData": false,
-      "credentials": {
-        "googleApi": {
-          "id": "Fr8gBQ8Q5zSOdGfU",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const apiHostIds = new Set(\n  $items(\"Braeton problems\").map(item => String(item.json.HostID).trim())\n);\n\nconst closedProblems = $items(\"Sheet Braeton\").filter(item => {\n  const sheetHostId = String(item.json.HostID).trim();\n  return !apiHostIds.has(sheetHostId);\n});\n\nreturn closedProblems.map(item => ({\n  json: {\n    HostID: item.json.HostID,\n    rowIndex: item.json.row_number\n  }\n}));\n"
+        "jsCode": "// Get all HostIDs that currently have active problems in Zabbix (status = \"PROBLEM\")\nconst apiHostIds = new Set(\n  $items(\"API Zabbix Problems\")\n    .filter(item => item.json.Status === \"PROBLEM\")\n    .map(item => String(item.json.HostID).trim())\n);\n\n// Get rows from sheet\nconst sheetRows = $items(\"Zabbix Problems\");\n\n// Find rows that are either missing from API OR marked as resolved\nconst closedProblems = sheetRows.filter(item => {\n  const sheetHostId = String(item.json.HostID).trim();\n  const status = item.json.Status?.trim();\n\n  // True if not found in current API or marked as resolved\n  return !apiHostIds.has(sheetHostId) || status === \"RESOLVED\";\n});\n\n// Output rows to be removed or updated\nreturn closedProblems.map(item => ({\n  json: {\n    HostID: item.json.HostID,\n    rowIndex: item.json.row_number,\n    Status: item.json.Status,\n    Host: item.json.Host,\n    HostName: item.json[\"Host Name\"],\n    Desc: item.json.Description\n  }\n}));\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1152,
-        -560
+        976,
+        -416
       ],
       "id": "b622e7a6-c25a-44ea-8172-f6ba30bdaf35",
       "name": "Find Resolved Problems",
       "retryOnFail": true,
       "executeOnce": true,
-      "alwaysOutputData": true
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -803,8 +476,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1392,
-        -560
+        1200,
+        -416
       ],
       "id": "352fb309-adba-4d5d-aef6-3aab655503c2",
       "name": "If1"
@@ -832,11 +505,229 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2432,
-        -192
+        2256,
+        -64
       ],
       "id": "fa587c08-3b7d-44fe-8ce8-68791f71bdbc",
       "name": "ID and EventID"
+    },
+    {
+      "parameters": {
+        "content": "## Zabbix Login\n\nUsing zabbix credentials to login and get the token from the admin.",
+        "height": 240,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        -864
+      ],
+      "id": "ac1d98c4-79c8-4b1b-91f6-0ec859ea97a7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Zabbix Phone Line\n\nWorkflow has more information.",
+        "height": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        -1152
+      ],
+      "id": "ae3cdbaf-fb12-4276-bddb-a7606f67dce5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Zabbix Problems\n\nAll zabbix problems are extracted using the problem.get parameters. This includes, objectid, severity, clock (time when the problem occured) and description of the problem. Then a split out node is used to get all the information form the result array from the problem.get. Then a set node is used to clean and transform the data.\n\nAn aggregate node is used before the trigger.get node to put the triggerid's in an array so as to not overload the HTTP node with alot of data and prevent the node from failing.\n\nThen we get the host name from the trigger.get parameter using the array from the aggregate node for the host's respective id. Then another split out node is used to get the data from both the result and host arrays. Then we use a merge node to match triggerid's to there respective hosts. Then a set node to transform the data.",
+        "height": 608,
+        "width": 1056
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -1024
+      ],
+      "id": "6c1266f7-fba9-4e33-a679-553eb4e8d3d3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Merge, Compare and Delete\n\nMerge node combines both the Zabbix problems from the API and the problems in the sheet. \n\nCode node does a comparison to see which problems that are in the sheet is not returned from the API. If not, it gets marked for deletion as it's considered  resolved.\n\nSort node is used to delete rows in descending order.",
+        "height": 320,
+        "width": 1152
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -592
+      ],
+      "id": "2364c571-3270-4cf5-9c56-ff4d0a76510f",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Append and Read \nInfo is then put into the respective store sheet. Then we get the rows from the sheet which returns a row number and set using a set node. This is needed for deletion later.",
+        "height": 240,
+        "width": 1088
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -384
+      ],
+      "id": "69eae912-0376-4526-a320-7865db5c0081",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Check Problems\n\nWe then read the problems in the sheet to see if each problem has a ticket. If not, it get's sent to Sysaid's API to create the ticket for that problem.",
+        "height": 288,
+        "width": 656
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -176
+      ],
+      "id": "5f8a78e2-ed11-4ad1-96b2-866ca34a7c19",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Login to Sysaid\n\nLogin to sysaid using user credentials as proof.\n\nUse the POST to create a sysaid ticket for that problem.",
+        "height": 288,
+        "width": 624
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1488,
+        -192
+      ],
+      "id": "de2db9d4-0243-424a-8378-5747cf8229ef",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Send Zabbix an update of the problem\n\nA set node is used to get the ticket ID created from Sysaid and the event ID of the problem.\n\nWe used a POST node to update/acknowledge the problem in zabbix using the event.acknowledge param. \n\nWe then update the problem in the sheet using the event ID to match and add the ticket number that problem.",
+        "height": 368,
+        "width": 672
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2224,
+        -272
+      ],
+      "id": "afa1f038-d635-43f7-9edf-ef3ee03a31e1",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fXOynQEZrkWxv3o1",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/fXOynQEZrkWxv3o1",
+          "cachedResultName": "Creating Zabbix Hosts and Items"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -672,
+        -672
+      ],
+      "name": "Call Creating Zabbix Hosts and Items",
+      "id": "dbd38182-8bd3-4c0f-8240-f3d343b4b965"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"problem.get\",\n  \"params\": {\n    \"output\": [\"eventid\", \"objectid\", \"name\", \"severity\", \"clock\", \"r_eventid\"],\n    \"sortfield\": \"eventid\",\n    \"sortorder\": \"DESC\",\n    \"recent\": true\n  },\n  \"id\": 4\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -416,
+        -768
+      ],
+      "id": "39c806bf-9887-4e25-b678-a734d848aab6",
+      "name": "Get Zabbix problems",
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"trigger.get\",\n  \"params\": {\n    \"output\": [\"triggerid\", \"description\", \"priority\"],\n    \"triggerids\": [{{ $json.triggerid }}],\n    \"selectHosts\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -560
+      ],
+      "id": "0d4a06ac-cbf3-4095-a29d-62d36139101d",
+      "name": "Zabbix Trigger Problems",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
     },
     {
       "parameters": {
@@ -844,23 +735,32 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4",
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
           "mode": "list",
-          "cachedResultName": "Zabbix Agents",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit?usp=drivesdk"
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
-          "value": 54639254,
+          "value": 1939728952,
           "mode": "list",
-          "cachedResultName": "Braeton",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ydl8XShygBLThnPTN098iJ-UIIvvlcB3j_5x9DtdLQ4/edit#gid=54639254"
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
         },
         "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
+          "mappingMode": "defineBelow",
+          "value": {
+            "Time": "={{ $json.Time }}",
+            "HostID": "={{ $json.HostID }}",
+            "Host": "={{ $json.Host }}",
+            "Host Name": "={{ $json[\"Host Name\"] }}",
+            "Severity": "={{ $json.Severity }}",
+            "Description": "={{ $json.Description }}",
+            "Status": "={{ $json.Status }}",
+            "EventID": "={{ $json.EventID }}"
+          },
           "matchingColumns": [
-            "EventID"
+            "Description"
           ],
           "schema": [
             {
@@ -942,16 +842,6 @@
               "type": "string",
               "canBeUsedToMatch": true,
               "removed": false
-            },
-            {
-              "id": "TicketID",
-              "displayName": "TicketID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -962,11 +852,12 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -720,
-        -416
+        -432,
+        -288
       ],
       "id": "3ed08c6d-0d6c-48cf-b220-27860ccd9f6b",
-      "name": "Braeton Agent Sheets",
+      "name": "Zabbix Problems Sheet",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "Fr8gBQ8Q5zSOdGfU",
@@ -976,470 +867,381 @@
     },
     {
       "parameters": {
-        "content": "## Zabbix Login\n\nUsing zabbix credentials to login and get the token from the admin.",
-        "height": 256,
-        "width": 560
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
+          "mode": "list",
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1939728952,
+          "mode": "list",
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
+        },
+        "combineFilters": "OR",
+        "options": {}
       },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        -1344,
-        -912
+        16,
+        -288
       ],
-      "id": "ac1d98c4-79c8-4b1b-91f6-0ec859ea97a7",
-      "name": "Sticky Note"
+      "id": "b02e83cb-ff82-4f70-9973-e616136cbff1",
+      "name": "Get Zabbix Problems",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
     },
     {
       "parameters": {
-        "content": "## Zabbix Phone Line\n\nWorkflow has more information.",
-        "height": 272,
-        "width": 272
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8e7cb0ef-103e-41b7-80cd-a54c04411b36",
+              "name": "row_number",
+              "value": "={{ $('Get Zabbix Problems').item.json.row_number }}",
+              "type": "string"
+            },
+            {
+              "id": "d04899ee-a706-486b-b54b-2fcbca942c5a",
+              "name": "HostID",
+              "value": "={{ $json.HostID }}",
+              "type": "number"
+            },
+            {
+              "id": "cdf72c5a-90e5-4b92-aab5-669fd037aa67",
+              "name": "Host Name",
+              "value": "={{ $json[\"Host Name\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "77bb5045-cb46-4fae-854d-42b501fa9caa",
+              "name": "Status",
+              "value": "={{ $json.Status }}",
+              "type": "string"
+            },
+            {
+              "id": "7170cd7a-d2e5-4ed8-8f85-2aab1240826c",
+              "name": "Description",
+              "value": "={{ $json.Description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
-        -752,
-        -1152
+        432,
+        -288
       ],
-      "id": "ae3cdbaf-fb12-4276-bddb-a7606f67dce5",
-      "name": "Sticky Note1"
+      "id": "5fb49e6c-1f43-4606-9e6d-272e71bf1021",
+      "name": "Zabbix Problems"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        768,
+        -416
+      ],
+      "id": "0eacc526-d1be-41bd-b282-a91f3c5ac26f",
+      "name": "Merge API & Sheet"
     },
     {
       "parameters": {
-        "content": "## Braeton Problems\n\nBraeton problems extracted which gives the eventid and objectid for each problem.\n\nA Code node is used to convert objectid to triggerid, extract the eventid and convert the clock from epoch time to a custom time format (yy-MM-dd HH-mm-ss).\n\nBraeton trigger node uses the trigger.get to get the host information because the problem.get doesn't return that info. Merge node joins both the trigger and code nodes. This is used to match the host info with the eventid and clock.\n\nThen the information is taken from the result array using the split out node and a set node is used to transform the information to put in the google sheet.\n",
-        "height": 560,
-        "width": 1072
+        "fieldToSplitOut": "result",
+        "options": {}
       },
-      "type": "n8n-nodes-base.stickyNote",
+      "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -448,
-        -1056
+        -240,
+        -768
       ],
-      "id": "6c1266f7-fba9-4e33-a679-553eb4e8d3d3",
-      "name": "Sticky Note2"
+      "id": "6c04f115-be4e-46ea-a358-8df5e51b532b",
+      "name": "Split Out Result Array"
     },
     {
       "parameters": {
-        "content": "## Merge, Compare and Delete\n\nMerge node combines both the Braeton problems from the API and the problems in the sheet. \n\nCode node does a comparison to see which problems that are in the sheet is not returned from the API. If not, it gets marked for deletion as it's considered  resolved.\n\nSort node is used to delete rows in descending order.",
-        "height": 384,
-        "width": 1152
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a42eb48e-49fa-4aba-bcdf-275137b80ec7",
+              "name": "Time",
+              "value": "={{ new Date($json[\"clock\"] * 1000).toISOString().replace('T', ' ').substring(0, 19).trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "8a222147-4ba0-4af0-8cca-ee3fc51dc455",
+              "name": "triggerid",
+              "value": "={{ $json.objectid }}",
+              "type": "string"
+            },
+            {
+              "id": "ff756d67-e706-41c8-8ad6-3c44b2c6ff32",
+              "name": "Status",
+              "value": "={{ $json[\"r_eventid\"] === \"0\" || !$json[\"r_eventid\"] ? \"PROBLEM\" : \"RESOLVED\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "eventid, clock, r_eventid, objectid",
+        "options": {}
       },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
-        864,
-        -736
+        -64,
+        -768
       ],
-      "id": "2364c571-3270-4cf5-9c56-ff4d0a76510f",
-      "name": "Sticky Note3"
+      "id": "8205db07-79c4-4526-8346-8441a7adadee",
+      "name": "Set Trigger ID's"
     },
     {
       "parameters": {
-        "content": "## Append and Read \nInfo is then put into the respective store sheet. Then we get the rows from the sheet which returns a row number and set using a set node. This is needed for deletion later.",
-        "height": 240,
-        "width": 1008
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "triggerid"
+            }
+          ]
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.stickyNote",
+      "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
         -416,
-        -480
+        -560
       ],
-      "id": "69eae912-0376-4526-a320-7865db5c0081",
-      "name": "Sticky Note4"
+      "id": "caded62f-ded7-4a8c-a302-4e4ad311c333",
+      "name": "Trigger ID Array"
     },
     {
       "parameters": {
-        "content": "## Check Problems\n\nWe then read the problems in the sheet to see if each problem has a ticket. If not, it get's sent to Sysaid's API to create the ticket for that problem.",
-        "height": 288,
-        "width": 656
+        "fieldToSplitOut": "result, result[0].hosts",
+        "options": {}
       },
-      "type": "n8n-nodes-base.stickyNote",
+      "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        880,
-        -304
+        -64,
+        -560
       ],
-      "id": "5f8a78e2-ed11-4ad1-96b2-866ca34a7c19",
-      "name": "Sticky Note5"
+      "id": "c069b3e7-dc2f-452c-9439-f2ece7c98db6",
+      "name": "Split Out Result and Hosts"
     },
     {
       "parameters": {
-        "content": "## Login to Sysaid\n\nLogin to sysaid using user credentials as proof.\n\nUse the POST to create a sysaid ticket for that problem.",
-        "height": 288,
-        "width": 624
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1664,
-        -320
-      ],
-      "id": "de2db9d4-0243-424a-8378-5747cf8229ef",
-      "name": "Sticky Note6"
-    },
-    {
-      "parameters": {
-        "content": "## Send Zabbix an update of the problem\n\nA set node is used to get the ticket ID created from Sysaid and the event ID of the problem.\n\nWe used a POST node to update/acknowledge the problem in zabbix using the event.acknowledge param. \n\nWe then update the problem in the sheet using the event ID to match and add the ticket number that problem.",
-        "height": 368,
-        "width": 672
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        2384,
-        -400
-      ],
-      "id": "afa1f038-d635-43f7-9edf-ef3ee03a31e1",
-      "name": "Sticky Note7"
-    },
-    {
-      "parameters": {
-        "operation": "upsert",
-        "dataTableId": {
-          "__rl": true,
-          "value": "8y4OLwlOJZZbTrt2",
-          "mode": "list",
-          "cachedResultName": "Braeton Problems",
-          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/8y4OLwlOJZZbTrt2"
-        },
-        "filters": {
-          "conditions": [
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
             {
-              "keyName": "EventID",
-              "keyValue": "={{ $json.EventID }}"
+              "field1": "triggerid",
+              "field2": "result.triggerid"
             }
           ]
         },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Time",
-              "displayName": "Time",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "HostID",
-              "displayName": "HostID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Host",
-              "displayName": "Host",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "HostName",
-              "displayName": "HostName",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Severity",
-              "displayName": "Severity",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Description",
-              "displayName": "Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "EventID",
-              "displayName": "EventID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "TicketID",
-              "displayName": "TicketID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
         "options": {}
       },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
       "position": [
-        -80,
-        -384
+        192,
+        -672
       ],
-      "id": "06911f64-d5a5-4a0b-8827-bf45c0f93baf",
-      "name": "Upsert row(s)",
-      "executeOnce": false
+      "id": "372f5fde-82d4-4d17-9490-1e158dd8b92a",
+      "name": "Merge TriggerID"
     },
     {
       "parameters": {
-        "operation": "get",
-        "dataTableId": {
-          "__rl": true,
-          "value": "ZKHgO1Ak04DLRby0",
-          "mode": "list",
-          "cachedResultName": "Braeton Problems",
-          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/ZKHgO1Ak04DLRby0"
-        },
-        "filters": {
-          "conditions": [
+        "assignments": {
+          "assignments": [
             {
-              "keyValue": "={{ $json.id }}"
+              "id": "847cd878-4b87-491e-bf5e-7c83ab9693cc",
+              "name": "Time",
+              "value": "={{ $json.Time }}",
+              "type": "string"
+            },
+            {
+              "id": "61dec4c1-c9e9-4efd-a7b8-c09c41624cfb",
+              "name": "HostID",
+              "value": "={{ $json.result.hosts[0].hostid }}",
+              "type": "string"
+            },
+            {
+              "id": "2d380f93-2503-4489-b131-a961fe374e17",
+              "name": "Host",
+              "value": "={{ $json.result.hosts[0].host }}",
+              "type": "string"
+            },
+            {
+              "id": "cd85b0ce-1d42-41cf-9d70-12fc1f996f74",
+              "name": "Host Name",
+              "value": "={{ $json.result.hosts[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "c5159c8c-25e3-443f-a686-c9d8c50597f5",
+              "name": "Severity",
+              "value": "={{ $json.severity }}",
+              "type": "string"
+            },
+            {
+              "id": "c491e678-a274-440c-8856-7b96165c2488",
+              "name": "Description",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "ac9db0a7-d6a4-49fc-93f6-a79c26149e6e",
+              "name": "Status",
+              "value": "={{ $json.Status }}",
+              "type": "string"
+            },
+            {
+              "id": "9de7af85-ca7a-40f4-9dd3-12df43933a67",
+              "name": "EventID",
+              "value": "={{ $('Split Out Result Array').item.json.eventid }}",
+              "type": "string"
             }
           ]
-        }
-      },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
-      "position": [
-        224,
-        -384
-      ],
-      "id": "82e7dba7-9f72-4484-9436-56224af02817",
-      "name": "Get row(s)",
-      "executeOnce": false
-    },
-    {
-      "parameters": {
-        "operation": "deleteRows",
-        "dataTableId": {
-          "__rl": true,
-          "value": "zkhwrBbFIowchu5E",
-          "mode": "list",
-          "cachedResultName": "Braeton Problems",
-          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/zkhwrBbFIowchu5E"
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
-        1824,
+        432,
         -576
       ],
-      "id": "01190a8b-e312-4618-b2c0-39214bc35ca3",
-      "name": "Delete row(s)"
+      "id": "a6e5bcb3-841c-460e-bca5-3a65e99cedcf",
+      "name": "API Zabbix Problems"
     },
     {
       "parameters": {
-        "operation": "get",
-        "dataTableId": {
+        "authentication": "serviceAccount",
+        "documentId": {
           "__rl": true,
-          "value": "ZKHgO1Ak04DLRby0",
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
           "mode": "list",
-          "cachedResultName": "Braeton Problems",
-          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/ZKHgO1Ak04DLRby0"
-        }
-      },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
-      "position": [
-        928,
-        -176
-      ],
-      "id": "ca306c0e-d9b7-47c9-bf7d-fd47450624aa",
-      "name": "Get row(s)1",
-      "executeOnce": false
-    },
-    {
-      "parameters": {
-        "operation": "update",
-        "dataTableId": {
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
+        },
+        "sheetName": {
           "__rl": true,
-          "value": "zkhwrBbFIowchu5E",
+          "value": 1939728952,
           "mode": "list",
-          "cachedResultName": "Braeton Problems",
-          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/zkhwrBbFIowchu5E"
-        },
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "EventID"
-            },
-            {
-              "keyName": "TicketID"
-            }
-          ]
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "HostID": 0,
-            "Severity": 0,
-            "EventID": 0,
-            "TicketID": 0
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Time",
-              "displayName": "Time",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "HostID",
-              "displayName": "HostID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Host",
-              "displayName": "Host",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "HostName",
-              "displayName": "HostName",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Severity",
-              "displayName": "Severity",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Description",
-              "displayName": "Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "EventID",
-              "displayName": "EventID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "TicketID",
-              "displayName": "TicketID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        2896,
-        -192
+        752,
+        -48
       ],
-      "id": "c03be18f-7d30-4ca3-9dfb-813cddcee6cf",
-      "name": "Update row(s)"
+      "id": "4401b35c-0fc1-4a28-82aa-f47dcbfc76dd",
+      "name": "Get Rows (Zabbix Problem Sheet)",
+      "executeOnce": true,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "// Get all incoming items (the problems)\nconst problems = $input.all();\n\n// We'll build a map where key = Host, value = list of problems\nconst hostMap = {};\n\nfor (const item of problems) {\n  const data = item.json;\n  const host = data.Host || \"Unknown\";\n\n  if (!hostMap[host]) {\n    hostMap[host] = {\n      Time: [],\n      Host: data.Host,\n      HostName: data.HostName,\n      HostID: data.HostID,\n      Severity: data.Severity,\n      Description: [], // store multiple problem descriptions\n      EventID: [],\n    };\n  }\n\n  // Add this problem’s details\n  hostMap[host].Description.push(data.Description);\n  hostMap[host].EventID.push(data.EventID);\n  hostMap[host].Time.push(data.Time);\n}\n\n// Now convert the grouped map into array output\nreturn Object.values(hostMap).map(h => ({\n  json: {\n    ...h,\n    Description: h.Description.join(String.fromCharCode(10)),\n    EventID: h.EventID.join(\"\\n\"),\n    Time: h.Time.join(\"\\n\")\n  }\n}));\n"
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
       },
-      "type": "n8n-nodes-base.code",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1280,
+        -768
+      ],
+      "id": "4ec5dd4b-5db5-47a9-bad4-aee5a808d9e9",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "HostID, Description",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        -368,
-        -384
+        -16,
+        128
       ],
-      "id": "247b9370-ea42-412e-b1f1-f4f2cdcf341b",
-      "name": "Group Problems by Host"
+      "id": "699f82d1-6116-4071-9103-ab1214fb7e3b",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "795070217018578",
+        "recipientPhoneNumber": "18763514207 - ronaldo",
+        "textBody": "=Please see the following problem:  \n{{ $json.Time }}\n{{ $json[\"Host Name\"] }}\n{{ $json.Description }}",
+        "additionalFields": {
+          "previewUrl": false
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        -736
+      ],
+      "id": "fe421f27-b258-4f8a-ba24-034387f2e3f8",
+      "name": "Send message",
+      "webhookId": "6e86d705-76c1-427b-b5f8-10e622da99d5",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "bP42xqNMnKqIbTr5",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        656,
+        -736
+      ],
+      "id": "5a43cf33-87a3-45fa-9250-83a0b31b725c",
+      "name": "Limit"
     }
   ],
   "connections": {
@@ -1458,43 +1260,11 @@
       "main": [
         [
           {
-            "node": "Call Zabbix push and timestamp test",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get Braeton problems",
+            "node": "Get Zabbix problems",
             "type": "main",
             "index": 0
           }
         ]
-      ]
-    },
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "Zabbix Login",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Braeton problems": {
-      "main": [
-        [
-          {
-            "node": "Braeton Triggers & Event ID",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get Rows (Braeton Sheet)": {
-      "main": [
-        []
       ]
     },
     "CheckExistingTicket": {
@@ -1510,13 +1280,7 @@
     },
     "If": {
       "main": [
-        [
-          {
-            "node": "Login credentials",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Login credentials": {
@@ -1541,55 +1305,6 @@
         ]
       ]
     },
-    "Merge2": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Out": {
-      "main": [
-        [
-          {
-            "node": "Braeton problems",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Braeton Trigger Problems": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Braeton Triggers & Event ID": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 1
-          },
-          {
-            "node": "Braeton Trigger Problems",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Create Sysaid Ticket": {
       "main": [
         [
@@ -1601,27 +1316,11 @@
         ]
       ]
     },
-    "Braeton problems": {
-      "main": [
-        [
-          {
-            "node": "Merge3",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Group Problems by Host",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Zabbix Update": {
       "main": [
         [
           {
-            "node": "Update row(s)",
+            "node": "Update row in sheet",
             "type": "main",
             "index": 0
           }
@@ -1632,41 +1331,14 @@
       "main": [
         [
           {
-            "node": "Delete row(s)",
+            "node": "Delete rows or columns from sheet",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge3": {
-      "main": [
-        [
-          {
-            "node": "Find Resolved Problems",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Sheet Braeton": {
-      "main": [
-        [
-          {
-            "node": "Merge3",
-            "type": "main",
-            "index": 1
           }
         ]
       ]
     },
     "Delete rows or columns from sheet": {
-      "main": [
-        []
-      ]
-    },
-    "Get Rows (Braeton Sheet)1": {
       "main": [
         []
       ]
@@ -1691,13 +1363,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Get row(s)1",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "ID and EventID": {
@@ -1711,45 +1377,149 @@
         ]
       ]
     },
-    "Braeton Agent Sheets": {
-      "main": [
-        []
-      ]
-    },
-    "Upsert row(s)": {
+    "Get Zabbix problems": {
       "main": [
         [
           {
-            "node": "Get row(s)",
+            "node": "Split Out Result Array",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get row(s)": {
+    "Zabbix Trigger Problems": {
       "main": [
         [
           {
-            "node": "Sheet Braeton",
+            "node": "Split Out Result and Hosts",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Delete row(s)": {
+    "Zabbix Problems Sheet": {
       "main": [
         [
           {
-            "node": "Get row(s)1",
+            "node": "Get Zabbix Problems",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get row(s)1": {
+    "Get Zabbix Problems": {
+      "main": [
+        [
+          {
+            "node": "Zabbix Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zabbix Problems": {
+      "main": [
+        [
+          {
+            "node": "Merge API & Sheet",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge API & Sheet": {
+      "main": [
+        [
+          {
+            "node": "Find Resolved Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Result Array": {
+      "main": [
+        [
+          {
+            "node": "Set Trigger ID's",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Trigger ID's": {
+      "main": [
+        [
+          {
+            "node": "Merge TriggerID",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Trigger ID Array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger ID Array": {
+      "main": [
+        [
+          {
+            "node": "Zabbix Trigger Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Result and Hosts": {
+      "main": [
+        [
+          {
+            "node": "Merge TriggerID",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge TriggerID": {
+      "main": [
+        [
+          {
+            "node": "API Zabbix Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Zabbix Problems": {
+      "main": [
+        [
+          {
+            "node": "Zabbix Problems Sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Rows (Zabbix Problem Sheet)": {
       "main": [
         [
           {
@@ -1760,11 +1530,32 @@
         ]
       ]
     },
-    "Group Problems by Host": {
+    "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "Upsert row(s)",
+            "node": "Zabbix Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        []
+      ]
+    },
+    "Send message": {
+      "main": [
+        []
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Send message",
             "type": "main",
             "index": 0
           }
@@ -1775,13 +1566,17 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "86a8eda7-36b3-467d-9e6e-be597463cdb7",
-  "triggerCount": 0,
+  "versionId": "db53a9da-c6c4-4466-ae45-aafd153f3c57",
+  "triggerCount": 1,
   "shared": [
     {
       "createdAt": "2025-08-13T21:53:08.988Z",
