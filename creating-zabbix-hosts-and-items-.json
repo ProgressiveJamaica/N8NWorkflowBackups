@@ -1,0 +1,959 @@
+{
+  "createdAt": "2025-10-30T15:11:35.351Z",
+  "updatedAt": "2025-11-04T19:43:51.534Z",
+  "id": "fXOynQEZrkWxv3o1",
+  "name": "Creating Zabbix Hosts and Items",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "ed6001b4-6973-4781-ab30-fac6eafe6a48",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -864,
+        -464
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"host.create\",\n  \"params\": {\n    \"host\": \"TFL_{{ $json.PhoneLine }}\",\n    \"name\": \"{{ $json.Hostname }}\",\n    \"interfaces\": [\n      {\n        \"type\": 1,\n        \"main\": 1,\n        \"useip\": 1,\n        \"ip\": \"{{ $json.Zabbixhost }}\",\n        \"dns\": \"\",\n        \"port\": \"10050\"\n      }\n    ],\n    \"groups\": [\n      { \"groupid\": \"73\" }\n    ]\n  },\n  \"id\": 1\n}\n",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -560
+      ],
+      "id": "e951849a-07a4-4332-a86a-d2f19f5dc8f7",
+      "name": "Host create",
+      "executeOnce": false,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        -352
+      ],
+      "id": "e23851a5-1972-470c-801c-3152f6ff0249",
+      "name": "Item create",
+      "executeOnce": true,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"host.get\",\n  \"params\": {\n    \"groupids\": [\"73\"],\n    \"output\": [\"hostid\", \"host\", \"name\"]\n  },\n  \"id\": 4\n}",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -800,
+        -96
+      ],
+      "id": "119ad3db-6503-4489-aef0-13720a58ef31",
+      "name": "Host get",
+      "executeOnce": false,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E",
+          "mode": "list",
+          "cachedResultName": "PGJ Store Inspections",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1469833957,
+          "mode": "list",
+          "cachedResultName": "Phone Line Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit#gid=1469833957"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Zabbix itemid": "={{ $json[\"Zabbix itemid\"] }}",
+            "row_number": "={{ $json.row_number }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Store",
+              "displayName": "Store",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix host",
+              "displayName": "Zabbix host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix host visible name",
+              "displayName": "Zabbix host visible name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix key",
+              "displayName": "Zabbix key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Zabbix itemid",
+              "displayName": "Zabbix itemid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provider",
+              "displayName": "Provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Line",
+              "displayName": "Phone Line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Status",
+              "displayName": "Last Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Timestamp",
+              "displayName": "Last Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "n8n Timestamp",
+              "displayName": "n8n Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Active",
+              "displayName": "Active",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        784,
+        -224
+      ],
+      "id": "0fa95787-bca6-4cf5-9eb7-cbb21319156b",
+      "name": "Update row in sheet1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const sheetRows = $items(\"Get row(s) in sheet1\"); // all sheet rows\nconst createdItemIds = $json[\"result\"][\"itemids\"]; // from item.create response\n\n// Map itemids to sheet rows based on order\nconst output = sheetRows.map((row, index) => {\n  return {\n    json: {\n      ...row.json,\n      \"Zabbix itemid\": createdItemIds[index] // update with corresponding itemid\n    }\n  };\n});\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        -224
+      ],
+      "id": "a0417861-281f-49ae-915e-6793dd4f36ff",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      jsonrpc: \"2.0\",\n      method: \"item.create\",\n      params: items\n        .filter(item => item.json.hostid) // skip ones missing hostid\n        .map(item => ({\n          name: `PSTN line Status :+${item.json.name}`,\n          key_: item.json[\"Zabbix key\"],\n          hostid: item.json.hostid,\n          type: 2,\n          value_type: 3,\n          delay: \"0s\"\n        })),\n      id: 1\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -352
+      ],
+      "id": "4ec76859-df2a-45e7-98b6-130892413c0f",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        -96
+      ],
+      "id": "222ab93d-4ce5-4ad6-aa85-88eb45006298",
+      "name": "Split Out",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "mode": "keepKeyMatches",
+        "propertyName1": "={{ $json[\"Host name\"] }}",
+        "propertyName2": "={{ $json.name }}"
+      },
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        592,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "26791f7f-3806-45cb-b86b-27555d6ad684"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E",
+          "mode": "list",
+          "cachedResultName": "PGJ Store Inspections",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 38780026,
+          "mode": "list",
+          "cachedResultName": "Copy of Phone Line Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit#gid=38780026"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -672,
+        -560
+      ],
+      "id": "22a87681-b1c6-4cda-8ef8-9812b6bff835",
+      "name": "PGJ Store",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "nD0tQ9yo8o1TkGU6",
+          "mode": "list",
+          "cachedResultName": "PGJ Store Inspections",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/nD0tQ9yo8o1TkGU6"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.row_number }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Store": "={{ $json.Store }}",
+            "Zabbixhost": "={{ $json[\"Zabbix host\"] }}",
+            "ZabbixHostName": "={{ $json[\"Zabbix host visible name\"] }}",
+            "Zabbixkey": "={{ $json[\"Zabbix key\"] }}",
+            "ZabbixID": "={{ $json[\"Zabbix itemid\"] }}",
+            "Provider": "={{ $json.Provider }}",
+            "PhoneLine": "={{ $json[\"Phone Line\"] }}",
+            "LastStatus": "={{ $json[\"Last Status\"] }}",
+            "LastTimestamps": "={{ $json[\"Last Timestamp\"] }}",
+            "n8nTimestamp": "={{ $json[\"n8n Timestamp\"] }}",
+            "ACTIVE": "={{ $json.Active }}",
+            "Hostname": "={{ $json[\"Host name\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Store",
+              "displayName": "Store",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Zabbixhost",
+              "displayName": "Zabbixhost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ZabbixHostName",
+              "displayName": "ZabbixHostName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Zabbixkey",
+              "displayName": "Zabbixkey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ZabbixID",
+              "displayName": "ZabbixID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Provider",
+              "displayName": "Provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PhoneLine",
+              "displayName": "PhoneLine",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LastStatus",
+              "displayName": "LastStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LastTimestamps",
+              "displayName": "LastTimestamps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "n8nTimestamp",
+              "displayName": "n8nTimestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ACTIVE",
+              "displayName": "ACTIVE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Hostname",
+              "displayName": "Hostname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "pstnlinestatus",
+              "displayName": "pstnlinestatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pstnlinerror",
+              "displayName": "pstnlinerror",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -560
+      ],
+      "id": "46644444-5404-44b3-a967-0930d7dbc50e",
+      "name": "Upsert row(s)"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E",
+          "mode": "list",
+          "cachedResultName": "PGJ Store Inspections",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 38780026,
+          "mode": "list",
+          "cachedResultName": "Copy of Phone Line Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmsBPwvqnmQK8HJ75WaLqI1786WsKOFE9AkadnIe6-E/edit#gid=38780026"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -672,
+        -368
+      ],
+      "id": "34c47b25-3e83-48f6-b7ad-ef1d19df2ea1",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "aweysrqDzDdwqN8u",
+          "mode": "list",
+          "cachedResultName": "Phone Line Host",
+          "cachedResultUrl": "/projects/jYvi0vPc2f8MZoYz/datatables/aweysrqDzDdwqN8u"
+        },
+        "limit": null
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        -272
+      ],
+      "id": "c06f2d2f-63d2-42c0-b3f7-2aa28b412bdc",
+      "name": "Get row(s)",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"item.get\",\n  \"params\": {\n    \"hostids\": \"{{ $json.hostid }}\",          \n    \"output\": \"extend\",         \n    \"sortfield\": \"name\"          \n  },\n  \"id\": 1\n}\n",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "4239861b-f5ef-4617-9d80-71ff5a476a9c",
+      "name": "Item get",
+      "executeOnce": false,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        64,
+        -32
+      ],
+      "id": "37245456-062d-4335-9ed2-e0ab51d3283f",
+      "name": "Split Out1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const itemIds = $input.all().map(item => item.json.itemid);\nreturn [{ json: { itemIds: itemIds } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        -16
+      ],
+      "id": "d789a55e-800a-46b7-9f48-20ebd89b6dff",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"item.delete\",\n  \"params\": [\"155987\",\"155988\",\"155989\",\"155990\",\"155991\",\"155992\",\"155993\",\"155994\",\"155995\",\"155996\",\"155997\",\"155998\",\"155999\",\"156000\",\"156001\",\"156002\",\"156003\",\"156004\",\"156005\",\"156006\",\"156007\",\"156008\",\"156009\",\"156010\",\"156011\",\"156012\",\"156013\",\"156014\",\"156015\",\"156016\",\"156017\",\"156018\",\"156019\",\"156020\",\"156021\",\"156022\",\"156023\",\"156024\",\"156025\",\"156026\",\"156027\",\"156028\",\"156029\",\"156030\",\"156031\",\"156032\",\"156033\",\"156034\",\"156035\",\"156036\",\"156037\",\"156038\",\"156039\",\"156040\",\"156041\",\"156042\",\"156043\",\"156044\",\"156045\",\"156046\",\"156047\",\"156048\",\"156049\",\"156050\",\"156051\",\"156052\",\"156053\",\"156054\",\"156055\",\"156056\",\"156057\",\"156058\",\"156059\",\"156060\",\"156061\",\"156062\",\"156063\",\"156064\",\"156065\",\"156066\",\"156067\",\"156068\",\"156069\",\"156070\",\"156071\",\"156072\",\"156073\",\"156074\",\"156075\",\"156076\",\"156077\",\"156078\",\"156079\",\"156080\",\"156081\",\"156082\",\"156083\",\"156084\",\"156085\",\"156086\",\"156087\",\"156088\",\"156089\",\"156090\",\"156091\",\"156092\",\"156093\",\"156094\",\"156095\",\"156096\",\"156097\",\"156098\",\"156099\",\"156100\",\"156101\",\"156102\",\"156103\",\"156104\",\"156105\",\"156106\",\"156107\",\"156108\"],\n  \"id\": 1\n}",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        -16
+      ],
+      "id": "b0af46dd-f630-484e-947f-3b8c18856ef2",
+      "name": "Item delete",
+      "executeOnce": false,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "Host name",
+              "field2": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -208,
+        -352
+      ],
+      "id": "fe884142-89bd-4934-8a25-a9434877cf5a",
+      "name": "Merge"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "PGJ Store",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item create": {
+      "main": [
+        []
+      ]
+    },
+    "Host get": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Item create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        []
+      ]
+    },
+    "Merge1": {
+      "main": [
+        []
+      ]
+    },
+    "PGJ Store": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Host create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Host create": {
+      "main": [
+        []
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Item get": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Item delete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c625b704-395f-4b25-a846-de65f446dfed",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-10-30T15:11:35.351Z",
+      "updatedAt": "2025-10-30T15:11:35.351Z",
+      "role": "workflow:owner",
+      "workflowId": "fXOynQEZrkWxv3o1",
+      "projectId": "jYvi0vPc2f8MZoYz"
+    }
+  ],
+  "tags": []
+}
