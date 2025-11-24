@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-11-13T20:52:53.153Z",
+  "updatedAt": "2025-11-24T13:57:40.229Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -72,7 +72,9 @@
           "attemptToConvertTypes": false,
           "convertFieldsToString": true
         },
-        "options": {}
+        "options": {
+          "waitForSubWorkflow": false
+        }
       },
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
@@ -395,7 +397,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        1680,
+        1648,
         -432
       ],
       "id": "79267c53-d861-445d-8eae-beac39aab1fd",
@@ -1192,38 +1194,33 @@
       "name": "Schedule Trigger"
     },
     {
-      "parameters": {
-        "compare": "selectedFields",
-        "fieldsToCompare": "HostID, Description",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
       "position": [
-        -16,
-        128
+        768,
+        -784
       ],
-      "id": "699f82d1-6116-4071-9103-ab1214fb7e3b",
-      "name": "Remove Duplicates"
+      "id": "fc2b4d0a-1d48-4059-a74b-79d037d9664b",
+      "name": "Limit"
     },
     {
       "parameters": {
-        "operation": "send",
+        "operation": "sendAndWait",
         "phoneNumberId": "795070217018578",
         "recipientPhoneNumber": "18763514207 - ronaldo",
-        "textBody": "=Please see the following problem:  \n{{ $json.Time }}\n{{ $json[\"Host Name\"] }}\n{{ $json.Description }}",
-        "additionalFields": {
-          "previewUrl": false
-        }
+        "message": "=Hello! Please see the following problem:\nTime: {{ $json.Time }}\nHost Name: {{ $json[\"Host Name\"] }}\nDescription: {{ $json.Description }}",
+        "responseType": "freeText",
+        "options": {}
       },
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1.1,
       "position": [
-        848,
-        -736
+        976,
+        -784
       ],
-      "id": "fe421f27-b258-4f8a-ba24-034387f2e3f8",
-      "name": "Send message",
+      "id": "739a0d77-bc90-4315-b21b-fa439b56300e",
+      "name": "Send message and wait for response",
       "webhookId": "6e86d705-76c1-427b-b5f8-10e622da99d5",
       "credentials": {
         "whatsAppApi": {
@@ -1233,15 +1230,41 @@
       }
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.limit",
-      "typeVersion": 1,
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"event.acknowledge\",\n  \"params\": \n  {\n    \"eventids\": \"165220\",\n    \"action\": 4,\n    \"message\": \"{{ $json.data.text }}\"\n  },\n\"id\": 1\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        656,
-        -736
+        1184,
+        -784
       ],
-      "id": "5a43cf33-87a3-45fa-9250-83a0b31b725c",
-      "name": "Limit"
+      "id": "5166de0a-27b8-47ec-a794-06774dbc44f2",
+      "name": "Zabbix Acknowledge",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
     }
   ],
   "connections": {
@@ -1512,7 +1535,7 @@
             "index": 0
           },
           {
-            "node": "Limit",
+            "node": "Merge API & Sheet",
             "type": "main",
             "index": 0
           }
@@ -1541,21 +1564,22 @@
         ]
       ]
     },
-    "Remove Duplicates": {
-      "main": [
-        []
-      ]
-    },
-    "Send message": {
-      "main": [
-        []
-      ]
-    },
     "Limit": {
       "main": [
         [
           {
-            "node": "Send message",
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Zabbix Acknowledge",
             "type": "main",
             "index": 0
           }
@@ -1575,7 +1599,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "db53a9da-c6c4-4466-ae45-aafd153f3c57",
+  "versionId": "0d9d8f73-a577-4b0f-8d53-91da0405b656",
   "triggerCount": 1,
   "shared": [
     {
