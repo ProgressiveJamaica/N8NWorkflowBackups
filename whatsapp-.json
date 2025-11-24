@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-21T20:21:13.137Z",
-  "updatedAt": "2025-11-11T16:38:56.961Z",
+  "updatedAt": "2025-11-14T04:21:33.521Z",
   "id": "A30kU1rcb6mKeDG6",
   "name": "Whatsapp",
   "active": false,
@@ -20,8 +20,8 @@
       "type": "n8n-nodes-base.whatsAppTrigger",
       "typeVersion": 1,
       "position": [
-        368,
-        160
+        384,
+        80
       ],
       "id": "899f1d6b-ad6a-4ee2-97e4-f08c5aa54c06",
       "name": "WhatsApp Trigger",
@@ -42,8 +42,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        592,
-        160
+        528,
+        208
       ],
       "id": "1e398b8c-09d2-4ca6-b200-d4f4b41b3bc5",
       "name": "AI Agent",
@@ -74,14 +74,14 @@
         "operation": "send",
         "phoneNumberId": "795070217018578",
         "recipientPhoneNumber": "18763514207 - ronaldo",
-        "textBody": "Is this thing on?",
+        "textBody": "Hey!",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        944,
-        160
+        592,
+        80
       ],
       "id": "2db2a6c4-2b88-41dc-a16a-104d1dbfbe7e",
       "name": "Send message",
@@ -99,7 +99,7 @@
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Send message",
             "type": "main",
             "index": 0
           }
@@ -136,7 +136,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "c6b076ec-3f05-4ec2-a6de-dd35cabd2512",
+  "versionId": "1f4d0272-52b5-4736-a060-75d234a6ad4d",
   "triggerCount": 0,
   "shared": [
     {
