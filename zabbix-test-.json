@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-11-24T13:57:40.229Z",
+  "updatedAt": "2025-11-26T20:37:07.558Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -575,13 +575,13 @@
     {
       "parameters": {
         "content": "## Append and Read \nInfo is then put into the respective store sheet. Then we get the rows from the sheet which returns a row number and set using a set node. This is needed for deletion later.",
-        "height": 240,
-        "width": 1088
+        "height": 256,
+        "width": 1104
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -480,
+        -512,
         -384
       ],
       "id": "69eae912-0376-4526-a320-7865db5c0081",
@@ -854,8 +854,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -432,
-        -288
+        -464,
+        -272
       ],
       "id": "3ed08c6d-0d6c-48cf-b220-27860ccd9f6b",
       "name": "Zabbix Problems Sheet",
@@ -890,8 +890,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        16,
-        -288
+        -32,
+        -272
       ],
       "id": "b02e83cb-ff82-4f70-9973-e616136cbff1",
       "name": "Get Zabbix Problems",
@@ -912,7 +912,7 @@
             {
               "id": "8e7cb0ef-103e-41b7-80cd-a54c04411b36",
               "name": "row_number",
-              "value": "={{ $('Get Zabbix Problems').item.json.row_number }}",
+              "value": "={{ $json.row_number }}",
               "type": "string"
             },
             {
@@ -947,7 +947,7 @@
       "typeVersion": 3.4,
       "position": [
         432,
-        -288
+        -272
       ],
       "id": "5fb49e6c-1f43-4606-9e6d-272e71bf1021",
       "name": "Zabbix Problems"
@@ -1206,31 +1206,6 @@
     },
     {
       "parameters": {
-        "operation": "sendAndWait",
-        "phoneNumberId": "795070217018578",
-        "recipientPhoneNumber": "18763514207 - ronaldo",
-        "message": "=Hello! Please see the following problem:\nTime: {{ $json.Time }}\nHost Name: {{ $json[\"Host Name\"] }}\nDescription: {{ $json.Description }}",
-        "responseType": "freeText",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.whatsApp",
-      "typeVersion": 1.1,
-      "position": [
-        976,
-        -784
-      ],
-      "id": "739a0d77-bc90-4315-b21b-fa439b56300e",
-      "name": "Send message and wait for response",
-      "webhookId": "6e86d705-76c1-427b-b5f8-10e622da99d5",
-      "credentials": {
-        "whatsAppApi": {
-          "id": "bP42xqNMnKqIbTr5",
-          "name": "WhatsApp account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "http://192.168.0.22/api_jsonrpc.php",
         "authentication": "predefinedCredentialType",
@@ -1265,6 +1240,177 @@
           "name": "Zabbix account"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "phoneNumberId": "883606571504084",
+        "recipientPhoneNumber": "18763514207 - ronaldo",
+        "message": "=See the following problem:\n{{ $json.Time }}\n{{ $json[\"Host Name\"] }}\n{{ $json.Description }}",
+        "responseType": "freeText",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        -784
+      ],
+      "id": "739a0d77-bc90-4315-b21b-fa439b56300e",
+      "name": "Send message and wait for response",
+      "webhookId": "6e86d705-76c1-427b-b5f8-10e622da99d5",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "bP42xqNMnKqIbTr5",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen = new Set();\nconst duplicates = [];\n\nfor (const item of items) {\n  const eventId = item.json.EventID;\n\n  // Skip if eventId missing\n  if (!eventId) continue;\n\n  // If we've seen this EventID before → it's a duplicate\n  if (seen.has(eventId)) {\n    duplicates.push({ json: item.json });\n  } else {\n    seen.add(eventId);\n  }\n}\n\n// Return only duplicates (for delete)\nreturn duplicates;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "7a0a2972-6728-49a8-b42c-94cdbc12171c",
+      "name": "Detect Duplicates",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "row_number",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -96
+      ],
+      "id": "287f5f34-f345-43c3-b8d2-8f7d725fab8e",
+      "name": "Sort1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
+          "mode": "list",
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1939728952,
+          "mode": "list",
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
+        },
+        "startIndex": "={{ $json.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        272,
+        -96
+      ],
+      "id": "10d56169-dc95-4964-badc-7093cf75e4d0",
+      "name": "Delete Dupes",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0",
+          "mode": "list",
+          "cachedResultName": "Ticket Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1939728952,
+          "mode": "list",
+          "cachedResultName": "Zabbix Problems",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/117E9W7q0sZzQ5JM5Pt1cclrYUk-Gx_h9X3Wf7N5Xef0/edit#gid=1939728952"
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        16
+      ],
+      "id": "98b6ca8c-353c-4456-b210-d19b870ab36a",
+      "name": "Get Zabbix Problems1",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4eb237bf-cdae-4c36-92e1-6d7237b0bbf8",
+              "leftValue": "={{ $json.HostID }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "e48ea25b-ffb3-4485-b5b8-16b1ad2fa8c3",
+      "name": "If2"
     }
   ],
   "connections": {
@@ -1585,6 +1731,62 @@
           }
         ]
       ]
+    },
+    "Detect Duplicates": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort1": {
+      "main": [
+        [
+          {
+            "node": "Delete Dupes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Dupes": {
+      "main": [
+        [
+          {
+            "node": "Get Zabbix Problems1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Zabbix Problems1": {
+      "main": [
+        []
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Sort1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Zabbix Problems1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1599,7 +1801,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "0d9d8f73-a577-4b0f-8d53-91da0405b656",
+  "versionId": "143dd6bf-5319-42c7-8188-dacec9f60bd1",
   "triggerCount": 1,
   "shared": [
     {
