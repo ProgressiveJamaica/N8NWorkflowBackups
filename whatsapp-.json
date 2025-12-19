@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-21T20:21:13.137Z",
-  "updatedAt": "2025-11-26T14:50:59.715Z",
+  "updatedAt": "2025-11-28T21:29:35.511Z",
   "id": "A30kU1rcb6mKeDG6",
   "name": "Whatsapp",
   "active": false,
@@ -20,8 +20,8 @@
       "type": "n8n-nodes-base.whatsAppTrigger",
       "typeVersion": 1,
       "position": [
-        64,
-        176
+        384,
+        208
       ],
       "id": "899f1d6b-ad6a-4ee2-97e4-f08c5aa54c06",
       "name": "WhatsApp Trigger",
@@ -37,6 +37,8 @@
     },
     {
       "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -57,8 +59,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
-        480,
-        448
+        560,
+        432
       ],
       "id": "7aff31bf-74f9-4d3d-a0aa-30eea260053a",
       "name": "Ollama Chat Model",
@@ -80,8 +82,8 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        1232,
-        224
+        912,
+        208
       ],
       "id": "2db2a6c4-2b88-41dc-a16a-104d1dbfbe7e",
       "name": "Send message",
@@ -100,20 +102,22 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.3,
       "position": [
-        368,
-        208
+        160,
+        176
       ],
       "id": "119c0949-cfbb-484f-a52d-4ea60d81946f",
       "name": "When chat message received",
       "webhookId": "0035dbe6-e84d-428c-909a-5db24d97d9c3"
     },
     {
-      "parameters": {},
+      "parameters": {
+        "sessionIdType": "customKey"
+      },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        656,
-        448
+        928,
+        528
       ],
       "id": "4aeea672-512a-4afc-a408-771c845844db",
       "name": "Simple Memory"
@@ -149,8 +153,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        912,
-        208
+        1408,
+        496
       ],
       "id": "51e6724b-6ba2-440d-b18c-864e47a9b4fa",
       "name": "Append or update row in sheet",
@@ -169,8 +173,8 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        816,
-        432
+        1088,
+        528
       ],
       "id": "f09b583b-00d7-48ab-8c64-2bcdee41964e",
       "name": "Ticket data"
@@ -206,8 +210,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.7,
       "position": [
-        976,
-        416
+        1248,
+        528
       ],
       "id": "8b06d7ee-514f-4e83-8c86-141b1ce15c6e",
       "name": "ticket data",
@@ -222,14 +226,20 @@
   "connections": {
     "WhatsApp Trigger": {
       "main": [
-        []
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "AI Agent": {
       "main": [
         [
           {
-            "node": "Append or update row in sheet",
+            "node": "Send message",
             "type": "main",
             "index": 0
           }
@@ -254,35 +264,17 @@
     },
     "When chat message received": {
       "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Simple Memory": {
       "ai_memory": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Ticket data": {
       "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "ticket data": {
@@ -299,7 +291,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "aa087ae7-0899-48d6-8aa1-4a8b14894750",
+  "versionId": "fd191a1d-372c-45e1-b82d-d61769063f1c",
   "triggerCount": 2,
   "shared": [
     {
