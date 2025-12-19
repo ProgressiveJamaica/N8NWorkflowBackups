@@ -1,0 +1,253 @@
+{
+  "createdAt": "2025-12-11T16:44:24.742Z",
+  "updatedAt": "2025-12-11T17:00:43.075Z",
+  "id": "A4JrcJ7grV8sBjgs",
+  "name": "SQL Workflow All Items",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "70cae171-f03d-4b4b-92f0-b31458c42f14",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -272,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e09b351f-c6be-4a33-a937-cf2eb5fbbd4c",
+              "name": "Creation Date",
+              "value": "={{ $json.CREATION_DATE }}",
+              "type": "string"
+            },
+            {
+              "id": "bee0b78a-4d76-40eb-aa88-df6e72acffed",
+              "name": "Item Description",
+              "value": "={{ $json.ITEM_DESCRIPTION }}",
+              "type": "string"
+            },
+            {
+              "id": "6db3bde7-27ee-4fd0-96cd-fd1894965f74",
+              "name": "Item Code",
+              "value": "={{ $json.ITEM_CODE }}",
+              "type": "string"
+            },
+            {
+              "id": "336f2499-b9c4-40d5-8cc7-da05822a0f78",
+              "name": "Store Number",
+              "value": "={{ $json.STORE_NUMBER }}",
+              "type": "string"
+            },
+            {
+              "id": "13a925af-7ce5-433e-98bb-d4d07d7174fe",
+              "name": "VendorID",
+              "value": "={{ $json.VENDOR_ID }}",
+              "type": "string"
+            },
+            {
+              "id": "11a8998b-712a-4c57-80a7-73ff597f390b",
+              "name": "Case Size",
+              "value": "={{ $json.CASE_SIZE }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        48,
+        0
+      ],
+      "id": "a9831d33-5de6-4fb1-a7e6-65de655bcc44",
+      "name": "Items"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  F09 AS CREATION_DATE,\n  P.F01 AS ITEM_CODE,\n  F02 AS ITEM_DESCRIPTION,\n  R.F1056 AS STORE_NUMBER,\n  C.F27 AS VENDOR_ID,\n  C.F19 AS CASE_SIZE\nFROM POS_TAB P\nINNER JOIN RPT_ITM_N R ON R.F01 = P.F01\nINNER JOIN COST_TAB C ON C.F01 = P.F01\nWHERE F09 >= DATEADD(DAY, -180, CAST(GETDATE() AS DATE))\nORDER BY F09 DESC;"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "6da71aa4-5777-4c4f-a32a-117ecd020e4d",
+      "name": "Items SQL",
+      "credentials": {
+        "microsoftSql": {
+          "id": "bfcJ16IsK3BLkJMK",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
+          "mode": "list",
+          "cachedResultName": "Sql query",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Items",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "Creation Date"
+          ],
+          "schema": [
+            {
+              "id": "Creation Date",
+              "displayName": "Creation Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Description",
+              "displayName": "Item Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Code",
+              "displayName": "Item Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Store Number",
+              "displayName": "Store Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "VendorID",
+              "displayName": "VendorID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Case Size",
+              "displayName": "Case Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "0aef04ef-3e5d-400e-8e89-ea50ff1e0edb",
+      "name": "Items Sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "Fr8gBQ8Q5zSOdGfU",
+          "name": "Google Service Account account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Items SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items": {
+      "main": [
+        [
+          {
+            "node": "Items Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items SQL": {
+      "main": [
+        [
+          {
+            "node": "Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "175b6fd8-bcde-40fe-a756-a649597da579",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-12-11T16:44:24.742Z",
+      "updatedAt": "2025-12-11T16:44:24.742Z",
+      "role": "workflow:owner",
+      "workflowId": "A4JrcJ7grV8sBjgs",
+      "projectId": "jYvi0vPc2f8MZoYz"
+    }
+  ],
+  "tags": []
+}
