@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-13T21:53:08.988Z",
-  "updatedAt": "2025-11-26T20:37:07.558Z",
+  "updatedAt": "2025-12-19T18:10:04.479Z",
   "id": "rdvNCzYT6AVYVUH5",
   "name": "Zabbix test",
   "active": false,
@@ -575,13 +575,13 @@
     {
       "parameters": {
         "content": "## Append and Read \nInfo is then put into the respective store sheet. Then we get the rows from the sheet which returns a row number and set using a set node. This is needed for deletion later.",
-        "height": 256,
-        "width": 1104
+        "height": 352,
+        "width": 1376
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -512,
+        -784,
         -384
       ],
       "id": "69eae912-0376-4526-a320-7865db5c0081",
@@ -854,8 +854,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -464,
-        -272
+        -736,
+        -288
       ],
       "id": "3ed08c6d-0d6c-48cf-b220-27860ccd9f6b",
       "name": "Zabbix Problems Sheet",
@@ -890,8 +890,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -32,
-        -272
+        -560,
+        -288
       ],
       "id": "b02e83cb-ff82-4f70-9973-e616136cbff1",
       "name": "Get Zabbix Problems",
@@ -947,7 +947,7 @@
       "typeVersion": 3.4,
       "position": [
         432,
-        -272
+        -256
       ],
       "id": "5fb49e6c-1f43-4606-9e6d-272e71bf1021",
       "name": "Zabbix Problems"
@@ -1178,8 +1178,7 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 10
+              "field": "minutes"
             }
           ]
         }
@@ -1194,87 +1193,14 @@
       "name": "Schedule Trigger"
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.limit",
-      "typeVersion": 1,
-      "position": [
-        768,
-        -784
-      ],
-      "id": "fc2b4d0a-1d48-4059-a74b-79d037d9664b",
-      "name": "Limit"
-    },
-    {
       "parameters": {
-        "method": "POST",
-        "url": "http://192.168.0.22/api_jsonrpc.php",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "zabbixApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"event.acknowledge\",\n  \"params\": \n  {\n    \"eventids\": \"165220\",\n    \"action\": 4,\n    \"message\": \"{{ $json.data.text }}\"\n  },\n\"id\": 1\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1184,
-        -784
-      ],
-      "id": "5166de0a-27b8-47ec-a794-06774dbc44f2",
-      "name": "Zabbix Acknowledge",
-      "executeOnce": false,
-      "retryOnFail": true,
-      "credentials": {
-        "zabbixApi": {
-          "id": "yJ0hjegcWJuG6BZR",
-          "name": "Zabbix account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "sendAndWait",
-        "phoneNumberId": "883606571504084",
-        "recipientPhoneNumber": "18763514207 - ronaldo",
-        "message": "=See the following problem:\n{{ $json.Time }}\n{{ $json[\"Host Name\"] }}\n{{ $json.Description }}",
-        "responseType": "freeText",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.whatsApp",
-      "typeVersion": 1.1,
-      "position": [
-        976,
-        -784
-      ],
-      "id": "739a0d77-bc90-4315-b21b-fa439b56300e",
-      "name": "Send message and wait for response",
-      "webhookId": "6e86d705-76c1-427b-b5f8-10e622da99d5",
-      "credentials": {
-        "whatsAppApi": {
-          "id": "bP42xqNMnKqIbTr5",
-          "name": "WhatsApp account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const seen = new Set();\nconst duplicates = [];\n\nfor (const item of items) {\n  const eventId = item.json.EventID;\n\n  // Skip if eventId missing\n  if (!eventId) continue;\n\n  // If we've seen this EventID before → it's a duplicate\n  if (seen.has(eventId)) {\n    duplicates.push({ json: item.json });\n  } else {\n    seen.add(eventId);\n  }\n}\n\n// Return only duplicates (for delete)\nreturn duplicates;\n"
+        "jsCode": "const seen = new Set();\nconst duplicates = [];\n\nfor (const item of items) {\n  const hostId = item.json.HostID;\n  const desc = item.json.Description;\n\n  // If either field missing, skip (no meaningful comparison)\n  if (!hostId || !desc) continue;\n\n  // Build a unique signature for this problem\n  const signature = `${hostId}::${desc}`;\n\n  // Check if the same HostID + Description was seen before\n  if (seen.has(signature)) {\n    duplicates.push({ json: item.json });\n  } else {\n    seen.add(signature);\n  }\n}\n\nreturn duplicates;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -224,
-        0
+        -384,
+        -288
       ],
       "id": "7a0a2972-6728-49a8-b42c-94cdbc12171c",
       "name": "Detect Duplicates",
@@ -1295,8 +1221,8 @@
       "type": "n8n-nodes-base.sort",
       "typeVersion": 1,
       "position": [
-        96,
-        -96
+        -64,
+        -304
       ],
       "id": "287f5f34-f345-43c3-b8d2-8f7d725fab8e",
       "name": "Sort1"
@@ -1324,8 +1250,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        272,
-        -96
+        128,
+        -304
       ],
       "id": "10d56169-dc95-4964-badc-7093cf75e4d0",
       "name": "Delete Dupes",
@@ -1362,8 +1288,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        432,
-        16
+        272,
+        -176
       ],
       "id": "98b6ca8c-353c-4456-b210-d19b870ab36a",
       "name": "Get Zabbix Problems1",
@@ -1406,11 +1332,84 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -48,
-        0
+        -208,
+        -192
       ],
       "id": "e48ea25b-ffb3-4485-b5b8-16b1ad2fa8c3",
       "name": "If2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -752
+      ],
+      "id": "5852a853-9c19-45d6-9e88-3d32d8e3e272",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.0.22/api_jsonrpc.php",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zabbixApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"event.acknowledge\",\n  \"params\": \n  {\n    \"eventids\": \"10166575\",\n    \"action\": 4,\n    \"message\": \"{{ $json.data.text }}\"\n  },\n\"id\": 1\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        -752
+      ],
+      "id": "257f0173-b307-4f39-a26d-fb35c6412369",
+      "name": "Zabbix Acknowledge",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "credentials": {
+        "zabbixApi": {
+          "id": "yJ0hjegcWJuG6BZR",
+          "name": "Zabbix account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "phoneNumberId": "883606571504084",
+        "recipientPhoneNumber": "18763514207 - ronaldo",
+        "message": "=See the following problem:\n{{ $json.Time }}\n{{ $json[\"Host Name\"] }}\n{{ $json.Description }}",
+        "responseType": "freeText",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        -752
+      ],
+      "id": "e37cf705-ee10-4ecc-ace5-b0b80237d85d",
+      "name": "Send message and wait for response",
+      "webhookId": "6e86d705-76c1-427b-b5f8-10e622da99d5",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "bP42xqNMnKqIbTr5",
+          "name": "WhatsApp account"
+        }
+      }
     }
   ],
   "connections": {
@@ -1583,7 +1582,7 @@
       "main": [
         [
           {
-            "node": "Zabbix Problems",
+            "node": "Detect Duplicates",
             "type": "main",
             "index": 0
           }
@@ -1710,28 +1709,6 @@
         ]
       ]
     },
-    "Limit": {
-      "main": [
-        [
-          {
-            "node": "Send message and wait for response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send message and wait for response": {
-      "main": [
-        [
-          {
-            "node": "Zabbix Acknowledge",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Detect Duplicates": {
       "main": [
         [
@@ -1767,7 +1744,13 @@
     },
     "Get Zabbix Problems1": {
       "main": [
-        []
+        [
+          {
+            "node": "Zabbix Problems",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "If2": {
@@ -1787,6 +1770,28 @@
           }
         ]
       ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Zabbix Acknowledge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1801,7 +1806,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "143dd6bf-5319-42c7-8188-dacec9f60bd1",
+  "versionId": "70191662-e9ee-4149-8d2a-75e574230acb",
   "triggerCount": 1,
   "shared": [
     {
