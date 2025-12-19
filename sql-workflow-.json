@@ -1,61 +1,26 @@
 {
   "createdAt": "2025-08-18T17:58:43.004Z",
-  "updatedAt": "2025-09-30T20:02:37.636Z",
+  "updatedAt": "2025-12-19T18:10:00.785Z",
   "id": "gY35g77PTE3nJsmG",
   "name": "SQL Workflow",
   "active": false,
   "isArchived": false,
   "nodes": [
     {
-      "parameters": {},
-      "id": "3d038160-84cd-4053-84f3-5f3cc2a90d32",
-      "name": "When clicking \"Execute Workflow\"",
-      "type": "n8n-nodes-base.manualTrigger",
-      "position": [
-        -1248,
-        16
-      ],
-      "typeVersion": 1
-    },
-    {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "e09b351f-c6be-4a33-a937-cf2eb5fbbd4c",
-              "name": "Creation Date",
-              "value": "={{ $json.CREATION_DATE }}",
+              "id": "6db3bde7-27ee-4fd0-96cd-fd1894965f74",
+              "name": "UPC",
+              "value": "={{ $json.ITEM_CODE.toString().trim().slice(2) }}",
               "type": "string"
             },
             {
               "id": "bee0b78a-4d76-40eb-aa88-df6e72acffed",
-              "name": "Item Description",
+              "name": "Description",
               "value": "={{ $json.ITEM_DESCRIPTION }}",
               "type": "string"
-            },
-            {
-              "id": "6db3bde7-27ee-4fd0-96cd-fd1894965f74",
-              "name": "Item Code",
-              "value": "={{ $json.ITEM_CODE }}",
-              "type": "string"
-            },
-            {
-              "id": "336f2499-b9c4-40d5-8cc7-da05822a0f78",
-              "name": "Store Number",
-              "value": "={{ $json.STORE_NUMBER }}",
-              "type": "string"
-            },
-            {
-              "id": "13a925af-7ce5-433e-98bb-d4d07d7174fe",
-              "name": "VendorID",
-              "value": "={{ $json.VENDOR_ID }}",
-              "type": "string"
-            },
-            {
-              "id": "11a8998b-712a-4c57-80a7-73ff597f390b",
-              "name": "Case Size",
-              "value": "={{ $json.CASE_SIZE }}",
-              "type": "number"
             }
           ]
         },
@@ -73,7 +38,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT\n  F09 AS CREATION_DATE,\n  P.F01 AS ITEM_CODE,\n  F02 AS ITEM_DESCRIPTION,\n  R.F1056 AS STORE_NUMBER,\n  C.F27 AS VENDOR_ID,\n  C.F19 AS CASE_SIZE\nFROM POS_TAB P\nINNER JOIN RPT_ITM_N R ON R.F01 = P.F01\nINNER JOIN COST_TAB C ON C.F01 = P.F01\nWHERE F09 >= DATEADD(DAY, -180, CAST(GETDATE() AS DATE))\nORDER BY F09 DESC;"
+        "query": "USE STORESQL;\n\nSELECT\n  MAX(F09) AS CREATION_DATE,\n  P.F01 AS ITEM_CODE,\n  MAX(F02) AS ITEM_DESCRIPTION,\n  MAX(R.F1056) AS STORE_NUMBER,\n  MAX(C.F27) AS VENDOR_ID,\n  MAX(C.F19) AS CASE_SIZE\nFROM POS_TAB P\nINNER JOIN RPT_ITM_N R ON R.F01 = P.F01\nINNER JOIN COST_TAB C ON C.F01 = P.F01\n-- WHERE F09 >= DATEADD(DAY, -180, CAST(GETDATE() AS DATE))\nGROUP BY P.F01\nORDER BY P.F01 ASC;   -- 👈 UPC / Item Code sorted ascending"
       },
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
@@ -85,7 +50,7 @@
       "name": "Items SQL",
       "credentials": {
         "microsoftSql": {
-          "id": "kzaFzy84PjbdnsE4",
+          "id": "bfcJ16IsK3BLkJMK",
           "name": "Microsoft SQL account"
         }
       }
@@ -113,8 +78,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -864,
-        160
+        -368,
+        240
       ],
       "id": "efb5ac6d-3f14-428f-869c-be2a324b5010",
       "name": "Vendor Name and ID"
@@ -127,14 +92,14 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        -1056,
-        160
+        -560,
+        240
       ],
       "id": "c34ed30a-6c22-4d62-8dd8-b7ae9b8cddb2",
       "name": "Vendor Name and ID1",
       "credentials": {
         "microsoftSql": {
-          "id": "kzaFzy84PjbdnsE4",
+          "id": "bfcJ16IsK3BLkJMK",
           "name": "Microsoft SQL account"
         }
       }
@@ -148,8 +113,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -160,
-        0
+        544,
+        80
       ],
       "id": "8187e0f4-b318-44e5-9d2a-a8fd06ebcbfe",
       "name": "Merge",
@@ -161,28 +126,26 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
-          "mode": "list",
-          "cachedResultName": "Sql query",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit?usp=drivesdk"
+          "value": "1qJEKHFlP-H-1t83nJQvIfLabL1pR195x8ITOLf02thk",
+          "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
+          "value": 1051529087,
           "mode": "list",
-          "cachedResultName": "Items",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=0"
+          "cachedResultName": "Item Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qJEKHFlP-H-1t83nJQvIfLabL1pR195x8ITOLf02thk/edit#gid=1051529087"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
           "value": {},
           "matchingColumns": [
-            "Creation Date"
+            "UPC"
           ],
           "schema": [
             {
-              "id": "Creation Date",
-              "displayName": "Creation Date",
+              "id": "UPC",
+              "displayName": "UPC",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -191,54 +154,13 @@
               "removed": false
             },
             {
-              "id": "Item Description",
-              "displayName": "Item Description",
+              "id": "Description",
+              "displayName": "Description",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Item Code",
-              "displayName": "Item Code",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Store Number",
-              "displayName": "Store Number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "VendorID",
-              "displayName": "VendorID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Case Size",
-              "displayName": "Case Size",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -267,17 +189,15 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8",
-          "mode": "list",
-          "cachedResultName": "Sql query",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit?usp=drivesdk"
+          "value": "1uiSZpStk4IIrvnDyPWk5_0yhfVEfnwJ9Eu6YZUJWJus",
+          "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": 602113986,
+          "value": 418833532,
           "mode": "list",
-          "cachedResultName": "Vendor and ID",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DlD2kXCDmiaiQ5kSn3LebfPlxjpfrcDNLeI0NLIVze8/edit#gid=602113986"
+          "cachedResultName": "Vendor Name & ID",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uiSZpStk4IIrvnDyPWk5_0yhfVEfnwJ9Eu6YZUJWJus/edit#gid=418833532"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
@@ -315,8 +235,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -656,
-        160
+        -160,
+        240
       ],
       "id": "5ce64a58-1961-4bf8-adc9-97fab07a7c82",
       "name": "Vendor and ID sheet",
@@ -338,8 +258,8 @@
       "name": "Items file",
       "type": "n8n-nodes-base.spreadsheetFile",
       "position": [
-        -416,
-        -144
+        80,
+        -64
       ],
       "typeVersion": 1,
       "id": "2855092a-e7b2-4d43-8b87-f59ba59c123b"
@@ -355,8 +275,8 @@
       "name": "Vendors file",
       "type": "n8n-nodes-base.spreadsheetFile",
       "position": [
-        -416,
-        160
+        80,
+        240
       ],
       "typeVersion": 1,
       "id": "e844cf83-4607-4148-bd5a-067350fc68f8"
@@ -371,8 +291,8 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        48,
-        0
+        752,
+        80
       ],
       "id": "b46eaf76-aec5-4e07-8173-babe1cbff9f3",
       "name": "Write Items to shared drive"
@@ -387,30 +307,46 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        256,
-        0
+        960,
+        80
       ],
       "id": "fcc219e6-dbb1-4c44-848d-3ed0cce0f041",
       "name": "Write Vendors to shared drive"
+    },
+    {
+      "parameters": {
+        "content": "## Query Items\nThis workflow runs once a day. It extracts all the items barcode and description to be put in a google sheet. This is also used relative to an appsheet, where when a user scans an item's barcode, inputs other information, it would automatically input the description for that item based on it's UPC.",
+        "height": 272,
+        "width": 896
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        -272
+      ],
+      "id": "35302846-7f47-442e-a088-44a156236728",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1248,
+        -144
+      ],
+      "id": "c1e37271-cdd3-42dc-bf00-5722d84ee4c2",
+      "name": "Schedule Trigger"
     }
   ],
   "connections": {
-    "When clicking \"Execute Workflow\"": {
-      "main": [
-        [
-          {
-            "node": "Items SQL",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Vendor Name and ID1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Items": {
       "main": [
         [
@@ -468,13 +404,7 @@
     },
     "Items Sheet": {
       "main": [
-        [
-          {
-            "node": "Items file",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Vendor and ID sheet": {
@@ -525,18 +455,33 @@
       "main": [
         []
       ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Items SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "ec1a4874-e7fc-44f8-8047-2a859a5fbb18",
-  "triggerCount": 0,
+  "versionId": "2c08d576-72db-4303-9a33-0300819bac0c",
+  "triggerCount": 1,
   "shared": [
     {
       "createdAt": "2025-08-18T17:58:43.004Z",
